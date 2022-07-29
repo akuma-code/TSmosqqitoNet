@@ -1,26 +1,29 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import TestContainer from './Components/Layout/TestContainer';
+import styled from 'styled-components'
+import StyledFlex from './Components/Layout/StyledFlex';
+import NetCard from './Components/Cards/NetCard';
+import InputForm from './Components/Forms/InputForm';
+import { HomePage } from './Components/pages/HomePage';
 
-function App() {
+
+const AppWrapper = styled.div`
+display: flex;
+width: 100%;
+height: 80vh;
+border: 5px solid #f8e3e3;
+background: #08b1e4;
+place-items: start;
+flex-direction:"column";
+`
+
+const App = (): JSX.Element => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <HomePage >
+
+    </HomePage>
+  )
 }
 
 export default App;
