@@ -2,7 +2,6 @@
 import React from 'react';
 import TestContainer from './Components/Layout/TestContainer';
 import styled from 'styled-components'
-import StyledFlex from './Components/Layout/StyledFlex';
 import NetCard from './Components/Cards/NetCard';
 import InputForm from './Components/Forms/InputForm';
 import { HomePage } from './Components/pages/HomePage';

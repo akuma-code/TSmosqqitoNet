@@ -29,4 +29,3 @@ const StyledFlex = (props: FlexProps) => {
   )
 }
 
-export default StyledFlex
