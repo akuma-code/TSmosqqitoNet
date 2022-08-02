@@ -1,24 +1,26 @@
-import { Form, Input, Select } from 'antd'
 import React, { useState } from 'react'
+import { INet } from '../pages/HomePage'
 
 type ISizes = {
-    w: string | number
-    h: string | number
+    w: string
+    h: string
 }
-type INetType = 'skf' | 'simple'
-type NetTypeProps = {
-    value?: INetType
-    onChange?: (value: INetType) => void
-}
+export type INetType = 'skf' | 'simple' | string
+// type NetTypeProps = {
+//     value?: INetType
+//     onChange?: (value: INetType) => void
+// }
 type INetInputProps = {
     value?: ISizes
     onChange?: (value: ISizes) => void
+    ADD: (net: INet) => void
 }
 
 
-export const NetInputForm: React.FC<INetInputProps> = ({ value = { w: 0, h: 0 }, onChange }) => {
+export const NetInputForm: React.FC<INetInputProps> = ({ value = { w: "0", h: "0" }, ADD }) => {
+
     const [size, setSize] = useState<ISizes>({ w: "", h: "" })
-    const [typeNet, setTypeNet] = useState<any>({ value: "skf" })
+    const [typeNet, setTypeNet] = useState<string>("skf")
 
 
 
@@ -26,38 +28,16 @@ export const NetInputForm: React.FC<INetInputProps> = ({ value = { w: 0, h: 0 },
         const newSize = parseInt(e.target.value || '0', 10)
         setSize({ ...size, [s]: newSize })
     }
-    const changeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTypeNet({ ...typeNet, value: e.target.value })
+    const changeType = (value: string) => {
+        setTypeNet(value)
     }
-    const submitHandler = () => {
-        console.log(size)
+    const submitHandler = (): void => {
+        const newnet: INet = { w: size.w || "0", h: size.h || "0", type: typeNet || "skf" }
+        console.log('newnet', newnet)
+        ADD(newnet)
     }
     return (
-        <Form
-            onFinish={submitHandler}
-        >
-            <Form.Item>
-                <Input value={value.w || size.w}
-                    onChange={(e) => changeSize(e, 'w')}
-                    placeholder='w'
-                />
-            </Form.Item>
-            <Form.Item>
-                <Input value={value.h || size.h}
-                    onChange={(e) => changeSize(e, 'h')}
-                    placeholder='h'
-                />
-            </Form.Item>
-
-            <Select
-                value={typeNet}
-                onChange={changeType}
-            >
-                <Select.Option value='skf'>skf</Select.Option>
-                <Select.Option value='simple'>simple</Select.Option>
-            </Select>
-
-        </Form>
+        <div></div>
     )
 }
 
