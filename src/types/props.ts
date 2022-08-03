@@ -9,7 +9,9 @@ export interface ICardProps {
 export interface INetListProps {
     w: string
     h: string
-    type?: INetType
+    isSimple: boolean
+    id: number
+    remove?: (id: number) => void
 }
 
 export type INetInputProps = {
@@ -24,3 +26,11 @@ export type ISizes = {
 }
 
 export type INetType = 'skf' | 'simple' | string
+
+export interface INetCardProps {
+    w: string
+    h: string
+    id: number
+    isSimple: boolean
+    remove: (id: number) => void
+}

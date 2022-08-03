@@ -12,15 +12,22 @@ code {
     monospace;
 }
 
-.mt1 {
-  margin-top: 1rem;
-}
 
 .form__net {
   display: flex;
   border-bottom: 1px solid #000;
   align-content: center;
   width: 80vw;
+}
+
+.form__list {
+  display: flex;
+  border-bottom: 1px solid #000;
+  width: 40vw;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  flex-direction: row;
 }
 
 .form__net>div {
@@ -34,4 +41,37 @@ code {
 
 .p0 {
   padding: 0;
+}
+
+.px1 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.mx1 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+
+.mt1 {
+  margin-top: 1rem;
+}
+
+.my1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pb1 {
+  padding-bottom: 1rem;
+}
+
+.flex-row {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 2rem;
 }

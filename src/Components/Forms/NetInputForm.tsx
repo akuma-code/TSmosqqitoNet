@@ -6,56 +6,68 @@ import { INetInputProps, INetListProps, ISizes } from '../../types/props'
 
 
 
-export const NetInputForm: React.FC<INetInputProps> = ({ value = { w: "0", h: "0" }, ADD }) => {
+export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
 
     const [size, setSize] = useState<ISizes>({ w: "", h: "" })
-    const [typeNet, setTypeNet] = useState<string>("skf")
 
+    const [isSimple, setIsSimple] = useState(false)
 
 
     const changeSize = (e: React.ChangeEvent<HTMLInputElement>, s: 'w' | 'h') => {
         const newSize = parseInt(e.target.value || '0', 10)
         setSize({ ...size, [s]: newSize })
     }
-    const changeType = (value: string) => {
-        setTypeNet(value)
-    }
-    const submitHandler = (): void => {
-        const newnet: INetListProps = { w: size.w || "0", h: size.h || "0", type: typeNet || "skf" }
+    const submitHandler = (e: React.FormEvent): void => {
+        e.preventDefault()
+        const newnet: INetListProps = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple }
         console.log('newnet', newnet)
         ADD(newnet)
+        setSize({ w: '', h: '' })
     }
     return (
-        <form className='row form__net' name='netinput'>
+        <form
+            className='row form__net'
+            name='netinput'
+            onSubmit={submitHandler}
+        >
 
             <div className="input-field col s2 ">
                 <i className="material-icons prefix center" style={{ transform: "rotate(270deg)" }}>expand</i>
                 <label htmlFor="sizew">Ширина</label>
                 <input
+                    value={size.w}
                     id="sizew"
                     type="number"
-                    className="validate center" />
+                    className="validate center"
+                    onChange={(e) => { changeSize(e, 'w') }} />
             </div>
             <div className="input-field col s2 ">
                 <i className="material-icons prefix center" >expand</i>
                 <label htmlFor="sizeh">Высота</label>
                 <input
+                    value={size.h}
                     id="sizeh"
                     type="number"
-                    className="validate center" />
+                    className="validate center"
+                    onChange={(e) => { changeSize(e, 'h') }} />
             </div>
             <div className="col s3 center ">
                 <div className="switch input-field">
                     <label className='black-text'>
-                        SKF
-                        <input type="checkbox" className='black-text'></input>
-                        <span className="lever  blue darken-3 red-text"></span>
-                        SIMPLE
+
+                        <input
+                            type="checkbox"
+                            className='black-text'
+                            onChange={() => { setIsSimple(!isSimple) }}
+                        ></input>
+                        <span className="lever  "></span>
+                        {isSimple ? "SIMPLE" : "SKF"}
+                        {/* {isSimple && "SIMPLE"} */}
                     </label>
                 </div>
             </div>
             <div className="row s1 center input-field ">
-                <button form='netinput' className='btn btn-large'>SUBMIT</button>
+                <button formTarget='netinput' className='btn btn-large blue lighten-1'>Расчитать</button>
             </div>
 
 
