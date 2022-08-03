@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card } from 'antd'
+
 import { ICardProps } from '../../types/props'
 
 const cardStyle = {
@@ -10,8 +10,8 @@ const cardStyle = {
 
 export default function NetCard(props: ICardProps): JSX.Element {
     return (
-        <Card style={cardStyle} {...props}>
+        <div style={cardStyle} {...props}>
             <div>TEXT</div>
-        </Card>
+        </div>
     )
 }

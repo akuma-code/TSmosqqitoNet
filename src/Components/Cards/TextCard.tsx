@@ -1,4 +1,4 @@
-import { Card } from 'antd'
+
 import React from 'react'
 interface TextCardProps {
     text?: any[] | string;
@@ -8,7 +8,7 @@ interface TextCardProps {
 const TextCard: React.FC<TextCardProps> = ({ text, title }) => {
 
     return (
-        <Card title={title}
+        <div title={title}
             style={{
                 padding: "30px",
                 background: "#ececec",
@@ -16,11 +16,11 @@ const TextCard: React.FC<TextCardProps> = ({ text, title }) => {
                 margin: "5px 5px",
                 border: "1px solid black" || "none"
             }}
-            bordered={true}>
+        >
             <hr />
             {text}
             <hr />
-        </Card>
+        </div>
     )
 }
 
