@@ -34,9 +34,10 @@ export const HomePage: FC<HomePageProps> = () => {
     return (
 
         <div className='col container'>
+            <h4 className='center'>Расчет М\С по световому проему</h4>
             <div className='flex-row'>
                 <NetInputForm ADD={ADD} />
-                <button className="material-icons red-text mx1"
+                <button className="material-icons red darken-4 black-text mx1 reset-btn"
                     onClick={reset}
                 >delete
                 </button>

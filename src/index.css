@@ -18,16 +18,16 @@ code {
   border-bottom: 1px solid #000;
   align-content: center;
   width: 80vw;
+  padding-right: 1rem;
 }
 
 .form__list {
   display: flex;
-  border-bottom: 1px solid #000;
   width: 40vw;
   justify-content: space-between;
-  align-items: flex-end;
   flex-wrap: nowrap;
   flex-direction: row;
+  align-items: center;
 }
 
 .form__net>div {
@@ -69,9 +69,37 @@ code {
 
 .flex-row {
   display: flex;
-  flex-flow: row nowrap;
+
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+  align-content: space-around;
+  flex-direction: row;
+}
+
+.flex-col {
+  display: flex;
+  flex-flow: column nowrap;
   justify-content: space-between;
   flex-wrap: nowrap;
   align-items: baseline;
-  gap: 2rem;
+  gap: .3em;
+}
+
+.reset-btn {
+  width: 6rem;
+  font-size: 4rem;
+
+  cursor: pointer;
+}
+
+
+
+.reset-btn:hover::after {
+  display: block;
+  position: absolute;
+  content: "Очистить список";
+  font-size: 2rem;
+  margin-left: 5rem;
+  top: 7rem;
 }

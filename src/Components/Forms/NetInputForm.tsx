@@ -19,6 +19,7 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
     }
     const submitHandler = (e: React.FormEvent): void => {
         e.preventDefault()
+        if (size.w === '' || size.h === '') return alert("Один из размеров не введен!")
         const newnet: INetListProps = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple }
         console.log('newnet', newnet)
         ADD(newnet)
@@ -30,7 +31,19 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
             name='netinput'
             onSubmit={submitHandler}
         >
-
+            <div className="col s2 center ">
+                <div className="switch input-field">
+                    <label className='black-text'>
+                        <input
+                            type="checkbox"
+                            className='black-text'
+                            onChange={() => { setIsSimple(!isSimple) }}
+                        ></input>
+                        <span className="lever"></span>
+                        {isSimple ? "Простая" : "SKF"}
+                    </label>
+                </div>
+            </div>
             <div className="input-field col s2 ">
                 <i className="material-icons prefix center" style={{ transform: "rotate(270deg)" }}>expand</i>
                 <label htmlFor="sizew">Ширина</label>
@@ -51,22 +64,8 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
                     className="validate center"
                     onChange={(e) => { changeSize(e, 'h') }} />
             </div>
-            <div className="col s3 center ">
-                <div className="switch input-field">
-                    <label className='black-text'>
 
-                        <input
-                            type="checkbox"
-                            className='black-text'
-                            onChange={() => { setIsSimple(!isSimple) }}
-                        ></input>
-                        <span className="lever  "></span>
-                        {isSimple ? "SIMPLE" : "SKF"}
-                        {/* {isSimple && "SIMPLE"} */}
-                    </label>
-                </div>
-            </div>
-            <div className="row s1 center input-field ">
+            <div className="col s3 center input-field ">
                 <button formTarget='netinput' className='btn btn-large blue lighten-1'>Расчитать</button>
             </div>
 

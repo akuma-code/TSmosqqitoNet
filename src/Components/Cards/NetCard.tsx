@@ -18,7 +18,7 @@ const NetCard: React.FC<INetCardProps> = (props) => {
     }, [isSKF])
 
     return (
-        <div className="my1 form__list">
+        <div className="my1 form__list teal lighten-5">
             <div>
                 <button
                     style={{ width: "100px" }}
@@ -33,16 +33,19 @@ const NetCard: React.FC<INetCardProps> = (props) => {
                     className='btn mx1 cyan lighten-4 black-text'
                     onClick={() => toggle()}
                 >
-                    {calcedNet.W} x {calcedNet.H}
+                    <b>{calcedNet.W} x {calcedNet.H}</b>
                 </button>
 
             </div>
-
-            <div>
-                Световой: {w} мм x {h} мм
+            <div className='flex-row'>
+                <div className='flex-col'>
+                    <span className='center'> Световой проем: </span>
+                    <b className='center'> {w} мм x {h} мм</b>
+                </div>
                 <button className="material-icons red-text mx1 "
                     onClick={() => props.remove(props.id)}
                 >delete</button>
+
             </div>
 
 
