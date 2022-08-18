@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import NetCard from './Components/Cards/NetCard';
-
+import { BrowserRouter } from 'react-router-dom'
 import { HomePage } from './Components/pages/HomePage';
+import { AppRouter } from './Components/AppRouter';
+import NavBar from './Components/NavBar';
 
 
 
 
 const App = (): JSX.Element => {
   return (
-    <HomePage />
-
-
+    <BrowserRouter>
+      <NavBar />
+      <AppRouter />
+    </BrowserRouter>
   )
 }
 

@@ -34,3 +34,35 @@ export interface INetCardProps {
     isSimple: boolean
     remove: (id: number) => void
 }
+export type ITodoNote = {
+    note: string
+}
+export type ITodoPayment = {
+    sum: string | number
+    info: string
+    numb?: number
+}
+
+export enum TodoInputType {
+    NOTES = 'notes',
+    CASH = 'cash'
+}
+export type TDItype = 'notes' | 'cash'
+export type ITodoFormTypes = { type: TDItype }
+export interface ITodoFormProps {
+    type: 'notes' | 'cash'
+    value?: ITodoNote | ITodoPayment
+    handlers?: {
+        getNote: (note: ITodoNote) => void,
+        getCash: (cash: { sum: string, info: string }) => void,
+    }
+    getData?: (data: ITodoNote | { sum: string, info: string }) => void,
+    onChange?: (value: ITodoNote | ITodoPayment) => void
+    children?: React.ReactNode
+
+}
+
+export interface ITodoFormData {
+    notes?: ITodoNote[] | [] | null,
+    payments?: ITodoPayment[] | [] | null
+}

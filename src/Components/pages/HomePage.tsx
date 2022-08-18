@@ -21,10 +21,10 @@ export const HomePage: FC<HomePageProps> = () => {
 
     const [netlist, setNetlist] = useState<INetListProps[]>(getFromLS())
     const ADD = (net: INetListProps) => {
-        return setNetlist([net, ...netlist])
+        return setNetlist(netlist => [net, ...netlist])
     }
     const reset = () => setNetlist([])
-    const remove = (id: number) => setNetlist(netlist.filter(n => n.id !== id))
+    const remove = (id: number) => setNetlist(netlist => netlist.filter(n => n.id !== id))
     useEffect(() => {
         saveToLS(netlist)
 

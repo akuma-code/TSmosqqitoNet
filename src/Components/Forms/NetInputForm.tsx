@@ -15,13 +15,12 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
 
     const changeSize = (e: React.ChangeEvent<HTMLInputElement>, s: 'w' | 'h') => {
         const newSize = parseInt(e.target.value || '0', 10)
-        setSize({ ...size, [s]: newSize })
+        setSize(size => ({ ...size, [s]: newSize }))
     }
     const submitHandler = (e: React.FormEvent): void => {
         e.preventDefault()
         if (size.w === '' || size.h === '') return alert("Один из размеров не введен!")
         const newnet: INetListProps = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple }
-        console.log('newnet', newnet)
         ADD(newnet)
         setSize({ w: '', h: '' })
     }
@@ -37,8 +36,8 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
                         <input
                             type="checkbox"
                             className='black-text'
-                            onChange={() => { setIsSimple(!isSimple) }}
-                        ></input>
+                            onChange={() => { setIsSimple(prev => !prev) }}
+                        />
                         <span className="lever"></span>
                         {isSimple ? "Простая" : "SKF"}
                     </label>
