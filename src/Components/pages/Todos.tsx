@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
-import { ITodoFormTypes, ITodoNote, TodoInputType as TdIType } from '../../types/props'
+import React, { useEffect, useState } from 'react'
+import { ITodoFormTypes, ITodoItem, TodoInputType as TdIType } from '../../types/props'
+import { TodoList } from '../Cards/TodoList'
 import { TodoForm } from '../Forms/TodoForm'
 
 export const Todos = () => {
 
     const [formType, setFormType] = useState<ITodoFormTypes>({ type: TdIType.NOTES })
-    const [formList, setFormList] = useState([])
-    // const getData=(data:string | { sum: string, info: string })=>  setFormList(prev => [...prev, data]) 
+    const [todos, setTodos] = useState<ITodoItem[]>([])
 
+    const ADDTODO = (todo: ITodoItem) => (setTodos([todo, ...todos]))
+    const REMOVE = (numb: number) => setTodos(prev => prev.filter(i => i.numb !== numb))
+
+
+    // useEffect(() => {
+    //     saveToLS(todos)
+    // }, [todos])
     return (
         <div className='container'>
             <div className='mt1 valign-wrapper'>
@@ -32,7 +39,9 @@ export const Todos = () => {
                     </i>
                 </div>
             </div>
-            <TodoForm type={formType.type} />
+            <TodoForm type={formType.type} ADD={ADDTODO} />
+
+            <TodoList items={todos} />
         </div>
     )
 }
