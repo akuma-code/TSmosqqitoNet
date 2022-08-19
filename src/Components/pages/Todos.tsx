@@ -4,14 +4,7 @@ import { TodoList } from '../Cards/TodoList'
 import { TodoForm } from '../Forms/TodoForm'
 
 export const Todos = () => {
-    const getFromLS = (): ITodoItem[] => {
-        const saved = JSON.parse(localStorage.getItem('saved_todos') || '[]')
-        return saved
-    }
-    const saveToLS = (todos: ITodoItem[]) => {
-        const saved = JSON.stringify(todos)
-        return localStorage.setItem('saved_todos', saved)
-    }
+
     const [formType, setFormType] = useState<ITodoFormTypes>({ type: TdIType.NOTES })
     const [todos, setTodos] = useState<ITodoItem[]>([])
 
