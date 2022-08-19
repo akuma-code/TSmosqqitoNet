@@ -52,10 +52,8 @@ export type ITodoFormTypes = { type: TDItype }
 export interface ITodoFormProps {
     type: 'notes' | 'cash'
     value?: ITodoNote | ITodoPayment
-    handlers?: {
-        getNote: (note: ITodoNote) => void,
-        getCash: (cash: { sum: string, info: string }) => void,
-    }
+
+    ADD: (todo: ITodoItem) => void
     getData?: (data: ITodoNote | { sum: string, info: string }) => void,
     onChange?: (value: ITodoNote | ITodoPayment) => void
     children?: React.ReactNode
@@ -65,4 +63,11 @@ export interface ITodoFormProps {
 export interface ITodoFormData {
     notes?: ITodoNote[] | [] | null,
     payments?: ITodoPayment[] | [] | null
+}
+
+export interface ITodoItem {
+    numb: number,
+    text: string,
+    checked: boolean,
+    date?: string
 }

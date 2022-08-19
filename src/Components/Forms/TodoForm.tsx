@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react'
-import { ITodoFormProps, ITodoFormTypes, ITodoPayment, TodoInputType } from '../../types/props'
+import { useCashToText } from '../../hooks/useCashToText'
+import { ITodoFormProps, ITodoPayment, TodoInputType } from '../../types/props'
 
-const submitHandler = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('form submitted')
-}
+
 export type INote = {
     text: string,
     numb?: number
@@ -13,24 +11,27 @@ export type INote = {
 export type INotesProps = INote[] | []
 export type ICashProps = ITodoPayment[] | []
 
-export const TodoForm: FC<ITodoFormProps> = ({ type }: ITodoFormTypes, getData) => {
+export const TodoForm: FC<ITodoFormProps> = (props: ITodoFormProps) => {
 
     const [note, setNote] = useState<INote>({ text: "" })
     const [cash, setCash] = useState<ITodoPayment>({ sum: "", info: "" })
+    const todoCash = useCashToText(cash)
     const ADDNOTE = (value: string) => setNote(prev => ({ ...prev, text: value }))
-
-    const ADDCASH = (value: string, type: string) => {
-
-        setCash(prev => ({ ...prev, [type]: value }))
-    }
+    const ADDCASH = (value: string, type: string) => setCash(prev => ({ ...prev, [type]: value }))
     // const ADDCASH=(newcash:ITodoPayment, field:'sum'|'ínfo')=>setCash(cash.map(c => c.numb === newcash.numb ?({...c, [field]:newcash[field]}):c))
+    const submitHandler = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (props.type === TodoInputType.NOTES) return props.ADD({ text: note.text, numb: Date.now(), checked: false })
+        if (props.type === TodoInputType.CASH) return props.ADD({ text: todoCash, numb: Date.now(), checked: false })
+        console.log('SUbmited!');
 
+    }
     return (
         <>
 
             <form name='todoform'
                 onSubmit={submitHandler}>
-                {type === TodoInputType.NOTES &&
+                {props.type === TodoInputType.NOTES &&
                     <div className='row  valign-wrapper'>
                         <div className='col s2 input-field'>
                             <button className='btn waves-effect waves-light w100' formTarget='todoform' type='submit'>
@@ -53,7 +54,7 @@ export const TodoForm: FC<ITodoFormProps> = ({ type }: ITodoFormTypes, getData) 
                         </div>
 
                     </div>}
-                {type === TodoInputType.CASH &&
+                {props.type === TodoInputType.CASH &&
                     <div className='row  valign-wrapper'>
                         <div className='col s2 input-field'>
                             <button className='btn waves-effect waves-light w100' formTarget='todoform' type='submit'>
