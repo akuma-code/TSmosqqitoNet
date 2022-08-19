@@ -3,18 +3,28 @@ import { ITodoFormTypes, ITodoItem, TodoInputType as TdIType } from '../../types
 import { TodoList } from '../Cards/TodoList'
 import { TodoForm } from '../Forms/TodoForm'
 
+
+const getFromLS = (): ITodoItem[] => {
+    const saved = JSON.parse(localStorage.getItem('saved_todos') || '[]')
+    return saved
+}
+
+const saveToLS = (todos: ITodoItem[]) => {
+    const saved = JSON.stringify(todos)
+    return localStorage.setItem('saved_todos', saved)
+}
 export const Todos = () => {
 
     const [formType, setFormType] = useState<ITodoFormTypes>({ type: TdIType.NOTES })
-    const [todos, setTodos] = useState<ITodoItem[]>([])
+    const [todos, setTodos] = useState<ITodoItem[]>(getFromLS())
 
     const ADDTODO = (todo: ITodoItem) => (setTodos([todo, ...todos]))
     const REMOVE = (numb: number) => setTodos(prev => prev.filter(i => i.numb !== numb))
 
 
-    // useEffect(() => {
-    //     saveToLS(todos)
-    // }, [todos])
+    useEffect(() => {
+        saveToLS(todos)
+    }, [todos])
     return (
         <div className='container'>
             <div className='mt1 valign-wrapper'>
@@ -41,7 +51,7 @@ export const Todos = () => {
             </div>
             <TodoForm type={formType.type} ADD={ADDTODO} />
 
-            <TodoList items={todos} />
+            <TodoList items={todos} remove={REMOVE} />
         </div>
     )
 }

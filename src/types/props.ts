@@ -53,7 +53,7 @@ export interface ITodoFormProps {
     type: 'notes' | 'cash'
     value?: ITodoNote | ITodoPayment
 
-    ADD: (todo: ITodoListItem | ITodoItem) => void
+    ADD: (todo: { text: string, numb: number, checked: boolean }) => void
     getData?: (data: ITodoNote | { sum: string, info: string }) => void,
     onChange?: (value: ITodoNote | ITodoPayment) => void
     children?: React.ReactNode
@@ -70,7 +70,7 @@ export interface ITodoItem {
     text: string,
     checked: boolean,
     date?: string,
-    remove?: (numb: number) => void
+    // remove?: (numb: number) => void
 
 }
 

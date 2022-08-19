@@ -4,11 +4,12 @@ import { ITodoItem } from '../../types/props'
 import TodoCard from './TodoCard'
 
 type ITodoLIstProps = {
-    items: ITodoItem[]
+    items: ITodoItem[],
+    remove: (numb: number) => void
     children?: React.ReactNode
 }
 
-export const TodoList: FC<ITodoLIstProps> = ({ items }) => {
+export const TodoList: FC<ITodoLIstProps> = ({ items, remove }) => {
     const getFromLS = (): ITodoItem[] => {
         const saved = JSON.parse(localStorage.getItem('saved_todos') || '[]')
         return saved
@@ -24,7 +25,7 @@ export const TodoList: FC<ITodoLIstProps> = ({ items }) => {
         saveToLS(items)
     }, [items])
 
-    const REM = (numb: number) => setList(list.filter(i => i.numb !== numb))
+    // const REM = (numb: number) => setList(list.filter(i => i.numb !== numb))
     if (list.length < 1) return (<h1>EMPTY!</h1>)
     return (
         <ol className='col w100 collection todos__list'>
@@ -34,7 +35,7 @@ export const TodoList: FC<ITodoLIstProps> = ({ items }) => {
                     numb={item.numb}
                     text={item.text}
                     key={item.numb}
-                    remove={() => REM(item.numb)}
+                    remove={remove}
                 />
             ))}
         </ol>

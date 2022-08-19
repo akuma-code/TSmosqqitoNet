@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
-import { ITodoItem, ITodoListItem } from '../../types/props'
+import { ITodoListItem } from '../../types/props'
 
 const TodoCard: FC<ITodoListItem> = (todo) => {
-    const { text, checked, remove } = todo
+    const { text, checked, remove, numb } = todo
     const [isCheck, setIsCheck] = useState(checked)
     const cls = isCheck ? "collection-item todos__card done" : "collection-item todos__card"
 
@@ -21,7 +21,7 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
                 <b>{text}</b>
             </div>
             <button className='btn-large red lighten-1'
-                onClick={() => remove(todo.numb)}
+                onClick={() => remove(numb)}
             >
                 <i className="material-icons">
                     delete
