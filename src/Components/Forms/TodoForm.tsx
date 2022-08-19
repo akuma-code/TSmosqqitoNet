@@ -11,7 +11,7 @@ export type INote = {
 export type INotesProps = INote[] | []
 export type ICashProps = ITodoPayment[] | []
 
-export const TodoForm: FC<ITodoFormProps> = (props: ITodoFormProps) => {
+export const TodoForm: FC<ITodoFormProps> = (props) => {
 
     const [note, setNote] = useState<INote>({ text: "" })
     const [cash, setCash] = useState<ITodoPayment>({ sum: "", info: "" })

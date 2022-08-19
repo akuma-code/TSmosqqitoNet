@@ -103,3 +103,36 @@ code {
   margin-left: 5rem;
   top: 7rem;
 }
+
+.todos__list {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: .3rem;
+}
+
+.todos__card {
+  font-size: large;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todos__card div {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.todos__card.done {
+  background-color: indigo;
+  color: #fff;
+  text-decoration: line-through;
+  font-weight: 100;
+}
+
+.todos__card i {
+  font-size: 3rem;
+}
