@@ -5,7 +5,7 @@ import { ITodoFormProps, ITodoPayment, TodoInputType } from '../../types/props'
 
 export type INote = {
     text: string,
-    numb?: number
+
 }
 
 export type INotesProps = INote[] | []
@@ -21,9 +21,12 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
     // const ADDCASH=(newcash:ITodoPayment, field:'sum'|'ínfo')=>setCash(cash.map(c => c.numb === newcash.numb ?({...c, [field]:newcash[field]}):c))
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        if (props.type === TodoInputType.NOTES) return props.ADD({ text: note.text, numb: Date.now(), checked: false })
-        if (props.type === TodoInputType.CASH) return props.ADD({ text: todoCash, numb: Date.now(), checked: false })
-        console.log('SUbmited!');
+        let txt = "";
+        if (props.type === TodoInputType.NOTES) txt = note.text
+        if (props.type === TodoInputType.CASH) txt = todoCash
+        props.ADD({ text: txt, numb: Date.now(), checked: false })
+        setNote({ text: "" })
+        setCash({ sum: "", info: "" })
 
     }
     return (
