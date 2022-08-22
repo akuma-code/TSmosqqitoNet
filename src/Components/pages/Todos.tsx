@@ -76,25 +76,31 @@ export const Todos = () => {
                     </div>
                 </div>
                 <TodoForm type={formType.type} ADD={ADDTODO} />
-                <TagSelector reverse={REVERSE}>
 
-                </TagSelector>
-
-                {/* <SortSelector sort={getSort} /> */}
-                {/* <hr />
-                <TodoList items={todos} remove={REMOVE} reverse={REVERSE} /> */}
-                <hr />
-                <ListContainer>
-                    {todos.map(todo => (
-                        <TodoCard
-                            checked={todo.checked}
-                            numb={todo.numb}
-                            text={todo.text}
-                            key={todo.numb}
-                            remove={REMOVE}
-                            type={todo.type} />
-                    ))}
-                </ListContainer>
+                {todos.length >= 1 && <><TagSelector reverse={REVERSE} /> <hr /></>}
+                {todos.length >= 1 ?
+                    <ListContainer>
+                        {todos.map(todo => (
+                            <TodoCard
+                                checked={todo.checked}
+                                numb={todo.numb}
+                                text={todo.text}
+                                key={todo.numb}
+                                remove={REMOVE}
+                                type={todo.type} />
+                        ))}
+                    </ListContainer>
+                    :
+                    <div className='flex-row red-text center-text'>
+                        <span className="material-icons inline">
+                            cancel
+                        </span>
+                        <h3>Заметок не наблюдено!!</h3>
+                        <span className="material-icons inline">
+                            cancel
+                        </span>
+                    </div>
+                }
             </div>
         </TodoContext.Provider>
     )
