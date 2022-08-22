@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useSorting } from '../../hooks/useSorting'
 import { ITodoFormTypes, ITodoItem, TodoInputType as TdIType } from '../../types/props'
 import { I } from '../Cards/I'
 import { ListContainer } from '../Cards/ListContainer'
 import TodoCard from '../Cards/TodoCard'
-import { TodoList } from '../Cards/TodoList'
-import { SortSelector } from '../Forms/SortSelector'
 import { TagSelector } from '../Forms/TagSelector'
 import { TodoForm } from '../Forms/TodoForm'
 
