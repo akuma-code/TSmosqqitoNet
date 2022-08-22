@@ -18,7 +18,9 @@ export const AppRouter: FC<AppRouterProps> = () => {
                 path="/todos"
                 element={<Todos />}
             />
-
+            <Route path='/'
+                element={<HomePage />}
+            />
         </Routes>
     )
 }

@@ -1,20 +1,27 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { ITodoListItem } from '../../types/props'
+import { TodoContext } from '../pages/Todos'
 import { I } from './I'
 
 const TodoCard: FC<ITodoListItem> = (todo) => {
-    const { text, checked, remove, numb, children } = todo
+    const TODO = useContext(TodoContext)
+
+    const { text, checked, remove, numb, type } = todo
     const [isCheck, setIsCheck] = useState(checked)
     const cls = isCheck ? "done" : ""
-    const textCls = isCheck ? "done" : ""
     const liCls = ["collection-item", "todos__card", "s3"]
 
+    const check = (numb: number) => TODO!.setTodos(TODO!.todos.map(t => t.numb === numb ? { ...t, checked: isCheck } : t))
+
+    useEffect(() => {
+        check(numb)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isCheck])
 
 
 
     return (
-
-
         <li className={[cls, ...liCls].join(" ")}
             style={{ padding: ".3em .3em" }}
         >
@@ -36,7 +43,8 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
             <div className='w100 px1'>
                 {!isCheck &&
                     <div >
-                        {children}
+                        {type === 'notes' && <span className="material-icons green-text">description </span>}
+                        {type === 'cash' && <span className="material-icons red-text">attach_money</span>}
                     </div>
                 }
                 <b className={cls}>{text}</b>
@@ -44,7 +52,6 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
             <button className='btn red lighten-1'
                 onClick={() => remove(numb)}
             >
-
                 <I title='delete' />
             </button>
 

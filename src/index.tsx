@@ -13,11 +13,10 @@ const TODOS = new TodoStore()
 
 root.render(
 
-  <AppCTX.Provider value={TODOS}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </AppCTX.Provider>
+
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
