@@ -38,7 +38,7 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                 {props.type === TodoInputType.NOTES &&
                     <div className='row  valign-wrapper'>
                         <div className='col s2 input-field'>
-                            <button className='btn waves-effect waves-light w100' formTarget='todoform' type='submit'>
+                            <button className='btn waves-effect waves-light w100 blue accent-2 round' formTarget='todoform' type='submit'>
                                 <span>Добавить</span>
                                 <i className="material-icons right">
                                     playlist_add
@@ -61,7 +61,7 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                 {props.type === TodoInputType.CASH &&
                     <div className='row  valign-wrapper'>
                         <div className='col s2 input-field'>
-                            <button className='btn waves-effect waves-light w100' formTarget='todoform' type='submit'>
+                            <button className='btn waves-effect waves-light w100 blue accent-2' formTarget='todoform' type='submit'>
                                 <span>Внести</span>
                                 <i className="material-icons right">
                                     monetization_on

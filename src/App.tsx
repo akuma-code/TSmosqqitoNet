@@ -2,7 +2,7 @@
 import React from 'react';
 import NetCard from './Components/Cards/NetCard';
 import { BrowserRouter } from 'react-router-dom'
-import { HomePage } from './Components/pages/HomePage';
+import { Nets } from './Components/pages/Nets';
 import { AppRouter } from './Components/AppRouter';
 import NavBar from './Components/NavBar';
 

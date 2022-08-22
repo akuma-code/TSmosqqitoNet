@@ -4,43 +4,48 @@ import { I } from '../Cards/I'
 import { saveToLS, TodoContext } from '../pages/Todos'
 
 interface TagSelectorProps {
-    fields?: string[]
     reverse: () => void
     typesort: () => void
     numbsort: () => void
     children?: React.ReactNode
 }
 
-const btnCls = 'chip  btn waves-effect waves-light '
+const btnCls = 'chip  btn waves-effect waves-light  blue accent-1 ml1 txt-bold'
 
-export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort, children }) => {
+export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort }) => {
     // const reverse = () => TODO!.setTodos(TODO!.todos.reverse())
     const [isASC, setIsASC] = useState(true)
     const toggleASC = (): void => {
         setIsASC(!isASC)
         reverse()
     }
-
+    const rotate = isASC ? "rotate(0deg)" : "rotate(180deg)"
     return (
-        <div className='mt1 valign-wrapper'>
-
-            <button className='btn-floating  mx1'
-                onClick={toggleASC}
-            >
-                <I title={isASC ? 'arrow_upward' : 'arrow_downward'}
-                    clsI='' />
-            </button>
-            <button className={btnCls + " ml1"}
-                onClick={typesort}
-            >
-                По Типу
-            </button>
-            <button className={btnCls + "ml1"}
-                onClick={numbsort}
-            >
-                По дате
-            </button>
-            {children}
+        <div className='mt1 valign-wrapper tags_selector'>
+            <div>
+                <button className='btn-floating  blue accent-4 mx1'
+                    onClick={toggleASC}
+                    style={{ transition: "all .3s", transform: rotate }}
+                >
+                    <I title='swap_vert'
+                        clsI='' />
+                </button>
+                <button className={btnCls}
+                    onClick={typesort}
+                >
+                    По типу
+                </button>
+                <button className={btnCls}
+                    onClick={numbsort}
+                >
+                    По времени
+                </button>
+            </div>
+            <div className='valign-wrapper flex-row'>
+                {/* <I title='view_list' /> */}
+                <h4 className="material-icons" >view_list</h4>
+                <h5 className='pr3'>Панель сортировки</h5>
+            </div>
         </div>
     )
 }

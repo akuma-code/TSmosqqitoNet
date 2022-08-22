@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { HomePage } from './pages/HomePage'
+import { Nets } from './pages/Nets'
 import { Todos } from './pages/Todos'
 
 type AppRouterProps = {
@@ -12,14 +12,14 @@ export const AppRouter: FC<AppRouterProps> = () => {
         <Routes>
             <Route
                 path='/nets'
-                element={<HomePage />}
+                element={<Nets />}
             />
             <Route
                 path="/todos"
                 element={<Todos />}
             />
             <Route path='/'
-                element={<HomePage />}
+                element={<Nets />}
             />
         </Routes>
     )

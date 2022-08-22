@@ -4,7 +4,7 @@ import NetCard from '../Cards/NetCard';
 import { NetInputForm } from '../Forms/NetInputForm';
 
 
-type HomePageProps = {
+type NetsPageProps = {
     children?: React.ReactNode[] | string
 }
 
@@ -17,7 +17,7 @@ const saveToLS = (netlist: INetListProps[]) => {
     return localStorage.setItem('saved_nets', saved)
 }
 
-export const HomePage: FC<HomePageProps> = () => {
+export const Nets: FC<NetsPageProps> = () => {
 
     const [netlist, setNetlist] = useState<INetListProps[]>(getFromLS())
     const ADD = (net: INetListProps) => {
