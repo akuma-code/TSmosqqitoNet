@@ -23,11 +23,13 @@ const NetCard: React.FC<INetCardProps> = (props) => {
                 <button
                     style={{ width: "100px" }}
 
-                    className={`btn  pb1 ${isSKF ? "deep-orange darken-2" : "blue-grey darken-4"} `}
+                    className={`btn  pb1  ${isSKF ? "deep-orange darken-2" : "blue-grey darken-4"} `}
                     onClick={() => toggle()}
                 >
                     {isSKF ? "SKF" : "Простая"}
                 </button>
+                {isSKF && <i className="material-icons">grid_4x4</i>}
+                {!isSKF && <i className="material-icons large-text">grid_3x3</i>}
                 <button
 
                     className='btn mx1 cyan lighten-4 black-text'
