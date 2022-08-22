@@ -4,10 +4,7 @@ type ITodoStoreItem = {
     numb?: number
 }
 
-interface ITodoStore {
-    todos?: ITodoStoreItem
 
-}
 export class TodoStore {
     todo: ITodoStoreItem[]
     constructor() {

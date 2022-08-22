@@ -18,7 +18,7 @@ const NetCard: React.FC<INetCardProps> = (props) => {
     }, [isSKF])
 
     return (
-        <div className="my1 form__list teal lighten-5">
+        <div className="my1 form__list grey lighten-2 z-depth-3 px1">
             <div>
                 <button
                     style={{ width: "100px" }}

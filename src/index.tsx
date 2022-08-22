@@ -12,8 +12,6 @@ const root = ReactDOM.createRoot(
 const TODOS = new TodoStore()
 
 root.render(
-
-
   <React.StrictMode>
     <App />
   </React.StrictMode>

@@ -5,12 +5,12 @@ import TodoCard from './TodoCard'
 
 type ITodoLIstProps = {
     items: ITodoItem[],
-    remove: (numb: number) => void
+    rem: (numb: number) => void
     reverse: () => void
     children?: React.ReactNode
 }
 
-export const TodoList: FC<ITodoLIstProps> = ({ items, remove }) => {
+export const TodoList: FC<ITodoLIstProps> = ({ items, rem }) => {
 
 
     if (items.length < 1) return (
@@ -26,14 +26,15 @@ export const TodoList: FC<ITodoLIstProps> = ({ items, remove }) => {
     )
     return (
         <ol className='col w100 collection z-depth-3 todos__list'>
-            {items.map((item) => (
+            {items.map((item, idx) => (
                 <TodoCard
                     checked={item.checked}
                     numb={item.numb}
                     text={item.text}
                     key={item.numb}
-                    remove={remove}
+                    rem={rem}
                     type={item.type}
+                    idx={idx}
                 />
             ))}
         </ol>

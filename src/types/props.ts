@@ -81,7 +81,8 @@ export interface ITodoListItem {
     text: string,
     checked: boolean,
     type: string,
-    remove: (numb: number) => void
+    idx: number,
+    rem: (numb: number) => void
     check?: (isCheck: boolean) => void,
     reverse?: () => void
     children?: React.ReactNode

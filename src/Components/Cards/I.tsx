@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from 'react'
+import React, { FC } from 'react'
 
 export interface IconProps {
     title: string

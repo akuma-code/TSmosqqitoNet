@@ -6,10 +6,11 @@ import { I } from './I'
 const TodoCard: FC<ITodoListItem> = (todo) => {
     const TODO = useContext(TodoContext)
 
-    const { text, checked, remove, numb, type } = todo
+    const { text, checked, rem, numb, type } = todo
     const [isCheck, setIsCheck] = useState(checked)
     const cls = isCheck ? "done" : ""
-    const liCls = ["collection-item", "todos__card", "s3"]
+    const liCls = "collection-item   todos__card s3"
+    const count = (todo.idx && todo?.idx % 2 !== 0) ? "grey lighten-1" : "blue accent-1"
 
     const check = (numb: number) => TODO!.setTodos(TODO!.todos.map(t => t.numb === numb ? { ...t, checked: isCheck } : t))
 
@@ -22,13 +23,13 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
 
 
     return (
-        <li className={[cls, ...liCls].join(" ")}
+        <li className={[cls, count, liCls].join(" ")}
             style={{ padding: ".3em .3em" }}
         >
             <div>
 
                 <label
-                    className='valign-wrapper pr-1'
+                    className='valign-wrapper ml2'
                     style={{ minWidth: "fit-content", borderRight: "1px solid black" }}>
 
                     <input
@@ -42,7 +43,7 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
             </div >
             <div className='w100 px1'>
                 {!isCheck &&
-                    <div >
+                    <div className='icon-wrapper rounded'>
                         {type === 'notes' && <span className="material-icons green-text">description </span>}
                         {type === 'cash' && <span className="material-icons red-text">attach_money</span>}
                     </div>
@@ -50,11 +51,11 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
                 <b className={cls}>{text}</b>
             </div>
             <button className='btn red lighten-1'
-                onClick={() => remove(numb)}
+                onClick={() => rem(numb)}
             >
                 <I title='delete' />
             </button>
-
+            <hr />
         </li >
 
     )

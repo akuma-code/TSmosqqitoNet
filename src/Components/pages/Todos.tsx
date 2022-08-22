@@ -90,14 +90,15 @@ export const Todos = () => {
                         />
                         <hr />
                         <ListContainer>
-                            {todos.map(todo => (
+                            {todos.map((todo, idx) => (
                                 <TodoCard
                                     checked={todo.checked}
                                     numb={todo.numb}
                                     text={todo.text}
                                     key={todo.numb}
-                                    remove={REMOVE}
-                                    type={todo.type} />
+                                    rem={REMOVE}
+                                    type={todo.type}
+                                    idx={idx} />
                             ))}
                         </ListContainer></>
                     :

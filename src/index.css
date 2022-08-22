@@ -1,3 +1,5 @@
+@import url('./extStyle.scss');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #e0e0e0;
 }
 
 code {
@@ -23,7 +26,7 @@ code {
 
 .form__list {
   display: flex;
-  width: 40vw;
+  width: 100%;
   justify-content: space-between;
   flex-wrap: nowrap;
   flex-direction: row;
@@ -71,6 +74,10 @@ code {
 
 .ml1 {
   margin-left: 1rem;
+}
+
+.ml2 {
+  margin-left: 2rem;
 }
 
 
@@ -128,8 +135,8 @@ code {
   display: flex;
   flex-flow: column nowrap;
   gap: .4rem;
-  padding-inline-start: 20px;
-  padding-inline-end: 10px;
+  padding-inline-start: 0px;
+  /* padding-inline-end: 10px; */
   flex-grow: 4;
 
 }
@@ -143,6 +150,7 @@ code {
   align-items: center;
   justify-content: space-between;
   flex-grow: 2;
+  border-radius: .6rem;
 }
 
 .todos__card div {
@@ -178,4 +186,14 @@ code {
 
 .txt-bold {
   font-weight: 800;
+}
+
+.icon-wrapper {
+  background: #fff;
+}
+
+.rounded {
+  border-radius: 50%;
+  padding: 4px;
+  margin: 4px;
 }

@@ -42,7 +42,7 @@ export const Nets: FC<NetsPageProps> = () => {
                 >delete
                 </button>
             </div>
-            <div className='col s3'>
+            <div className='col s8'>
                 {netlist.map(net => (
                     <NetCard {...net} key={net.id} remove={() => remove(net.id)} />
                 ))}
