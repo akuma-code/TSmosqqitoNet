@@ -1,34 +1,55 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ITodoListItem } from '../../types/props'
+import { I } from './I'
 
 const TodoCard: FC<ITodoListItem> = (todo) => {
-    const { text, checked, remove, numb } = todo
+    const { text, checked, remove, numb, children } = todo
     const [isCheck, setIsCheck] = useState(checked)
-    const cls = isCheck ? "collection-item todos__card done" : "collection-item todos__card"
+    const cls = isCheck ? "done" : ""
+    const textCls = isCheck ? "done" : ""
+    const liCls = ["collection-item", "todos__card", "s3"]
+
+
+
 
     return (
-        <li className={cls}>
+
+
+        <li className={[cls, ...liCls].join(" ")}
+            style={{ padding: ".3em .3em" }}
+        >
             <div>
-                <label className='valign-wrapper'>
+
+                <label
+                    className='valign-wrapper pr-1'
+                    style={{ minWidth: "fit-content", borderRight: "1px solid black" }}>
+
                     <input
                         type="checkbox"
                         checked={isCheck}
                         onChange={() => setIsCheck(prev => !prev)} />
-                    <span ></span>
+                    <span style={{ wordWrap: "break-word" }} className="pr1">
+                        {/* {!isCheck && "Сделано!"} */}
+                    </span>
                 </label>
+            </div >
+            <div className='w100 px1'>
+                {!isCheck &&
+                    <div >
+                        {children}
+                    </div>
+                }
+                <b className={cls}>{text}</b>
             </div>
-            <div>
-                <b>{text}</b>
-            </div>
-            <button className='btn-large red lighten-1'
+            <button className='btn red lighten-1'
                 onClick={() => remove(numb)}
             >
-                <i className="material-icons">
-                    delete
-                </i>
+
+                <I title='delete' />
             </button>
 
-        </li>
+        </li >
+
     )
 }
 

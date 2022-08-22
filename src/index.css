@@ -48,6 +48,10 @@ code {
   padding-right: 1rem;
 }
 
+.pr1 {
+  padding-right: 1rem;
+}
+
 .mx1 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -69,12 +73,13 @@ code {
 
 .flex-row {
   display: flex;
-
   justify-content: center;
   align-items: stretch;
   gap: 2rem;
   align-content: space-around;
   flex-direction: row;
+  align-items: center;
+  word-wrap: normal;
 }
 
 .flex-col {
@@ -107,7 +112,11 @@ code {
 .todos__list {
   display: flex;
   flex-flow: column nowrap;
-  gap: .3rem;
+  gap: .4rem;
+  padding-inline-start: 20px;
+  padding-inline-end: 10px;
+  flex-grow: 4;
+
 }
 
 .todos__card {
@@ -118,21 +127,30 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-grow: 2;
 }
 
 .todos__card div {
+  flex-shrink: 2;
+
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  overflow-wrap: anywhere;
 }
 
 .todos__card.done {
-  background-color: indigo;
+  background-color: rgba(76, 0, 130, 0.397);
   color: #fff;
-  text-decoration: line-through;
+
+
+}
+
+.done {
   font-weight: 100;
+  text-decoration: line-through;
 }
 
 .todos__card i {
-  font-size: 3rem;
+  font-size: 1.7rem;
 }

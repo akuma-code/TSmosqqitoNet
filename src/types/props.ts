@@ -45,7 +45,8 @@ export type ITodoPayment = {
 
 export enum TodoInputType {
     NOTES = 'notes',
-    CASH = 'cash'
+    CASH = 'cash',
+    CHECKED = 'checked'
 }
 export type TDItype = 'notes' | 'cash'
 export type ITodoFormTypes = { type: TDItype }
@@ -53,7 +54,7 @@ export interface ITodoFormProps {
     type: 'notes' | 'cash'
     value?: ITodoNote | ITodoPayment
 
-    ADD: (todo: { text: string, numb: number, checked: boolean }) => void
+    ADD: (todo: { text: string, numb: number, checked: boolean, type: string | TDItype }) => void
     getData?: (data: ITodoNote | { sum: string, info: string }) => void,
     onChange?: (value: ITodoNote | ITodoPayment) => void
     children?: React.ReactNode
@@ -69,6 +70,7 @@ export interface ITodoItem {
     numb: number,
     text: string,
     checked: boolean,
+    type: string,
     date?: string,
     // remove?: (numb: number) => void
 
@@ -79,4 +81,6 @@ export interface ITodoListItem {
     text: string,
     checked: boolean,
     remove: (numb: number) => void
+    check?: (isCheck: boolean) => void,
+    children?: React.ReactNode
 }

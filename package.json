@@ -44,17 +44,12 @@
     ]
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
+  "main": "index.tsx",
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/akuma-code/TSmosqqitoNet.git"
-  },
   "keywords": [],
   "author": "akuma",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/akuma-code/TSmosqqitoNet/issues"
-  },
-  "homepage": "https://github.com/akuma-code/TSmosqqitoNet#readme"
+  }
 }

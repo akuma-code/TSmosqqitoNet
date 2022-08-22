@@ -12,19 +12,20 @@ export type INotesProps = INote[] | []
 export type ICashProps = ITodoPayment[] | []
 
 export const TodoForm: FC<ITodoFormProps> = (props) => {
-
+    const { type, ADD } = props
     const [note, setNote] = useState<INote>({ text: "" })
     const [cash, setCash] = useState<ITodoPayment>({ sum: "", info: "" })
     const todoCash = useCashToText(cash)
     const ADDNOTE = (value: string) => setNote(prev => ({ ...prev, text: value }))
     const ADDCASH = (value: string, type: string) => setCash(prev => ({ ...prev, [type]: value }))
-    // const ADDCASH=(newcash:ITodoPayment, field:'sum'|'ínfo')=>setCash(cash.map(c => c.numb === newcash.numb ?({...c, [field]:newcash[field]}):c))
+    const DATATYPE = {
+        notes: note.text,
+        cash: todoCash
+    }
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        let txt = "";
-        if (props.type === TodoInputType.NOTES) txt = note.text
-        if (props.type === TodoInputType.CASH) txt = todoCash
-        props.ADD({ text: txt, numb: Date.now(), checked: false })
+        ADD({ text: DATATYPE[type], numb: Date.now(), checked: false, type: type })
+
         setNote({ text: "" })
         setCash({ sum: "", info: "" })
 
@@ -74,7 +75,6 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                                     <input placeholder="бабло" id="sum" type="text" className="validate"
                                         value={cash.sum}
                                         onChange={(e) => ADDCASH(e.target.value, 'sum')}
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(prev => ({ ...prev, cash: e.target.value }))} 
                                     />
                                 </label>
                             </div>
@@ -83,7 +83,6 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                                     <input placeholder="За что или кого вносим" type="text" className="validate"
                                         value={cash.info}
                                         onChange={(e) => ADDCASH(e.target.value, 'info')}
-                                    // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData(prev => ({ ...prev, info: e.target.value }))}
                                     />
                                 </label>
                             </div>
