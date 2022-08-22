@@ -30,14 +30,23 @@ export const TodoContext = React.createContext<ITodoContext | null>(null)
 export const Todos = () => {
 
     const [formType, setFormType] = useState<ITodoFormTypes>({ type: TdIType.NOTES })
-    const [isREV, setIsREV] = useState(false)
+    const [isSORT, setIsSORT] = useState(false)
     const [todos, setTodos] = useState<ITodoItem[]>(getFromLS())
     const REVERSE = () => {
-        setIsREV(prev => !prev)
-        const reversed = todos.reverse()
-        // saveToLS(reversed)
-        setTodos(prev => reversed)
+        setTodos(todos.reverse())
+        setIsSORT(prev => !prev)
     }
+    const SortType = () => {
+        const sorttype = (arr: ITodoItem[]) => arr.sort((a, b) => a.type.localeCompare(b.type))
+        setIsSORT(prev => !prev)
+        setTodos(prev => sorttype(prev))
+    }
+    const SortNumb = () => {
+        const sortNumb = (arr: ITodoItem[]) => arr.sort((a, b) => a.numb - b.numb)
+        setIsSORT(prev => !prev)
+        setTodos(prev => sortNumb(prev))
+    }
+
     // const [sort_field, setSortField] = useState({ type: "type" })
     const ADDTODO = (todo: ITodoItem) => (setTodos([todo, ...todos]))
     const REMOVE = (numb: number) => setTodos(prev => prev.filter(i => i.numb !== numb))
@@ -45,15 +54,13 @@ export const Todos = () => {
     // const sorted = useSorting(todos, sort_field.type)
     useEffect(() => {
         saveToLS(todos)
-    }, [todos, isREV])
+    }, [todos, isSORT])
+
+
     return (
-        <TodoContext.Provider value={
-            {
-                todos,
-                setTodos,
-            }}>
-
-
+        <TodoContext.Provider
+            value={{ todos, setTodos }}
+        >
             <div className='container'>
                 <div className='mt1 valign-wrapper'>
                     <div className="chip  btn waves-effect waves-light ml1"
@@ -77,19 +84,25 @@ export const Todos = () => {
                 </div>
                 <TodoForm type={formType.type} ADD={ADDTODO} />
 
-                {todos.length >= 1 && <><TagSelector reverse={REVERSE} /> <hr /></>}
                 {todos.length >= 1 ?
-                    <ListContainer>
-                        {todos.map(todo => (
-                            <TodoCard
-                                checked={todo.checked}
-                                numb={todo.numb}
-                                text={todo.text}
-                                key={todo.numb}
-                                remove={REMOVE}
-                                type={todo.type} />
-                        ))}
-                    </ListContainer>
+                    <>
+                        <TagSelector
+                            reverse={REVERSE}
+                            typesort={SortType}
+                            numbsort={SortNumb}
+                        />
+                        <hr />
+                        <ListContainer>
+                            {todos.map(todo => (
+                                <TodoCard
+                                    checked={todo.checked}
+                                    numb={todo.numb}
+                                    text={todo.text}
+                                    key={todo.numb}
+                                    remove={REMOVE}
+                                    type={todo.type} />
+                            ))}
+                        </ListContainer></>
                     :
                     <div className='flex-row red-text center-text'>
                         <span className="material-icons inline">
