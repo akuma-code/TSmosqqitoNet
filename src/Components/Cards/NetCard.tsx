@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useCalcNet } from '../../hooks/useCalcNet'
 
 import { INetCardProps } from '../../types/props'
+import { I } from './I'
 
 
 
@@ -29,13 +30,14 @@ const NetCard: React.FC<INetCardProps> = (props) => {
                     {isSKF ? "SKF" : "Простая"}
                 </button>
                 {isSKF && <i className="material-icons">grid_4x4</i>}
+                {isSKF && <I title='grid_4x4' />}
                 {!isSKF && <i className="material-icons large-text">grid_3x3</i>}
                 <button
 
                     className='btn mx1 cyan lighten-4 black-text'
                     onClick={() => toggle()}
                 >
-                    <b>{calcedNet.W} x {calcedNet.H}</b>
+                    <b>{calcedNet.W} мм x {calcedNet.H} мм</b>
                 </button>
 
             </div>
