@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react'
+import { useRef } from 'react'
 import { useCashToText } from '../../hooks/useCashToText'
 import { ITodoFormProps, ITodoPayment, TodoInputType } from '../../types/props'
 
@@ -12,6 +13,7 @@ export type INotesProps = INote[] | []
 export type ICashProps = ITodoPayment[] | []
 
 export const TodoForm: FC<ITodoFormProps> = (props) => {
+    const inputfield = useRef<HTMLInputElement>(null)
     const { type, ADD } = props
     const [note, setNote] = useState<INote>({ text: "" })
     const [cash, setCash] = useState<ITodoPayment>({ sum: "", info: "" })
@@ -25,7 +27,7 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
         ADD({ text: DATATYPE[type], numb: Date.now(), checked: false, type: type })
-
+        inputfield.current && inputfield.current.focus()
         setNote({ text: "" })
         setCash({ sum: "", info: "" })
 
@@ -51,6 +53,7 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                                 <label>Новая заметка
                                     <input placeholder="Добавить новую заметку" id="sum" type="text" className="validate"
                                         value={note.text}
+                                        ref={inputfield}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => ADDNOTE(e.target.value)} />
                                 </label>
                             </div>
@@ -74,6 +77,7 @@ export const TodoForm: FC<ITodoFormProps> = (props) => {
                                 <label>Сумма
                                     <input placeholder="бабло" id="sum" type="text" className="validate"
                                         value={cash.sum}
+                                        ref={inputfield}
                                         onChange={(e) => ADDCASH(e.target.value, 'sum')}
                                     />
                                 </label>

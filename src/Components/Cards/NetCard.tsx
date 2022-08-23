@@ -12,8 +12,11 @@ const NetCard: React.FC<INetCardProps & { isForbidden?: boolean }> = (props) => 
     const { simple, skf } = useCalcNet(w, h)
     const initial = isSKF ? skf : simple
     const [calcedNet, setCalcedNet] = useState(initial)
-    const toggle = () => setIsSKF(!isSKF)
     const [forb, setIsForb] = useState(calcedNet.isForbidden)
+
+
+    const toggle = () => setIsSKF(!isSKF)
+
     useEffect(() => {
         isSKF ? setCalcedNet(skf) : setCalcedNet(simple)
         isSKF ? setIsForb(skf.isForbidden) : setIsForb(simple.isForbidden)
@@ -40,7 +43,7 @@ const NetCard: React.FC<INetCardProps & { isForbidden?: boolean }> = (props) => 
                 <button className={`btn    ${isSKF ? "blue accent-2" : "blue-grey darken-4"} `}
                     onClick={() => toggle()}
                 >
-                    <b>{calcedNet.W} мм x {calcedNet.H} мм</b>
+                    <b className={forb ? "red-text" : "white-text"}>{calcedNet.W} мм x {calcedNet.H} мм</b>
                 </button>
 
             </div>

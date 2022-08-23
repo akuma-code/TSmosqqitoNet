@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { useStateCalcNet } from '../../hooks/useCalcNet';
 import { INetListProps } from '../../types/props';
 import { ListContainer } from '../Cards/ListContainer';
 import NetCard from '../Cards/NetCard';
@@ -23,19 +24,17 @@ const saveToLS = (netlist: INetListProps[]) => {
 export const Nets: FC<NetsPageProps> = () => {
 
     const [netlist, setNetlist] = useState<newNetType[]>(getFromLS())
+    const [hookList] = useStateCalcNet(netlist)
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
 
-
-    const ADD = (net: newNetType) => {
-        // if (isBigger(net.w) && isBigger(net.h)) return alert("Один из размеров не должен привышать 1570")
-        return setNetlist(netlist => [...netlist, net])
-    }
+    const ADD = (net: newNetType) => setNetlist(netlist => [...netlist, net])
     const reset = () => setNetlist([])
     const remove = (id: number) => setNetlist(netlist => netlist.filter(n => n.id !== id))
+
     useEffect(() => {
         saveToLS(netlist)
-
+        console.log('hookList', hookList)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [netlist])
 
 

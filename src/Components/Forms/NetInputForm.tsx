@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRef } from 'react'
 import { INetInputProps, ISizes } from '../../types/props'
 import { I } from '../Cards/I'
 
@@ -14,7 +15,7 @@ export type newNetType = {
 
 
 export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
-
+    const fieldW = useRef<HTMLInputElement | null>(null)
     const [size, setSize] = useState<ISizes>({ w: "", h: "" })
 
     const [isSimple, setIsSimple] = useState(false)
@@ -30,6 +31,7 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
 
         const newnet: newNetType = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple, isForbidden: true }
         ADD(newnet)
+        fieldW.current && fieldW.current.focus()
         setSize({ w: '', h: '' })
     }
     return (
@@ -57,6 +59,7 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
                 <label htmlFor="sizew">Ширина</label>
                 <input
                     value={size.w}
+                    ref={fieldW}
                     id="sizew"
                     type="number"
                     className="validate center"

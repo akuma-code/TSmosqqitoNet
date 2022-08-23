@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { newNetType } from "../Components/Forms/NetInputForm"
 
 type IDeltaNet = {
@@ -50,7 +50,7 @@ export const useCalcNet = (w: string, h: string): INetResult => {
     return NETS
 }
 
-export const useStateCalcNet = (list: newNetType[]): [INetsObject[], any] => {
+export const useStateCalcNet = (list: newNetType[]): [INetsObject[]] => {
 
     const delta: IDeltaNet = {
         skf: { dw: -45, dh: -47 },
@@ -74,9 +74,12 @@ export const useStateCalcNet = (list: newNetType[]): [INetsObject[], any] => {
     })
     const getNetsSizes = (newnet: newNetType[]) => newnet.map(NETS)
 
-    const [netsList, setNetsList] = useState<INetsObject[]>(getNetsSizes(list))
+    const [netsList, setNetsList] = useState<INetsObject[]>([])
+    useEffect(() => {
+        setNetsList(getNetsSizes(list))
+    }, [list])
 
 
 
-    return [netsList, setNetsList]
+    return [netsList]
 }
