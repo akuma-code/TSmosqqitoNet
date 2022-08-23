@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Nets } from './pages/Nets'
+import { PageTesting } from './pages/PageTesting'
 import { Todos } from './pages/Todos'
 
 type AppRouterProps = {
@@ -17,6 +18,9 @@ export const AppRouter: FC<AppRouterProps> = () => {
             <Route
                 path="/todos"
                 element={<Todos />}
+            />
+            <Route path='/test'
+                element={<PageTesting />}
             />
             <Route path='/'
                 element={<Nets />}
