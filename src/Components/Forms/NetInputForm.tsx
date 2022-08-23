@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { INetInputProps, INetListProps, ISizes } from '../../types/props'
+import { INetInputProps, ISizes } from '../../types/props'
 import { I } from '../Cards/I'
 
 export type newNetType = {

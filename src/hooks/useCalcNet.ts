@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { newNetType } from "../Components/Forms/NetInputForm"
 
 type IDeltaNet = {
     skf: { dw: number, dh: number }
     simple: { dw: number, dh: number }
 }
-type ISize = string | number
 type INet = {
     W: number,
     H: number
-}
-interface InputSizeType {
-    w?: ISize
-    h?: ISize
-    type: 'skf' | 'simple'
 }
 type INetResult = {
     skf: { W: number, H: number, isForbidden: boolean }

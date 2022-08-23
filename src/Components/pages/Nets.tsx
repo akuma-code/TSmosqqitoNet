@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react'
-import { useCalcNet, useStateCalcNet } from '../../hooks/useCalcNet';
 import { INetListProps } from '../../types/props';
 import { ListContainer } from '../Cards/ListContainer';
 import NetCard from '../Cards/NetCard';
@@ -20,10 +19,6 @@ const saveToLS = (netlist: INetListProps[]) => {
     return localStorage.setItem('saved_nets', saved)
 }
 
-const isBigger = (size: string | number): boolean => {
-    if (typeof size === 'string') size = parseInt(size, 10)
-    return size > 1570 ? true : false
-}
 
 export const Nets: FC<NetsPageProps> = () => {
 
@@ -55,13 +50,11 @@ export const Nets: FC<NetsPageProps> = () => {
                 >delete
                 </button>
             </div>
-            {/* <div className='col s8'> */}
             <ListContainer>
-                {netlist.map((net, idx) => (
-                    <NetCard {...net} remove={remove} key={idx} />
+                {netlist.map(net => (
+                    <NetCard {...net} remove={remove} key={net.id} />
                 ))}
             </ListContainer>
-            {/* </div> */}
         </div>
 
     )
