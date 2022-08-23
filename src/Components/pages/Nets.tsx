@@ -1,7 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
+import { useCalcNet, useStateCalcNet } from '../../hooks/useCalcNet';
 import { INetListProps } from '../../types/props';
+import { ListContainer } from '../Cards/ListContainer';
 import NetCard from '../Cards/NetCard';
-import { NetInputForm } from '../Forms/NetInputForm';
+import { NetInputForm, newNetType } from '../Forms/NetInputForm';
 
 
 type NetsPageProps = {
@@ -12,16 +14,27 @@ const getFromLS = (): INetListProps[] => {
     const saved = JSON.parse(localStorage.getItem('saved_nets') || '[]')
     return saved
 }
+
 const saveToLS = (netlist: INetListProps[]) => {
     const saved = JSON.stringify(netlist)
     return localStorage.setItem('saved_nets', saved)
 }
 
+const isBigger = (size: string | number): boolean => {
+    if (typeof size === 'string') size = parseInt(size, 10)
+    return size > 1570 ? true : false
+}
+
 export const Nets: FC<NetsPageProps> = () => {
 
-    const [netlist, setNetlist] = useState<INetListProps[]>(getFromLS())
-    const ADD = (net: INetListProps) => {
-        return setNetlist(netlist => [net, ...netlist])
+    const [netlist, setNetlist] = useState<newNetType[]>(getFromLS())
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+
+
+    const ADD = (net: newNetType) => {
+        // if (isBigger(net.w) && isBigger(net.h)) return alert("Один из размеров не должен привышать 1570")
+        return setNetlist(netlist => [...netlist, net])
     }
     const reset = () => setNetlist([])
     const remove = (id: number) => setNetlist(netlist => netlist.filter(n => n.id !== id))
@@ -42,11 +55,13 @@ export const Nets: FC<NetsPageProps> = () => {
                 >delete
                 </button>
             </div>
-            <div className='col s8'>
-                {netlist.map(net => (
-                    <NetCard {...net} key={net.id} remove={() => remove(net.id)} />
+            {/* <div className='col s8'> */}
+            <ListContainer>
+                {netlist.map((net, idx) => (
+                    <NetCard {...net} remove={remove} key={idx} />
                 ))}
-            </div>
+            </ListContainer>
+            {/* </div> */}
         </div>
 
     )

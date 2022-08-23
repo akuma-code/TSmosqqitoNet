@@ -12,6 +12,8 @@ export interface INetListProps {
     isSimple: boolean
     id: number
     remove?: (id: number) => void
+    isForbidden: boolean
+
 }
 
 export type INetInputProps = {
@@ -32,6 +34,7 @@ export interface INetCardProps {
     h: string
     id: number
     isSimple: boolean
+    isForbidden?: boolean
     remove: (id: number) => void
 }
 export type ITodoNote = {

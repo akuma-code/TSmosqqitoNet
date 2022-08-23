@@ -2,7 +2,13 @@ import React, { useState } from 'react'
 import { INetInputProps, INetListProps, ISizes } from '../../types/props'
 import { I } from '../Cards/I'
 
-
+export type newNetType = {
+    w: string,
+    h: string,
+    id: number,
+    isSimple: boolean,
+    isForbidden: boolean
+}
 
 
 
@@ -21,7 +27,8 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
     const submitHandler = (e: React.FormEvent): void => {
         e.preventDefault()
         if (size.w === '' || size.h === '') return alert("Один из размеров не введен!")
-        const newnet: INetListProps = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple }
+
+        const newnet: newNetType = { w: size.w || "0", h: size.h || "0", id: Date.now(), isSimple: isSimple, isForbidden: true }
         ADD(newnet)
         setSize({ w: '', h: '' })
     }

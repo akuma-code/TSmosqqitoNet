@@ -42,7 +42,7 @@ export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort,
                 <button className={btnCls}
                     onClick={boolsort}
                 >
-                    По сделаному
+                    По сделанному
                 </button>
             </div>
             <div className='valign-wrapper flex-row'>

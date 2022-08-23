@@ -6,38 +6,38 @@ import { I } from './I'
 
 
 
-const NetCard: React.FC<INetCardProps> = (props) => {
+const NetCard: React.FC<INetCardProps & { isForbidden?: boolean }> = (props) => {
     const { h, isSimple, w } = props
-    const [calcedNet, setCalcedNet] = useState({ W: 0, H: 0 })
     const [isSKF, setIsSKF] = useState(!isSimple)
     const { simple, skf } = useCalcNet(w, h)
+    const initial = isSKF ? skf : simple
+    const [calcedNet, setCalcedNet] = useState(initial)
     const toggle = () => setIsSKF(!isSKF)
-
+    const [forb, setIsForb] = useState(calcedNet.isForbidden)
     useEffect(() => {
         isSKF ? setCalcedNet(skf) : setCalcedNet(simple)
+        isSKF ? setIsForb(skf.isForbidden) : setIsForb(simple.isForbidden)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSKF])
 
+    const isForbCls = forb ? "red darken-5" : "grey lighten-2"
     return (
-        <div className="my1 form__list grey lighten-2 z-depth-3 px1">
+        <div className={`form__list z-depth-3 px1 ${isForbCls}`} >
             <div className='flex-row'>
-                <button
+                <button className={`btn  pb1  z-depth-2 ${isSKF ? "deep-orange darken-2" : "blue-grey darken-4"} `}
                     style={{ width: "100px" }}
-
-                    className={`btn  pb1  ${isSKF ? "deep-orange darken-2" : "blue-grey darken-4"} `}
                     onClick={() => toggle()}
                 >
                     {isSKF ? "SKF" : "Простая"}
                 </button>
 
-                <span className='mx1'>
-
-                    {isSKF && <I title='grid_4x4' wrapped className='deep-orange-text text-darken-2' />}
-                    {!isSKF && <I title='grid_3x3' wrapped className='blue-text text-darken-4' />}
+                <span className='px1'>
+                    {forb && <I title='dangerous' className='red-text text-darken-4 I-wrapper white' />}
+                    {!forb && isSKF && <I title='grid_4x4' wrapped className='deep-red-text text-darken-2' />}
+                    {!forb && !isSKF && <I title='grid_3x3' wrapped className='blue-text text-darken-4' />}
                 </span>
-                <button
-
-                    className='btn cyan lighten-4 black-text'
+                <button className={`btn    ${isSKF ? "blue accent-2" : "blue-grey darken-4"} `}
                     onClick={() => toggle()}
                 >
                     <b>{calcedNet.W} мм x {calcedNet.H} мм</b>
