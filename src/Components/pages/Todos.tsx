@@ -27,38 +27,30 @@ export const TodoContext = React.createContext<ITodoContext | null>(null)
 export const Todos = () => {
 
     const [formType, setFormType] = useState<ITodoFormTypes>({ type: TdIType.NOTES })
-    const [isSORT, setIsSORT] = useState(false)
     const [todos, setTodos] = useState<ITodoItem[]>(getFromLS())
-    const REVERSE = () => {
-        setTodos(todos.reverse())
-        setIsSORT(prev => !prev)
-    }
+
+
+    const REVERSE = () => setTodos([...todos].reverse())
     const SortType = () => {
-        const sorttype = (arr: ITodoItem[]) => arr.sort((a, b) => a.type.localeCompare(b.type))
-        setIsSORT(prev => !prev)
+        const sorttype = (arr: ITodoItem[]) => [...arr].sort((a, b) => a.type.localeCompare(b.type))
         setTodos(prev => sorttype(prev))
     }
     const SortNumb = () => {
-        const sortNumb = (arr: ITodoItem[]) => arr.sort((a, b) => a.numb - b.numb)
-        setIsSORT(prev => !prev)
+        const sortNumb = (arr: ITodoItem[]) => [...arr].sort((a, b) => a.numb - b.numb)
         setTodos(prev => sortNumb(prev))
     }
     const SortBoolean = () => {
         const bool = (el: boolean): number => el ? 1 : 0
-        const sortBool = (arr: ITodoItem[]) => arr.sort((a, b) => (bool(a.checked) - bool(b.checked)))
+        const sortBool = (arr: ITodoItem[]) => [...arr].sort((a, b) => (bool(a.checked) - bool(b.checked)))
 
-        setIsSORT(prev => !prev)
         setTodos(prev => sortBool(prev))
     }
 
-    // const [sort_field, setSortField] = useState({ type: "type" })
     const ADDTODO = (todo: ITodoItem) => (setTodos([todo, ...todos]))
     const REMOVE = (numb: number) => setTodos(prev => prev.filter(i => i.numb !== numb))
-    // const getSort = (type: string) => setSortField({ type: type })
-    // const sorted = useSorting(todos, sort_field.type)
     useEffect(() => {
         saveToLS(todos)
-    }, [todos, isSORT])
+    }, [todos])
 
 
     return (
