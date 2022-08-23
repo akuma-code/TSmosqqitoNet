@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Text } from '@chakra-ui/react'
-import { PlusSquareIcon } from "@chakra-ui/icons"
+import { PlusSquareIcon } from '@chakra-ui/icons'
+
 type NavBarProps = {
     children?: React.ReactNode
 }
