@@ -1,7 +1,5 @@
-import React, { FC, useContext, useState } from 'react'
-import { ITodoItem } from '../../types/props'
+import React, { FC, useState } from 'react'
 import { I } from '../Cards/I'
-import { saveToLS, TodoContext } from '../pages/Todos'
 
 interface TagSelectorProps {
     reverse: () => void
