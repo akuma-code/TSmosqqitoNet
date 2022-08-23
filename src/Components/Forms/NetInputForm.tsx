@@ -77,7 +77,7 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
             </div>
 
             <div className="col s3 center input-field ">
-                <button formTarget='netinput' className='btn btn-large blue lighten-1'>Расчитать</button>
+                <button formTarget='netinput' className='btn btn-large blue lighten-1'>Рассчитать</button>
             </div>
 
 

@@ -2,14 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { TodoStore } from './Components/Stores/TodoStore';
 
-const AppCTX = React.createContext<TodoStore | null>(null)
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-const TODOS = new TodoStore()
 
 root.render(
   <React.StrictMode>
