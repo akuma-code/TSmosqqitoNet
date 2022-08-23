@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { INetInputProps, INetListProps, ISizes } from '../../types/props'
+import { I } from '../Cards/I'
 
 
 
@@ -30,14 +31,15 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
             name='netinput'
             onSubmit={submitHandler}
         >
-            <div className="col s2 center ">
-                <div className="switch input-field">
-                    <label className='black-text'>
+            <div className="col s3 center ">
+                <div className="switch input-field valign-wrapper">
+                    <label className='black-text align-center'>
                         <input
                             type="checkbox"
                             className='black-text'
                             onChange={() => { setIsSimple(prev => !prev) }}
                         />
+                        {isSimple ? <I title='grid_3x3' /> : <I title='grid_4x4' />}
                         <span className="lever"></span>
                         {isSimple ? "Простая" : "SKF"}
                     </label>

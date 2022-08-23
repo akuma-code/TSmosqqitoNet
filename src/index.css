@@ -198,3 +198,10 @@ code {
   padding: 4px;
   margin: 4px;
 }
+
+.I-wrapper {
+  display: flex;
+  /* background: rgb(179, 179, 179); */
+  padding: .6rem;
+  border-radius: 15%;
+}

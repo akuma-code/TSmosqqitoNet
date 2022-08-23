@@ -7,12 +7,13 @@ interface TagSelectorProps {
     reverse: () => void
     typesort: () => void
     numbsort: () => void
+    boolsort: () => void
     children?: React.ReactNode
 }
 
 const btnCls = 'chip  btn waves-effect waves-light  blue accent-1 ml1 txt-bold'
 
-export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort }) => {
+export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort, boolsort }) => {
     // const reverse = () => TODO!.setTodos(TODO!.todos.reverse())
     const [isASC, setIsASC] = useState(true)
     const toggleASC = (): void => {
@@ -39,6 +40,11 @@ export const TagSelector: FC<TagSelectorProps> = ({ reverse, typesort, numbsort 
                     onClick={numbsort}
                 >
                     По времени
+                </button>
+                <button className={btnCls}
+                    onClick={boolsort}
+                >
+                    По сделаному
                 </button>
             </div>
             <div className='valign-wrapper flex-row'>

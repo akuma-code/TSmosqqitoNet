@@ -10,7 +10,7 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
     const [isCheck, setIsCheck] = useState(checked)
     const cls = isCheck ? "done" : ""
     const liCls = "collection-item   todos__card s3"
-    const count = (todo.idx && todo?.idx % 2 !== 0) ? "grey lighten-1" : "blue accent-1"
+    const zebraColor = (type === 'notes') ? "grey lighten-1" : "blue accent-1"
 
     const check = (numb: number) => TODO!.setTodos(TODO!.todos.map(t => t.numb === numb ? { ...t, checked: isCheck } : t))
 
@@ -23,7 +23,7 @@ const TodoCard: FC<ITodoListItem> = (todo) => {
 
 
     return (
-        <li className={[cls, count, liCls].join(" ")}
+        <li className={[cls, zebraColor, liCls].join(" ")}
             style={{ padding: ".3em .3em" }}
         >
             <div>

@@ -43,6 +43,13 @@ export const Todos = () => {
         setIsSORT(prev => !prev)
         setTodos(prev => sortNumb(prev))
     }
+    const SortBoolean = () => {
+        const bool = (el: boolean): number => el ? 1 : 0
+        const sortBool = (arr: ITodoItem[]) => arr.sort((a, b) => (bool(a.checked) - bool(b.checked)))
+
+        setIsSORT(prev => !prev)
+        setTodos(prev => sortBool(prev))
+    }
 
     // const [sort_field, setSortField] = useState({ type: "type" })
     const ADDTODO = (todo: ITodoItem) => (setTodos([todo, ...todos]))
@@ -87,6 +94,7 @@ export const Todos = () => {
                             reverse={REVERSE}
                             typesort={SortType}
                             numbsort={SortNumb}
+                            boolsort={SortBoolean}
                         />
                         <hr />
                         <ListContainer>
