@@ -6,7 +6,7 @@ import { fetchSklad } from '../../http'
 import { ISklad } from '../../types/IServerData'
 import { StateMapper } from '../DataMapper'
 import SkladItemCard from '../Cards/SkladItemCard'
-
+import { API } from '../../http/ClientSkladApi'
 const products = [
     {
         id: 1,
@@ -51,10 +51,11 @@ const products = [
 
 const initial = async () => {
     const sklad = await fetchSklad()
-    console.log(sklad);
+    // console.log(sklad);
+    API.fetchAll()
 
     const map = StateMapper(sklad)
-    console.log('map', map)
+    // console.log('map', map)
     return map
 }
 
@@ -64,7 +65,7 @@ export const PageTesting: FC = (): JSX.Element => {
     const [skladsMap, setSkladsMap] = useState([])
     useEffect(() => {
         fetchSklad().then(data => setSklads(data.rows))
-
+        initial()
     }, [])
 
 
@@ -80,7 +81,7 @@ export const PageTesting: FC = (): JSX.Element => {
             alignItems='start'
         // alignContent={'center'}
         >
-            <Box
+            {/* <Box
                 bgColor={'#4fc3f7'}
                 padding='1rem'
                 margin='1rem'
@@ -92,20 +93,31 @@ export const PageTesting: FC = (): JSX.Element => {
             >
                 {items.map(product =>
                     <ProductCard {...product} key={product.id} />)}
-            </Box>
-            <Box className='p1 m1 blue darken-2'
+            </Box> */}
+            <Box className=' blue darken-2'
                 maxHeight={'90vh'}>
                 <Heading textAlign={'center'}>Products Form</Heading>
             </Box>
-            <Box
-                className='p1 m1 blue lighten-2'
-                textAlign={'center'}
-                maxHeight='90vh'
 
+            <Box className=' blue lighten-2'
+                textAlign={'center'}
+                maxHeight='100vh'
+                width={'100%'}
             >
-                <Heading>Складские остатки</Heading>
-                {sklads.map(s =>
-                    <SkladItemCard {...s} id={s.id} key={s.id} />)}
+
+                <Heading paddingBottom='0'>Складские остатки</Heading>
+                <Box
+                    className=''
+                    maxHeight='80vh'
+                    display='flex'
+                    flexDir={'column'}
+                    flexWrap='wrap'
+                    overflow={'hidden'}
+                    justifyContent='space-between'
+                >
+                    {sklads.map(s =>
+                        <SkladItemCard {...s} id={s.id} key={s.id} />)}
+                </Box>
             </Box>
 
 
