@@ -7,5 +7,5 @@ export const $api = axios.create({
 export const fetchSklad = async () => {
     const { data } = await $api.get('api/sklad')
 
-    return data.rows
+    return data
 }

@@ -5,6 +5,7 @@ import { ProductCard } from '../Testing/ProductCard'
 import { fetchSklad } from '../../http'
 import { ISklad } from '../../types/IServerData'
 import { StateMapper } from '../DataMapper'
+import SkladItemCard from '../Cards/SkladItemCard'
 
 const products = [
     {
@@ -59,10 +60,10 @@ const initial = async () => {
 
 export const PageTesting: FC = (): JSX.Element => {
     const [items, setItems] = useState(products)
-    const [sklads, setSklads] = useState<ISklad[]>([] as ISklad[])
+    const [sklads, setSklads] = useState<ISklad[]>([])
     const [skladsMap, setSkladsMap] = useState([])
     useEffect(() => {
-        fetchSklad().then(data => setSklads(data))
+        fetchSklad().then(data => setSklads(data.rows))
 
     }, [])
 
@@ -92,10 +93,20 @@ export const PageTesting: FC = (): JSX.Element => {
                 {items.map(product =>
                     <ProductCard {...product} key={product.id} />)}
             </Box>
-            <Box className='p1'>
+            <Box className='p1 m1 blue darken-2'
+                maxHeight={'90vh'}>
                 <Heading textAlign={'center'}>Products Form</Heading>
             </Box>
+            <Box
+                className='p1 m1 blue lighten-2'
+                textAlign={'center'}
+                maxHeight='90vh'
 
+            >
+                <Heading>Складские остатки</Heading>
+                {sklads.map(s =>
+                    <SkladItemCard {...s} id={s.id} key={s.id} />)}
+            </Box>
 
 
 

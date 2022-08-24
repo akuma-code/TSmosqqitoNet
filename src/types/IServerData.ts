@@ -5,7 +5,7 @@ export interface ISklad {
     quant?: number
     type?: IType
     typeId?: string
-    shop?: IShop[]
+    shop?: IShop
     shopId?: string
     prods?: any[]
 

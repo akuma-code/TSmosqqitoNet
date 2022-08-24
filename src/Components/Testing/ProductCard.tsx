@@ -44,16 +44,6 @@ export const ProductCard: React.FC<ProductCardProps> = (product): JSX.Element =>
 
                 />
             </Box>
-            {/* <Box padding={'1rem'} minWidth='max-content'
-            >
-                {product.info && product.info.map((i, idx) =>
-                    <ol key={idx}>
-                        <li> размер: {i.w} x {i.h}</li>
-                        <li> профиль: {i.prof}</li>
-                        <li> стекло: {i.glass}мм</li>
-                    </ol>
-                )}
-            </Box> */}
             <Box>
                 <Heading size={'lg'} textAlign='center' className='my1'>{product.title}</Heading>
 
@@ -81,3 +71,14 @@ export const ProductCard: React.FC<ProductCardProps> = (product): JSX.Element =>
         </Box>
     )
 }
+
+/* <Box padding={'1rem'} minWidth='max-content'
+>
+    {product.info && product.info.map((i, idx) =>
+        <ol key={idx}>
+            <li> размер: {i.w} x {i.h}</li>
+            <li> профиль: {i.prof}</li>
+            <li> стекло: {i.glass}мм</li>
+        </ol>
+    )}
+</Box> */
