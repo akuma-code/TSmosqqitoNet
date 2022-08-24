@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { Box, Container, Heading, Text } from '@chakra-ui/react'
 import React, { FC, useEffect, useState } from 'react'
 import { ITodoItem, ITodoListItem } from '../../types/props'
 import TodoCard from './TodoCard'
@@ -14,15 +15,15 @@ export const TodoList: FC<ITodoLIstProps> = ({ items, rem }) => {
 
 
     if (items.length < 1) return (
-        <div className='flex-row red-text center-text'>
-            <span className="material-icons inline">
+        <Heading >
+            {/* <span className="material-icons inline">
                 cancel
-            </span>
-            <h3>Заметок не наблюдено!!</h3>
-            <span className="material-icons inline">
+            </span> */}
+            <Text fontSize='60px'>Заметок не наблюдено!!</Text>
+            {/* <span className="material-icons inline">
                 cancel
-            </span>
-        </div>
+            </span> */}
+        </Heading>
     )
     return (
         <ol className='col w100 collection z-depth-3 todos__list'>

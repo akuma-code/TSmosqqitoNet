@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-type TypeHandler = {
+type IToggleFuncs = {
     on: () => void,
     off: () => void,
     toggle: () => void,
 }
 
-export const useToggle = (): [flag: boolean, handler: TypeHandler] => {
-    const [toggleFlag, setToggle] = useState(false)
-    const toggleFunc = () => setToggle(state => !state)
-    const setOn = () => setToggle(true)
-    const setOf = () => setToggle(false)
+type TuppleToggle = [
+    toggleFlag: boolean,
+    flagHandler: IToggleFuncs
+]
+/**
+ * возвращает boolean-стейт и хэндлер с методами on, off, toggle
+ * @param {boolean} initial  начальное значение
+ * @returns {TuppleToggle} [flag, setFlag]
+ */
+export const useToggle = (initial: boolean = false): TuppleToggle => {
+    const [toggleFlag, setToggleFlag] = useState(initial)
+    const setToggle = () => setToggleFlag(state => !state)
+    const setOn = () => setToggleFlag(true)
+    const setOf = () => setToggleFlag(false)
 
     const flagHandler = {
-        toggle: toggleFunc,
+        toggle: setToggle,
         on: setOn,
         off: setOf
     }

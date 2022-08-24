@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { ITodoFormTypes, ITodoItem, TodoInputType as TdIType } from '../../types/props'
 import { I } from '../Cards/I'
@@ -100,13 +101,14 @@ export const Todos = () => {
                                     type={todo.type}
                                     idx={idx} />
                             ))}
-                        </ListContainer></>
+                        </ListContainer>
+                    </>
                     :
                     <div className='flex-row red-text center-text'>
                         <span className="material-icons inline">
                             cancel
                         </span>
-                        <h3>Заметок не наблюдено!!</h3>
+                        <Text fontSize={'60'}>Заметок не наблюдено!!</Text>
                         <span className="material-icons inline">
                             cancel
                         </span>
