@@ -17,7 +17,11 @@ const NavBar: FC<NavBarProps> = () => {
                     <li>
                         <a href="/todos" style={{ fontSize: "2.3rem" }}>
                             <span className="material-icons mr1">checklist</span>Заметки
-
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/sklad" style={{ fontSize: "2.3rem" }}>
+                            <span className="material-icons mr1">next_week</span>Складские остатки
                         </a>
                     </li>
                     <li>

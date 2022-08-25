@@ -1,7 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Box, Button, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
-import { useToggle } from '../../hooks/useToggle'
-import { ProductCard } from '../Testing/ProductCard'
+import { FC, useEffect, useState } from 'react'
+import { Box, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { ISklad, PATHS } from '../../types/IServerData'
 import SkladItemCard from '../Cards/SkladItemCard'
 import { useFetchApi } from '../../http/useFetchApi'
@@ -12,7 +10,7 @@ const getNumb = (name: string): number => {
     return parseInt(numb, 10)
 }
 
-export const PageTesting: FC = (): JSX.Element => {
+export const SkladPage: FC = (): JSX.Element => {
     // const [items, setItems] = useState<ISklad[]>([])
     const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState<ISklad[]>([])

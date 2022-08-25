@@ -21,6 +21,7 @@ import {
 import React from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import { ISklad } from '../../types/IServerData'
+import { I } from './I'
 
 const onHover = (cond: boolean) => {
     function changeCls(initial: string, newCls: string) {
@@ -70,7 +71,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                     <Portal>
                         <PopoverContent >
                             <PopoverArrow bgColor={'indigo '} />
-                            <PopoverHeader textAlign={'center'} fontSize={'3xl'}><b>{type?.name}</b></PopoverHeader>
+                            <PopoverHeader textAlign={'center'} fontSize={'3xl'}><b>{type?.name} <I title="send" className='blue-text' /> {quant} шт.</b></PopoverHeader>
                             <PopoverBody>
                                 <Image
                                     alt='No IMAGE'
@@ -103,12 +104,17 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                         <StatNumber>{shop?.price}</StatNumber>
                         <StatHelpText>рублей</StatHelpText>
                     </Stat> */}
-                    <Heading className='ml1' alignItems={'center'} display='flex' flexDir={'column'}>{type?.name}</Heading>
+
                     <Stat className='m1' textAlign='center'>
-                        <StatLabel>Осталось</StatLabel>
-                        <StatNumber>{quant} шт.</StatNumber>
-                        <StatHelpText color={'red'} fontWeight={'semibold'}>Цена: {shop?.price} руб.</StatHelpText>
+                        <StatLabel>Наименование:</StatLabel>
+                        <StatNumber>{type?.name}</StatNumber>
+                        <StatHelpText
+                            color={'red'}
+                            fontWeight={'semibold'}
+                            fontSize={'xl'}
+                        >Цена: {shop?.price} руб.</StatHelpText>
                     </Stat>
+                    <Heading className='mr1' alignItems={'center'} display='flex' flexDir={'column'}>{quant} шт.</Heading>
                 </StatGroup>
             </Box>
 
