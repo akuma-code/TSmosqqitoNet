@@ -1,22 +1,44 @@
-import { Box, Heading, Image, Stat, StatGroup, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    Heading,
+    Image,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverFooter,
+    PopoverHeader,
+    PopoverTrigger,
+    Portal,
+    Stat,
+    StatGroup,
+    StatHelpText,
+    StatLabel,
+    StatNumber
+} from '@chakra-ui/react'
 import React from 'react'
 import { useToggle } from '../../hooks/useToggle'
 import { ISklad } from '../../types/IServerData'
+
 const onHover = (cond: boolean) => {
     function changeCls(initial: string, newCls: string) {
         if (cond) return [initial, newCls].join(" ")
         else return initial
     }
+
     return { changeCls }
 }
 
 
 const SkladItemCard: React.FC<ISklad> = (props) => {
     const [isHover, setHoverState] = useToggle()
-    const HoverHandler = onHover(isHover).changeCls('m1 ', 'blue accent-2  red-text')
+    const [isHoverImg, setHoverStateImg] = useToggle()
+    const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')
     const { type, quant, shop } = props
     return (
-        <Box className={HoverHandler}
+        <Box className={'m1 z-depth-3'}
             maxHeight='10em'
             display='flex'
             flexDir='row'
@@ -24,25 +46,51 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
             borderRadius='md'
             justifyContent={'space-between'}
             alignItems='stretch'
-            onMouseEnter={setHoverState.on}
-            onMouseLeave={setHoverState.off}
             padding='.6em'
-            maxWidth={'25vw'}
+            maxWidth={'23vw'}
+            bgColor={'gray.500'}
 
         >
-            <Box alignItems='center' display={'flex'} margin='1rem'>
-                <Image
-                    alt='No IMAGE'
-                    borderRadius={'lg'}
-                    src={`http://localhost:5000/${type?.img || 'noimage.jpg'}`}
-                />
+            <Box alignItems='center' display={'flex'} margin='.5rem'>
+
+                <Popover isOpen={isHoverImg}
+                    closeOnBlur
+                >
+                    <PopoverTrigger>
+                        <Image
+                            alt='No IMAGE'
+                            borderRadius={'lg'}
+                            maxHeight={'9em'}
+                            onMouseEnter={setHoverStateImg.on}
+                            onMouseLeave={setHoverStateImg.off}
+                            src={`http://localhost:5000/${type?.img || 'noimage.jpg'}`}
+
+                        />
+                    </PopoverTrigger>
+                    <Portal>
+                        <PopoverContent >
+                            <PopoverArrow bgColor={'indigo '} />
+                            <PopoverHeader textAlign={'center'} fontSize={'3xl'}><b>{type?.name}</b></PopoverHeader>
+                            <PopoverBody>
+                                <Image
+                                    alt='No IMAGE'
+                                    borderRadius={'lg'}
+                                    maxHeight={'20em'}
+                                    src={`http://localhost:5000/${type?.img || 'noimage.jpg'}`}
+
+                                />
+                            </PopoverBody>
+
+                        </PopoverContent>
+                    </Portal>
+                </Popover>
             </Box>
             <Box >
 
 
                 <StatGroup className='mx1'
-                    bgColor={'beige'}
-                    border='2px solid blue'
+                    bgColor={'gray.300'}
+                    border='2px solid white'
                     borderRadius='xl'
                     display={'flex'}
                     minWidth='max-content'
@@ -58,8 +106,8 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                     <Heading className='ml1' alignItems={'center'} display='flex' flexDir={'column'}>{type?.name}</Heading>
                     <Stat className='m1' textAlign='center'>
                         <StatLabel>Осталось</StatLabel>
-                        <StatNumber>{quant}штук</StatNumber>
-                        <StatHelpText>Цена: {shop?.price} руб.</StatHelpText>
+                        <StatNumber>{quant} шт.</StatNumber>
+                        <StatHelpText color={'red'} fontWeight={'semibold'}>Цена: {shop?.price} руб.</StatHelpText>
                     </Stat>
                 </StatGroup>
             </Box>

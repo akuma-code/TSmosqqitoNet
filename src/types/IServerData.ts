@@ -3,7 +3,7 @@
 export interface ISklad {
     id: number
     quant?: number
-    type?: IType
+    type: IType
     typeId?: string
     shop?: IShop
     shopId?: string
@@ -26,4 +26,12 @@ export interface IShop {
     id: number
     price: number
     title: string
+}
+
+export enum PATHS {
+    SKLAD = 'sklad',
+    SHOP = 'shop',
+    PROD = 'prod',
+    TYPE = 'type',
+    OFFER = 'offer'
 }

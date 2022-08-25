@@ -1,79 +1,28 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Box, Button, Container, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useToggle } from '../../hooks/useToggle'
 import { ProductCard } from '../Testing/ProductCard'
-import { fetchSklad } from '../../http'
-import { ISklad } from '../../types/IServerData'
-import { StateMapper } from '../DataMapper'
+import { ISklad, PATHS } from '../../types/IServerData'
 import SkladItemCard from '../Cards/SkladItemCard'
-import { API } from '../../http/ClientSkladApi'
-const products = [
-    {
-        id: 1,
-        title: "OK3",
-        src: "//localhost:5000/assets/ok-4.jpg",
-        price: 8300,
-        count: 5,
-        info: [{
-            w: 1170,
-            h: 970,
-            prof: "WHS",
-            glass: 24
-        }]
-    },
-    {
-        id: 2,
-        title: "OK6",
-        src: "//localhost:5000/assets/ok-6.jpg",
-        price: 21200,
-        count: 5,
-        info: [{
-            w: 1660,
-            h: 1440,
-            prof: "Proline",
-            glass: 36
-        }]
-    },
-    {
-        id: 3,
-        title: "OK8",
-        src: "//localhost:5000/assets/ok-8.jpg",
-        price: 8600,
-        count: 5,
-        info: [{
-            w: 560,
-            h: 1440,
-            prof: "Proline",
-            glass: 36
-        }]
-    },
-]
+import { useFetchApi } from '../../http/useFetchApi'
 
-const initial = async () => {
-    const sklad = await fetchSklad()
-    // console.log(sklad);
-    API.fetchAll()
 
-    const map = StateMapper(sklad)
-    // console.log('map', map)
-    return map
-}
 
 export const PageTesting: FC = (): JSX.Element => {
-    const [items, setItems] = useState(products)
+    // const [items, setItems] = useState<ISklad[]>([])
+    const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState<ISklad[]>([])
-    const [skladsMap, setSkladsMap] = useState([])
     useEffect(() => {
-        fetchSklad().then(data => setSklads(data.rows))
-        initial()
-    }, [])
+        const sorted = data.sort((a, b) => (a.type?.name.localeCompare(b.type?.name)))
+        setSklads(sorted)
+    }, [data])
 
-
+    if (error) return (<Text fontSize={'9xl'}>ERROR: {error}</Text>)
 
     return (
         <Container
             display={'flex'}
-            bgColor={'whatsapp.500'}
+            bgColor={'gray.100'}
             maxH={'100vh'}
             maxW={'container.2xl'}
             justifyContent='flex-start'
@@ -81,43 +30,40 @@ export const PageTesting: FC = (): JSX.Element => {
             alignItems='start'
         // alignContent={'center'}
         >
-            {/* <Box
-                bgColor={'#4fc3f7'}
-                padding='1rem'
-                margin='1rem'
-                className='z-depth-5 w100'
-                maxH='90vh'
-                maxWidth='max'
-                borderRadius='lg'
-                overflow='visible'
-            >
-                {items.map(product =>
-                    <ProductCard {...product} key={product.id} />)}
-            </Box> */}
-            <Box className=' blue darken-2'
+
+            {/* <Box className=' blue darken-2'
                 maxHeight={'90vh'}>
                 <Heading textAlign={'center'}>Products Form</Heading>
-            </Box>
+            </Box> */}
 
-            <Box className=' blue lighten-2'
+            <Box
+                // className=' blue lighten-2'
                 textAlign={'center'}
                 maxHeight='100vh'
                 width={'100%'}
             >
 
-                <Heading paddingBottom='0'>Складские остатки</Heading>
-                <Box
-                    className=''
-                    maxHeight='80vh'
-                    display='flex'
-                    flexDir={'column'}
-                    flexWrap='wrap'
-                    overflow={'hidden'}
-                    justifyContent='space-between'
-                >
-                    {sklads.map(s =>
-                        <SkladItemCard {...s} id={s.id} key={s.id} />)}
-                </Box>
+                <Heading paddingBottom='0'>Складские остатки
+                </Heading>
+
+
+                {
+                    isLoading ? <Spinner
+                        size={'xl'}
+                        emptyColor='red lighten-2'
+                        color='black'
+                        speed='0.65s'
+                        thickness='7px' />
+                        :
+                        <Wrap spacing={'0px'}>
+                            {sklads?.map(s =>
+                                <WrapItem key={s.id}>
+                                    <SkladItemCard {...s} id={s.id} />
+                                </WrapItem>
+                            )}
+                        </Wrap>
+                }
+
             </Box>
 
 
