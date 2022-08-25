@@ -26,7 +26,6 @@ const NavBar: FC<NavBarProps> = () => {
                     </li>
                     <li>
                         <a href="/test">
-
                             <PlusSquareIcon fontSize={'5xl'} background='grey' />
                         </a>
                     </li>
