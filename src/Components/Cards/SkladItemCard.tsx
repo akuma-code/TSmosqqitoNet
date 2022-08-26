@@ -48,7 +48,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
             justifyContent={'space-between'}
             alignItems='stretch'
             padding='.6em'
-            // maxWidth={'25vw'}
+
             bgColor={'gray.500'}
 
         >

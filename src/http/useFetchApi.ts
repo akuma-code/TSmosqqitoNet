@@ -44,7 +44,7 @@ export const useFetchApi = (path: PATHS, id?: number) => {
                 setIsLoading(false)
             } catch (e: unknown) {
                 const error = e as AxiosError
-                console.log('fetchApiData ERROR!')
+                console.log('fetchApiData ERROR!', error)
                 setFetchedData([])
                 setError(error.message)
             } finally {
