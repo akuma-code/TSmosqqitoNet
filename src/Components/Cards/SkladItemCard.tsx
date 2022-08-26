@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { useToggle } from '../../hooks/useToggle'
+import { HOSTURL } from '../../types/DataTypes'
 import { ISklad } from '../../types/IServerData'
 import { I } from './I'
 
@@ -64,7 +65,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                             maxHeight={'9em'}
                             onMouseEnter={setHoverStateImg.on}
                             onMouseLeave={setHoverStateImg.off}
-                            src={`http://localhost:5000/${type?.img || 'noimage.jpg'}`}
+                            src={`${HOSTURL.HOME}/${type?.img || 'noimage.jpg'}`}
 
                         />
                     </PopoverTrigger>

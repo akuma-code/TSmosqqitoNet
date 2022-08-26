@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ISklad, PATHS } from "../types/IServerData";
 
 const $api = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: 'http://akumapc:5000'
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchApi = (path: string) => {

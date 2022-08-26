@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-export enum IFetchDataType {
-    MAP = "map",
-    NORM = "normal"
-}
-type fetchVar = 'map' | 'normal'
-
-export interface IOptionsProps {
-    type: IFetchDataType
+export enum HOSTURL {
+    LOCALHOST = 'http://localhost:5000',
+    HOME = 'http://akumapc:5000',
+    WORK = 'http://cko1:5000'
 }
 
