@@ -1,8 +1,14 @@
 import axios from "axios";
-import { ISklad } from "../types/IServerData";
 
+import { HOSTURL } from "../types/DataTypes";
+import { ISklad } from "../types/IServerData";
+export const getURL = () => {
+    const saved_url = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
+    // console.log("Server Url: ", saved_url);
+    return saved_url
+}
 const $api = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: getURL()
 })
 
 interface IApiSklad {
