@@ -58,10 +58,10 @@ export const SkladPage: FC = (): JSX.Element => {
                 {
                     isLoading ? <Spinner
                         size={'xl'}
-                        emptyColor='red lighten-2'
-                        color='black'
+                        emptyColor='red.500'
+                        color='black.300'
                         speed='0.65s'
-                        thickness='7px' />
+                        thickness='6px' />
                         :
                         <Wrap spacing={'0px'}>
                             {sklads?.map(s =>

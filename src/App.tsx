@@ -12,11 +12,11 @@ import { getURL } from './http/ClientSkladApi';
 export const HostContext = React.createContext<any>(null)
 
 const App = (): JSX.Element => {
-  const [host, setHost] = useState<HOSTURL | string>(HOSTURL.LOCALHOST)
+  const [host, setHost] = useState<HOSTURL | string>(HOSTURL.WORK)
   useEffect(() => {
     const url = getURL()
-    if (host !== url) setHost(url)
-
+    // if (host !== url) setHost(url)
+    setHost(url)
     // localStorage.setItem("server_url", HOSTURL.WORK)
     // localStorage.setItem("server_url", HOSTURL.HOME)
 

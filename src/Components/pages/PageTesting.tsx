@@ -1,83 +1,116 @@
-import React, { FC, useEffect, useState } from 'react'
-import { Box, Button, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
-import { useToggle } from '../../hooks/useToggle'
-import { ProductCard } from '../Testing/ProductCard'
-import { ISklad, PATHS } from '../../types/IServerData'
-import SkladItemCard from '../Cards/SkladItemCard'
+import { Box, Button, Container, IconButton, Image, NumberInput, NumberInputField, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import React, { FC, useContext, useEffect, useState } from 'react'
+import { HostContext } from '../../App'
 import { useFetchApi } from '../../http/useFetchApi'
-
-const getNumb = (name: string): number => {
-    const signs = name.split("")
-    const numb = signs.map(char => isNaN(parseInt(char, 10)) ? null : char).join("")
-    return parseInt(numb, 10)
+import { ISklad, IType, PATHS } from '../../types/IServerData'
+import { I } from '../Cards/I'
+import SkladItemCard from '../Cards/SkladItemCard'
+import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdOutlineSave } from 'react-icons/md'
+interface ISkladForm {
+    id?: number
+    quant?: number
+    typeId?: string
+    shopId?: string
 }
 
-export const PageTesting: FC = (): JSX.Element => {
-    // const [items, setItems] = useState<ISklad[]>([])
-    const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
-    const [sklads, setSklads] = useState<ISklad[]>([])
+interface ITypeForm {
+    id?: number
+    name?: string
+    img?: string
+    secondaryImg?: string
+    infos?: any[]
+}
 
+interface IShopForm {
+    id?: number
+    title?: string
+    price?: number
+}
+export const PageTesting: FC = (): JSX.Element => {
+
+    const [skladform, setSkladform] = useState<ISkladForm>({})
+    const [shopform, setShopform] = useState<IShopForm>({})
+    const [typeform, setTypeform] = useState<ITypeForm>({})
+    const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
+    const [sklads, setSklads] = useState([] as ISklad[])
+    const { host } = useContext(HostContext)
+    const server_url = host + "/"
     useEffect(() => {
-        const sortedByTypeName = data.sort((a, b) => {
-            const [nameA, nameB] = [a.type?.name, b.type?.name]
-            const na = getNumb(nameA);
-            const nb = getNumb(nameB);
-            return na - nb
-        })
-        setSklads(sortedByTypeName)
+        setSklads(data)
+
+
     }, [data])
 
-    if (error) return (<Text fontSize={'9xl'}>ERROR: {error}</Text>)
+
+    if (error) return (
+        <>
+            <Text fontSize={'6xl'}>ERROR: {error}</Text>
+        </>
+    )
 
     return (
-        <Container
-            display={'flex'}
-            bgColor={'gray.100'}
-            maxH={'100vh'}
-            maxW={'container.2xl'}
-            justifyContent='flex-start'
-            flexDir={'row'}
-            alignItems='start'
-        // alignContent={'center'}
-        >
+        <div className="row">
+            <div className="col s3">
+                <Container>
+                    {
+                        isLoading && <Spinner
+                            size={'xl'}
+                            emptyColor='red.500'
+                            color='black.300'
+                            speed='0.65s'
+                            thickness='6px' />
+                    }
+                    <Wrap spacing={'0px'}>
+                        {sklads?.map(s =>
+                            <WrapItem key={s.id}>
+                                <Box className={'m1 z-depth-3'}
+                                    maxHeight='7rem'
+                                    display='flex'
+                                    flexDir='row'
+                                    border='2px'
+                                    borderRadius='lg'
+                                    justifyContent={'space-between'}
+                                    alignItems='stretch'
+                                    padding='.5em'
+                                    margin='.3em'
+                                    bgColor={'gray.500'}
+                                >
+                                    <Image
+                                        alt='No IMAGE'
+                                        borderRadius={'lg'}
+                                        maxHeight={'5em'}
+                                        src={`${server_url}${s.type?.img || 'noimage.jpg'}`}
+                                    />
+                                    <Box
+                                        maxWidth={'15em'}
+                                        display='flex'
+                                        flexDir='column'
 
-            {/* <Box className=' blue darken-2'
-                maxHeight={'90vh'}>
-                <Heading textAlign={'center'}>Products Form</Heading>
-            </Box> */}
+                                    >
+                                        <div className="flex-row mx1 w100">
+                                            <IconButton aria-label='plus' icon={<MdKeyboardArrowDown />} />
+                                            <NumberInput size='xs' maxW={5}>
+                                                <NumberInputField />
+                                            </NumberInput>
+                                            <IconButton aria-label='minus' icon={<MdKeyboardArrowUp />} />
+                                        </div>
+                                        <div className="flex-row mx1">
+                                            <NumberInput size='xs' w={15}>
+                                                <NumberInputField />
+                                            </NumberInput>
+                                            <IconButton aria-label='save price' icon={<MdOutlineSave />} />
+                                        </div>
+                                    </Box>
+                                </Box>
+                            </WrapItem>
+                        )}
+                    </Wrap>
+                </Container>
+            </div>
+            <div className="col s9">
 
-            <Box
-                // className=' blue lighten-2'
-                textAlign={'center'}
-                maxHeight='100vh'
-                width={'100%'}
-            >
+            </div>
+        </div>
 
-                <Heading paddingBottom='0'>Складские остатки
-                </Heading>
-
-
-                {
-                    isLoading ? <Spinner
-                        size={'xl'}
-                        emptyColor='red lighten-2'
-                        color='black'
-                        speed='0.65s'
-                        thickness='7px' />
-                        :
-                        <Wrap spacing={'0px'}>
-                            {sklads?.map(s =>
-                                <WrapItem key={s.id}>
-                                    <SkladItemCard {...s} id={s.id} />
-                                </WrapItem>
-                            )}
-                        </Wrap>
-                }
-
-            </Box>
-
-
-
-        </Container>
     )
 }

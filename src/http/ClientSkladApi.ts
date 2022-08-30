@@ -3,7 +3,7 @@ import axios from "axios";
 import { HOSTURL } from "../types/DataTypes";
 import { ISklad } from "../types/IServerData";
 export const getURL = () => {
-    const saved_url = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
+    const saved_url = localStorage.getItem('server_url') || HOSTURL.WORK
     // console.log("Server Url: ", saved_url);
     return saved_url
 }
@@ -45,4 +45,4 @@ class ClientSkladApi implements IApiSklad {
     }
 }
 
-export const API = new ClientSkladApi().fetchApi('sklad')
+

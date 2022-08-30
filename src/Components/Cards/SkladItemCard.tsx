@@ -48,9 +48,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
             justifyContent={'space-between'}
             alignItems='stretch'
             padding='.6em'
-
             bgColor={'gray.500'}
-
         >
             <Box alignItems='center' display={'flex'} margin='.5rem'>
 
@@ -71,7 +69,9 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                     <Portal>
                         <PopoverContent >
                             <PopoverArrow bgColor={'indigo '} />
-                            <PopoverHeader textAlign={'center'} fontSize={'3xl'}><b>{type?.name} <I title="send" className='blue-text' /> {quant} шт.</b></PopoverHeader>
+                            <PopoverHeader textAlign={'center'} fontSize={'3xl'}>
+                                <b>{type?.name} <I title="send" className='blue-text' /> {quant} шт.</b>
+                            </PopoverHeader>
                             <PopoverBody>
                                 <Image
                                     alt='No IMAGE'

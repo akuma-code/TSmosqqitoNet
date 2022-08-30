@@ -2,9 +2,10 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { ISklad, PATHS } from "../types/IServerData";
+import { getURL } from "./ClientSkladApi";
 
 const $api = axios.create({
-    baseURL: 'http://akumapc:5000'
+    baseURL: getURL()
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fetchApi = (path: string) => {
