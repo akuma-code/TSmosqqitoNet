@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { ISklad, PATHS } from "../types/IServerData";
+import { IShop, ISklad, PATHS } from "../types/IServerData";
 import { getURL } from "./ClientSkladApi";
 
 const $api = axios.create({
@@ -55,7 +55,7 @@ export const useFetchApi = (path: PATHS, id?: number) => {
 
     }, [])
 
+    const result: [ISklad[], boolean, string] = [data, isLoading, error]
 
-
-    return { data, isLoading, error }
+    return result
 }

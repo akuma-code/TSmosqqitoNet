@@ -12,7 +12,7 @@ const getNumb = (name: string): number => {
 
 export const SkladPage: FC = (): JSX.Element => {
     // const [items, setItems] = useState<ISklad[]>([])
-    const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
+    const [data, isLoading, error] = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState<ISklad[]>([])
 
     useEffect(() => {

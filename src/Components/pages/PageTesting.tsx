@@ -1,10 +1,8 @@
-import { Box, Button, Container, IconButton, Image, NumberInput, NumberInputField, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
-import React, { FC, useContext, useEffect, useState } from 'react'
+import { Box, Container, IconButton, Image, NumberInput, NumberInputField, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { useFetchApi } from '../../http/useFetchApi'
-import { ISklad, IType, PATHS } from '../../types/IServerData'
-import { I } from '../Cards/I'
-import SkladItemCard from '../Cards/SkladItemCard'
+import { ISklad, PATHS } from '../../types/IServerData'
 import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdOutlineSave } from 'react-icons/md'
 interface ISkladForm {
     id?: number
@@ -31,15 +29,18 @@ export const PageTesting: FC = (): JSX.Element => {
     const [skladform, setSkladform] = useState<ISkladForm>({})
     const [shopform, setShopform] = useState<IShopForm>({})
     const [typeform, setTypeform] = useState<ITypeForm>({})
-    const { data, isLoading, error } = useFetchApi(PATHS.SKLAD)
+    const [sklad, isLoading, error] = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState([] as ISklad[])
     const { host } = useContext(HostContext)
     const server_url = host + "/"
+    const [active, setActive] = useState({} as ISklad)
+
+    const selectItem = (skladItem: ISklad) => setActive(skladItem)
+    const isActive = (id: number) => (active.id === id)
+
     useEffect(() => {
-        setSklads(data)
-
-
-    }, [data])
+        setSklads(sklad)
+    }, [sklad])
 
 
     if (error) return (
@@ -73,7 +74,8 @@ export const PageTesting: FC = (): JSX.Element => {
                                     alignItems='stretch'
                                     padding='.5em'
                                     margin='.3em'
-                                    bgColor={'gray.500'}
+                                    bgColor={isActive(s.id) ? 'blackAlpha.100' : 'gray.500'}
+                                    onClick={() => selectItem(s)}
                                 >
                                     <Image
                                         alt='No IMAGE'
