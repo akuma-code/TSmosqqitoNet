@@ -4,7 +4,7 @@ import { ISklad, PATHS } from '../../types/IServerData'
 import SkladItemCard from '../Cards/SkladItemCard'
 import { useFetchApi } from '../../http/useFetchApi'
 
-const getNumb = (name: string): number => {
+export const getNumb = (name: string): number => {
     const signs = name.split("")
     const numb = signs.map(char => isNaN(parseInt(char, 10)) ? null : char).join("")
     return parseInt(numb, 10)

@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { Nets } from './Components/pages/Nets';
 import { AppRouter } from './Components/AppRouter';
 import NavBar from './Components/NavBar';
-import { HOSTURL } from './types/DataTypes';
-import { getURL } from './http/ClientSkladApi';
+import { HOSTURL } from './types/IServerData';
+import { getURL } from './http/useFetchApi';
 
 
 export const HostContext = React.createContext<any>(null)
@@ -14,7 +14,7 @@ export const HostContext = React.createContext<any>(null)
 const App = (): JSX.Element => {
   const [host, setHost] = useState<HOSTURL | string>(HOSTURL.WORK)
   useEffect(() => {
-    const url = getURL()
+    const url = getURL() + "/"
     // if (host !== url) setHost(url)
     setHost(url)
     // localStorage.setItem("server_url", HOSTURL.WORK)

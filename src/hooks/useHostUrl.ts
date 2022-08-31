@@ -1,4 +1,4 @@
-import { HOSTURL } from "../types/DataTypes";
+import { HOSTURL } from "../types/IServerData";
 
 export const useHostUrl = (url: HOSTURL | null = null) => {
     const saved_url = localStorage.getItem('server_url') || ""

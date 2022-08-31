@@ -2,7 +2,7 @@
 
 export interface ISklad {
     id: number
-    quant?: number
+    quant?: number | string
     type: IType
     typeId?: string
     shop?: IShop
@@ -25,7 +25,7 @@ export interface ITypeInfo {
 
 export interface IShop {
     id: number
-    price: number
+    price: number | string
     title: string
 }
 
@@ -35,4 +35,10 @@ export enum PATHS {
     PROD = 'prod',
     TYPE = 'type',
     OFFER = 'offer'
+}
+
+export enum HOSTURL {
+    LOCALHOST = 'http://localhost:5000',
+    HOME = 'http://akumapc:5000',
+    WORK = 'http://cko1:5000'
 }

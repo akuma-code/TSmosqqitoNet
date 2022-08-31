@@ -1,9 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { IShop, ISklad, PATHS } from "../types/IServerData";
-import { getURL } from "./ClientSkladApi";
+import { HOSTURL, IShop, ISklad, PATHS } from "../types/IServerData";
 
+export const getURL = () => {
+    const saved_url = localStorage.getItem('server_url') || HOSTURL.WORK
+    // console.log("Server Url: ", saved_url);
+    return saved_url
+}
 const $api = axios.create({
     baseURL: getURL()
 })

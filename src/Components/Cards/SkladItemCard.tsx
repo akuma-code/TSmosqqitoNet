@@ -37,7 +37,6 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')
     const { type, quant, shop } = props
     const { host } = useContext(HostContext)
-    const server_url = host + "/"
     return (
         <Box className={'m1 z-depth-3'}
             maxHeight='10em'
@@ -62,7 +61,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                             maxHeight={'9em'}
                             onMouseEnter={setHoverStateImg.on}
                             onMouseLeave={setHoverStateImg.off}
-                            src={`${server_url}${type?.img || 'noimage.jpg'}`}
+                            src={`${host}${type?.img || 'noimage.jpg'}`}
 
                         />
                     </PopoverTrigger>
@@ -77,7 +76,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                                     alt='No IMAGE'
                                     borderRadius={'lg'}
                                     maxHeight={'20em'}
-                                    src={`${server_url}${type?.img || 'noimage.jpg'}`}
+                                    src={`${host}${type?.img || 'noimage.jpg'}`}
 
                                 />
                             </PopoverBody>
