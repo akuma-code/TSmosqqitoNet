@@ -77,7 +77,7 @@ export const PageTesting: FC = (): JSX.Element => {
         form.append('typeId', active.type.id.toString())
         form.append('shopId', active.shop!.id.toString())
 
-        editOGO(form).then(data => console.log(data))
+        editOGO(form)
     }
     if (error) return (
         <>
