@@ -14,14 +14,14 @@ import {
 } from '@chakra-ui/react'
 import { InputFile } from '../Forms/InputFile'
 import { editOGO } from '../../http/ClientSkladApi'
-interface ISkladForm {
+export interface ISkladForm {
     id: number | string
     quant: string | Blob | any
     typeId: string
     shopId: string
 }
 
-interface ITypeForm {
+export interface ITypeForm {
     id: number | string
     name: string | Blob
     img: string | Blob
@@ -29,7 +29,7 @@ interface ITypeForm {
     infos?: any[]
 }
 
-interface IShopForm {
+export interface IShopForm {
     id: number
     title?: string
     price: any
