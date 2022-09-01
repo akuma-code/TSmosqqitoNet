@@ -3,6 +3,8 @@ import { Box, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-
 import { ISklad, PATHS } from '../../types/IServerData'
 import SkladItemCard from '../Cards/SkladItemCard'
 import { useFetchApi } from '../../http/useFetchApi'
+import { IWarehouse } from './PageTesting'
+import WarehouseItemCard from '../Cards/WhItemCard'
 
 export const getNumb = (name: string): number => {
     const signs = name.split("")
@@ -14,18 +16,20 @@ export const SkladPage: FC = (): JSX.Element => {
     // const [items, setItems] = useState<ISklad[]>([])
     const [data, isLoading, error] = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState<ISklad[]>([])
+    const [warehouse, isLoadingWH, errorWH] = useFetchApi(PATHS.WAREHOUSE)
+    const [whs, setWhs] = useState([] as IWarehouse[])
 
     useEffect(() => {
-        const sortedByTypeName = data.sort((a, b) => {
-            const [nameA, nameB] = [a.type?.name, b.type?.name]
+        const sortedByTypeName = warehouse.sort((a, b) => {
+            const [nameA, nameB] = [a.typename, b.typename]
             const na = getNumb(nameA);
             const nb = getNumb(nameB);
             return na - nb
         })
-        setSklads(sortedByTypeName)
-    }, [data])
+        setWhs(sortedByTypeName)
+    }, [warehouse])
 
-    if (error) return (<Text fontSize={'9xl'}>ERROR: {error}</Text>)
+    if (errorWH) return (<Text fontSize={'9xl'}>ERROR: {errorWH}</Text>)
 
     return (
         <Container
@@ -56,7 +60,7 @@ export const SkladPage: FC = (): JSX.Element => {
 
 
                 {
-                    isLoading ? <Spinner
+                    isLoadingWH ? <Spinner
                         size={'xl'}
                         emptyColor='red.500'
                         color='black.300'
@@ -64,9 +68,9 @@ export const SkladPage: FC = (): JSX.Element => {
                         thickness='6px' />
                         :
                         <Wrap spacing={'0px'}>
-                            {sklads?.map(s =>
+                            {whs?.map(s =>
                                 <WrapItem key={s.id}>
-                                    <SkladItemCard {...s} id={s.id} />
+                                    <WarehouseItemCard {...s} id={s.id} />
                                 </WrapItem>
                             )}
                         </Wrap>

@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { HOSTURL, IShop, ISklad, PATHS } from "../types/IServerData";
+import { IWarehouse } from "../Components/pages/PageTesting";
+import { HOSTURL, PATHS } from "../types/IServerData";
 
 export const getURL = () => {
     const saved_url = localStorage.getItem('server_url') || HOSTURL.WORK
@@ -12,11 +13,10 @@ const $api = axios.create({
     baseURL: getURL()
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const fetchApi = (path: string) => {
+export const fetchApi = (path: string) => {
 
     const fetchAll = async () => {
         const { data } = await $api.get(`api/${path}`)
-        // console.log('fetchApiData:', data)
         return data.rows
     }
     const fetchOne = async (id: number) => {
@@ -24,14 +24,31 @@ const fetchApi = (path: string) => {
         console.log('fetchOneApiData:', data)
         return data
     }
-    console.log("APIFUNC", fetchAll());
 
-    return { fetchAll, fetchOne }
+    const edit = async (id: number, newdata: any) => {
+        const { data } = await $api.put(`api/${path}/${id}`, newdata)
+        return data
+    }
+
+    const copySklad = async (skladId: number) => {
+        const { data } = await $api.post(`api/sklad/${skladId}/copy`)
+        return data
+    }
+
+    const remove = async (id: number) => {
+        if (!id) return await $api.delete(`api/${path}/del`)
+        const { data } = await $api.delete(`api/${path}/${id}/del`)
+        console.log('removed data: ', data)
+        return data
+    }
+    // console.log("APIFUNC", fetchAll());
+
+    return { fetchAll, fetchOne, edit, copySklad, remove }
 
 }
 export const useFetchApi = (path: PATHS, id?: number) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setFetchedData] = useState<ISklad[]>([])
+    const [data, setFetchedData] = useState<any[]>([])
     const [error, setError] = useState("")
 
     const fetchAll = async () => {
@@ -59,7 +76,7 @@ export const useFetchApi = (path: PATHS, id?: number) => {
 
     }, [])
 
-    const result: [ISklad[], boolean, string] = [data, isLoading, error]
+    // const result: [IWarehouse[], boolean, string] = [data, isLoading, error]
 
-    return result
+    return [data, isLoading, error] as const
 }

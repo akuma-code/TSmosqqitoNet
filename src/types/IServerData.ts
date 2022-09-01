@@ -34,7 +34,8 @@ export enum PATHS {
     SHOP = 'shop',
     PROD = 'prod',
     TYPE = 'type',
-    OFFER = 'offer'
+    OFFER = 'offer',
+    WAREHOUSE = 'sklad/wh'
 }
 
 export enum HOSTURL {
