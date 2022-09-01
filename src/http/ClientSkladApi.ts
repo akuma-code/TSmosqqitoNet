@@ -1,14 +1,15 @@
 import { $api } from "."
+import { ISklad } from "../types/IServerData"
 
-export const editOGO = async (ogoFormData: any) => {
-    const { id, typeId, name, img, secondaryImg, price, quant } = ogoFormData
-    const typedata = { name, img, secondaryImg, typeId }
-    const shopdata = { price }
-    const skladdata = { id, quant }
-    await console.log({ typedata, skladdata, shopdata });
-    $api.put('/api/fulledit/', typedata)
+export const editOGO = async ({ form_type, form_sklad, form_shop }: any, sklad_item: ISklad) => {
+    const { id, type, shop } = sklad_item
+    const editType = await $api.put(`/api/type/${type.id}/s`, form_type)
+    const editSklad = await $api.put(`api/sklad/${id}/s`, form_sklad)
+    const editShop = await $api.put(`api/shop/${shop?.id}/s`, form_shop)
+    // const editSklad = await $api.put(`/api/sklad/${id}/s`, form_sklad)
+    // const editShop = await $api.put(`/api/shop/${shop?.id}/s`, form_shop)
     // const editType = await $api.put(`api/type/${typeId}`, typedata)
     // const editSklad = await $api.put(`api/sklad/${id}`, skladdata)
     // const editShop = await $api.put(`api/shop/${typeId}`, shopdata)
-    // return { editSklad, editType, editShop }
+    return { editSklad, editType, editShop }
 }

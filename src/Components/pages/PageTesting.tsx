@@ -15,70 +15,95 @@ import {
 import { InputFile } from '../Forms/InputFile'
 import { editOGO } from '../../http/ClientSkladApi'
 interface ISkladForm {
-    id?: number
-    quant: string | Blob
+    id: number | string
+    quant: string | Blob | any
     typeId: string
-    shopId?: string
+    shopId: string
 }
 
 interface ITypeForm {
-    id: number
+    id: number | string
     name: string | Blob
     img: string | Blob
-    secondaryImg: string | Blob
+    secondaryImg: string | Blob | any
     infos?: any[]
 }
 
 interface IShopForm {
-    id?: number
+    id: number
     title?: string
-    price: string | Blob
+    price: any
 }
 
 interface IFiles {
-    img: {} & Blob
-    secondaryImg: {} & Blob
+    img: {} & Blob | string
+    secondaryImg: {} & Blob | string
+    src_main?: string
+    src_second?: string
 }
+
+const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
+    const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
+    return nameA - nameB
+})
+
+
 export const PageTesting: FC = (): JSX.Element => {
 
-    const [skladform, setSkladform] = useState<ISkladForm>({} as ISkladForm)
-    const [shopform, setShopform] = useState<IShopForm>({} as IShopForm)
-    const [typeform, setTypeform] = useState<ITypeForm>({} as ITypeForm)
-    const [files, setFiles] = useState({} as IFiles)
+    const [skladform, setSkladform] = useState<ISkladForm>({ id: -1, quant: "", typeId: "", shopId: "" } as ISkladForm)
+    const [shopform, setShopform] = useState<IShopForm>({ id: -1, price: "", title: "" } as IShopForm)
+    const [typeform, setTypeform] = useState<ITypeForm>({ name: "", img: "", secondaryImg: "" } as ITypeForm)
+    const [files, setFiles] = useState({ img: {}, secondaryImg: {}, src_main: "", src_second: "" } as IFiles)
     const [sklad, isLoading, error] = useFetchApi(PATHS.SKLAD)
     const [sklads, setSklads] = useState([] as ISklad[])
     const { host } = useContext(HostContext)
 
     const [active, setActive] = useState({} as ISklad)
 
-    const selectItem = (skladItem: ISklad) => setActive(skladItem)
+    const selectItem = (skladItem: ISklad) => {
+        setActive(skladItem)
+        setFiles(prev => ({ ...prev, src_main: active.type?.img, src_second: active.type?.secondaryImg }))
+        setShopform(prev => ({ ...prev, price: active.shop?.price }))
+        setSkladform(prev => ({ ...prev, id: active.id?.toString(), quant: active?.quant?.toString() }))
+        setTypeform(prev => ({ ...prev, name: active.type?.name, img: active.type?.img, secondaryImg: active.type?.secondaryImg }))
+    }
     const selectFiles = (e: any, type: string) => {
         const target = e.target
         setFiles(prev => ({ ...prev, [type]: target.files[0] }))
     }
     const isActive = (id: number) => (active.id === id)
-
+    const JST = (obj: any) => JSON.stringify(obj, null, 4)?.slice(1, -1)
+    const str = active ? JST(active) : ""
+    // console.log('str', str)
     useEffect(() => {
-        const sortedByTypeName = sklad.sort((a, b) => {
-            const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
-            return nameA - nameB
-        })
-        setSklads(sortedByTypeName)
+        // const sortedByTypeName = sklad.sort((a, b) => {
+        //     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
+        //     return nameA - nameB
+        // })
+        const sorted = sortedByTypeName(sklad)
+        setSklads(sorted)
     }, [sklad])
 
     const submitHandler = () => {
-        const form = new FormData();
-        form.append('name', typeform.name)
-        form.append('price', shopform.price)
-        form.append('quant', skladform.quant)
-        form.append('img', files.img)
-        form.append('secondaryImg', files.secondaryImg)
-        form.append('id', active.id.toString())
-        form.append('typeId', active.type.id.toString())
-        form.append('shopId', active.shop!.id.toString())
-
-        editOGO(form)
+        const form_type = new FormData();
+        const form_sklad = new FormData();
+        const form_shop = new FormData();
+        active.type.name !== typeform.name && form_type.append('name', typeform.name)
+        form_type.append('img', typeform.img)
+        form_type.append('secondaryImg', typeform.secondaryImg)
+        files.img && form_type.append('file_main', files.img)
+        files.secondaryImg && form_type.append('file_second', files.secondaryImg)
+        form_sklad.append('quant', skladform.quant)
+        form_sklad.append('id', active.id.toString())
+        form_type.append('typeId', active.type.id.toString())
+        form_shop.append('price', shopform.price)
+        // form_sklad.append('shopId', active.shop!.id.toString())
+        const forms = { form_type, form_sklad, form_shop }
+        editOGO(forms, active).then(() => setSklads(prev => [...prev]))
     }
+
+
+
     if (error) return (
         <>
             <Text fontSize={'6xl'}>ERROR: {error}</Text>
@@ -87,7 +112,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
     return (
         <div className="row">
-            <div className="col s2">
+            <div className="col s3">
                 <Container borderRight={'4px '} borderColor='gray.500' borderStyle={'groove'}>
                     {
                         isLoading && <Spinner
@@ -143,7 +168,7 @@ export const PageTesting: FC = (): JSX.Element => {
                     </Wrap>
                 </Container>
             </div>
-            <div className="col s9 mt1">
+            <div className="col s6 mt1">
                 {active &&
                     <>
                         <Heading textAlign={'center'}>
@@ -203,6 +228,11 @@ export const PageTesting: FC = (): JSX.Element => {
                         </FormControl>
                     </>
                 }
+            </div>
+            <div className="col s3 mt1">
+                <Container>
+                    {str}
+                </Container>
             </div>
         </div >
 

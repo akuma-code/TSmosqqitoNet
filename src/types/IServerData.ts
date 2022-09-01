@@ -14,7 +14,7 @@ export interface IType {
     id: number
     name: string
     img: string
-    secondaryImg?: string,
+    secondaryImg: string,
     infos: ITypeInfo[]
 }
 
