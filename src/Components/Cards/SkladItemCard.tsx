@@ -111,7 +111,7 @@ const SkladItemCard: React.FC<ISklad> = (props) => {
                             color={'red'}
                             fontWeight={'semibold'}
                             fontSize={'2xl'}
-                        >{shop?.price} руб.</StatHelpText>
+                        >{shop && shop?.price} руб.</StatHelpText>
                     </Stat>
                     <Heading className='mr1' alignItems={'center'} display='flex' flexDir={'column'}>{quant} шт.</Heading>
                 </StatGroup>

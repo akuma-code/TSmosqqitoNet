@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, Container, FormControl, Heading, Icon, IconButton, Image, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Button, Container, FormControl, Heading, Icon, IconButton, Image, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { ChangeEvent, ChangeEventHandler, FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
@@ -7,6 +7,7 @@ import { ISklad, PATHS } from '../../types/IServerData'
 import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdOutlineSave } from 'react-icons/md'
 import { FaWarehouse } from 'react-icons/fa'
 import { BsCalendar2EventFill } from 'react-icons/bs'
+import { IoAppsOutline } from 'react-icons/io5'
 import { getNumb } from './SkladPage'
 import {
     Editable,
@@ -15,6 +16,10 @@ import {
 } from '@chakra-ui/react'
 import { InputFile } from '../Forms/InputFile'
 import { editOGO, editWarehouse } from '../../http/ClientSkladApi'
+import { useToggle } from '../../hooks/useToggle'
+import { CopyModal } from '../Modal/CopyModal'
+import WarehouseItemCard from '../Cards/WhItemCard'
+import SkladItemCard from '../Cards/SkladItemCard'
 export interface ISkladForm {
     id: number | string
     quant: string | Blob | any
@@ -72,16 +77,40 @@ export const NUM = (str: string | number) => {
     return parseInt(str, 10)
 }
 
+const arrControl = (array: Array<any>, initial: number = 5) => {
+    const prev = (idx: number = initial): object => array[idx--]
+    const next = (idx: number = initial): object => array[idx--]
+    return [prev, next] as const
+
+
+}
+
+
 export const PageTesting: FC = (): JSX.Element => {
+    const { host } = useContext(HostContext)
 
     const [active, setActive] = useState({} as IWarehouse | any)
     const [whform, setWhform] = useState({} as IWarehouseForm)
     const [files, setFiles] = useState({} as IFiles | any)
     const [warehouse, isLoadingWH, errorWH] = useFetchApi(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState([] as IWarehouse[])
-    const { host } = useContext(HostContext)
+    const [sklads, isLoad, err] = useFetchApi(PATHS.SKLAD)
+    const [activeSklad, setActiveSklad] = useState<ISklad & {}>({} as ISklad)
+    const [showcopy, setShowcopy] = useToggle(false)
+    const [skladPrev, skladNext] = arrControl(sklads)
+    const clickHandlers = {
+        clickPrev() {
 
-
+            setActiveSklad(skladPrev() as ISklad)
+        },
+        clickNext() {
+            let idx = 0
+            setActiveSklad(skladNext() as ISklad)
+        },
+        async clickCopy() {
+            await fetchApi('/sklad').copySklad(activeSklad.id)
+        }
+    }
 
     const selectItem = (skladItem: IWarehouse) => {
         setActive(skladItem)
@@ -108,19 +137,17 @@ export const PageTesting: FC = (): JSX.Element => {
     const JST = (obj: any) => JSON.stringify(obj, null, 4)?.slice(1, -1)
     const str = active ? JST(active) : ""
     // console.log('str', str)
+    const sorted = sortedByTypeName(sklads as ISklad[])
     useEffect(() => {
-        const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
-        // const sorted = sortedByTypeName(sklad as ISklad[])
+        // const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
+        // setActiveSklad(sorted[sorted.length - 1])
         setWhs([...sortedWhByTypeName(warehouse as IWarehouse[])])
-        // setSklads(sorted)
-    }, [warehouse, whform])
-    // useEffect(() => {
-    //     const whApi = fetchApi('sklad/wh')
-    //     whApi.fetchAll().then(data => setWhs([...data]))
-    //     const sortedWH = sortedWhByTypeName(warehouse)
-    //     setWhs(sortedWH)
+    }, [warehouse, sorted, whform])
+    useEffect(() => {
+        console.log(sklads);
 
-    // }, [])
+
+    }, [])
 
     const submitHandler = () => {
         const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
@@ -134,8 +161,8 @@ export const PageTesting: FC = (): JSX.Element => {
         form_wh.append('img_sec', whform.img_sec)
         form_wh.append('file_main', files.file_main)
         form_wh.append('file_sec', files.file_sec)
-        editWarehouse(form_wh, active).then((data) => setWhs([...sortedWH]))
-        // setActive({})
+        editWarehouse(form_wh, active).then((data) => setWhs([...sortedWH].reverse()))
+        setActive({})
         setFiles({})
         // setWhs(prev => [...prev])
     }
@@ -160,37 +187,76 @@ export const PageTesting: FC = (): JSX.Element => {
                             speed='0.65s'
                             thickness='6px' />
                     }
-                    <Stack dir='row' className='mt1'>
-                        <Button
+
+                    {/* <Button
                             bg={'green.200'}
-                            onClick={() => {
-                                fetchApi('/sklad').copySklad(active.id)
-                            }}
-                            disabled
-                        >
-                            Copy Sklad Item
-                        </Button>
-                        <Button
+                            onClick={setShowcopy.toggle}
 
                         >
-                            Create Warehouse Item
-                        </Button>
-                        {/* <Button
+                            Copy Sklad Item
+                        </Button> */}
+                    {/* <CopyModal onShow={showcopy} onHide={setShowcopy.off} clickHandlers={clickHandlers} >
+                                
+                            </CopyModal> */}
+                    <Popover
+                        placement='auto'
+                        closeOnBlur={false}
+                    >
+                        <PopoverTrigger>
+                            <Button>Скопировать со склада</Button>
+                        </PopoverTrigger>
+                        <PopoverContent >
+                            <PopoverHeader fontWeight='bold' border='0'>
+                                Что копируем?
+                            </PopoverHeader>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverBody>
+                                <Wrap>
+                                    {sklads.map(s => (
+                                        <WrapItem key={s.id} onClick={() => setActiveSklad({ ...s })}>
+                                            <Button className='btn-dark' ><Icon as={IoAppsOutline} w={7} />{s.type.name}</Button>
+                                        </WrapItem>
+                                    ))}
+                                </Wrap>
+                            </PopoverBody>
+                            <PopoverFooter
+                                border='0'
+                                display='flex'
+                                alignItems='center'
+                                justifyContent='space-between'
+
+                            >
+                                <Button
+
+                                >
+                                    GO!
+                                </Button>
+
+                            </PopoverFooter>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Button
+
+                    >
+                        Create Warehouse Item
+                    </Button>
+                    {/* <Button
                                 onClick={submitHandler}
                             >
                                 Edit Warehouse Item
                             </Button> */}
-                        <Button
+                    <Button
 
-                        >
-                            Delete Warehouse Item
-                        </Button>
-                        <Button
-                            bg={'red.300'}
-                        >
-                            DELETE ALL WAREHOUSE
-                        </Button>
-                    </Stack>
+                    >
+                        Delete Warehouse Item
+                    </Button>
+                    <Button
+                        bg={'red.300'}
+                    >
+                        DELETE ALL WAREHOUSE
+                    </Button>
                 </Container>
             </div>
             <div className="col s2 mt1">
@@ -246,7 +312,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                     <input type="file" onChange={(e) => selectFiles(e, 'file_main')} />
                                 </div>
                                 <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" />
+                                    <input className="file-path validate" type="text" value={files.src_main} />
                                 </div>
                             </div>
                             <div className="file-field input-field">
@@ -255,7 +321,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                     <input type="file" onChange={(e) => selectFiles(e, 'file_sec')} />
                                 </div>
                                 <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" />
+                                    <input className="file-path validate" type="text" value={files.src_sec} />
                                 </div>
                             </div>
                             {/* <InputFile title='Дополнительно' changeHandler={(e) => selectFiles(e, 'file_sec')} value={files.file_main} /> */}
@@ -318,6 +384,7 @@ export const PageTesting: FC = (): JSX.Element => {
                     )}
                 </Wrap>
             </div>
+
         </div >
 
     )

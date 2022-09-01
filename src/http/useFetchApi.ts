@@ -30,8 +30,8 @@ export const fetchApi = (path: string) => {
         return data
     }
 
-    const copySklad = async (skladId: number) => {
-        const { data } = await $api.post(`api/sklad/${skladId}/copy`)
+    const copySklad = async (skladId: number | string) => {
+        const { data } = await $api.post(`api/sklad/wh/${skladId}/copy`)
         return data
     }
 

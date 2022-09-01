@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
+import { TiDatabase, TiHomeOutline } from "react-icons/ti";
+import { IoLogoUsd } from 'react-icons/io'
 import {
     Box,
+    Container,
     Heading,
+    Icon,
     Image,
     Popover,
     PopoverArrow,
@@ -68,31 +71,36 @@ const WarehouseItemCard: React.FC<IWarehouse> = (whItem) => {
 
                         />
                     </PopoverTrigger>
-                    {/* <Portal> */}
-                    <PopoverContent minWidth={'55em'}
-                        border='6px indigo'
-                        borderStyle='double'
-                        borderRadius='lg'
-                    >
-                        <PopoverArrow bgColor={'indigo '} />
-                        <PopoverHeader textAlign={'center'} fontSize={'3xl'}>
-                            <b>{whItem.typename} <I title="send" className='blue-text' /> {whItem.quant} шт.</b>
-                        </PopoverHeader>
-                        <PopoverBody
+                    <Portal>
+                        <PopoverContent minWidth={'55em'}
                             border='6px indigo'
-                            borderStyle='outset'
+                            borderStyle='groove'
+                            borderRadius='lg'
                         >
-                            <Image
-                                alt='No IMAGE'
-                                borderRadius={'lg'}
+                            <PopoverArrow bgColor={'indigo '} />
+                            <PopoverHeader fontSize={'3xl'}
+                                className="indigo lighten-4 z-depth-4"
+                                borderRadius={'md'}
+                            >
+                                <div className="w100 flex-row-between  ">
+                                    <div><b><Icon as={TiDatabase} /></b><b>{whItem.typename}</b></div>
+                                    <div><Icon as={TiHomeOutline} /><b> {whItem.quant} шт.</b></div>
+                                    <div><Icon as={IoLogoUsd} /><b>{whItem.price} руб.</b></div>
+                                </div>
+                            </PopoverHeader>
+                            <PopoverBody
+                                className="blue accent-1"
+                            >
+                                <Image
+                                    alt='No IMAGE'
+                                    borderRadius={'lg'}
+                                    src={`${host}${whItem.img_sec || 'noimage.jpg'}`}
 
-                                src={`${host}${whItem.img_sec || 'noimage.jpg'}`}
+                                />
+                            </PopoverBody>
 
-                            />
-                        </PopoverBody>
-
-                    </PopoverContent>
-                    {/* </Portal> */}
+                        </PopoverContent>
+                    </Portal>
                 </Popover>
             </Box>
             <Box >
