@@ -1,26 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, ButtonGroup, Container, FormControl, Heading, HStack, Icon, IconButton, Image, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Stack, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
-import { ChangeEvent, ChangeEventHandler, FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react'
+import { Box, Button, ButtonSpinner, Center, Container, Heading, HStack, Icon, Image, Spinner, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
 import { ISklad, PATHS } from '../../types/IServerData'
-import { MdKeyboardArrowUp, MdKeyboardArrowDown, MdOutlineSave } from 'react-icons/md'
-import { FaWarehouse } from 'react-icons/fa'
-import { BsCalendar2EventFill } from 'react-icons/bs'
-import { IoAppsOutline } from 'react-icons/io5'
 import { getNumb } from './SkladPage'
-import {
-    Editable,
-    EditableInput,
-    EditablePreview,
-} from '@chakra-ui/react'
-import { InputFile } from '../Forms/InputFile'
-import { editOGO, editWarehouse } from '../../http/ClientSkladApi'
+import { editWarehouse } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
-import { CopyModal } from '../Modal/CopyModal'
-import WarehouseItemCard from '../Cards/WhItemCard'
-import SkladItemCard from '../Cards/SkladItemCard'
 import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
+import { WhControlCard } from '../Cards/WhControlCard'
+import { BtnsStack } from './BtnsStack'
+import { ActiveItemForm } from './ActiveItemForm'
+import { PopoverInput } from '../Modal/PopoverInput'
+import { TiDatabase, TiHomeOutline } from 'react-icons/ti'
+import { IoLogoUsd } from 'react-icons/io'
 
 const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
@@ -47,27 +40,15 @@ const arrControl = (array: Array<any>, initial: number = 5) => {
 export const PageTesting: FC = (): JSX.Element => {
     const { host } = useContext(HostContext)
 
-    const [active, setActive] = useState({} as IWarehouse | any)
+    const [active, setActive] = useState<IWarehouse & {}>({} as IWarehouse)
     const [whform, setWhform] = useState({} as IWarehouseForm)
-    const [files, setFiles] = useState({} as IFiles | any)
+    const [files, setFiles] = useState<IFiles & {}>({} as IFiles)
     const [warehouse, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState<IWarehouse[]>([])
     const [sklads, isLoad, err] = useFetchApi<ISklad>(PATHS.SKLAD)
     const [activeSklad, setActiveSklad] = useState({} as ISklad)
     const [showcopy, setShowcopy] = useToggle(false)
     const [skladPrev, skladNext] = arrControl(sklads)
-    const clickHandlers = {
-        clickPrev() {
-            setActiveSklad(skladPrev() as ISklad)
-        },
-        clickNext() {
-            let idx = 0
-            setActiveSklad(skladNext() as ISklad)
-        },
-        async clickCopy() {
-            await fetchApi('/sklad').copySklad(activeSklad.id)
-        }
-    } as const
 
     const selectItem = (skladItem: IWarehouse) => {
         setActive(skladItem)
@@ -91,20 +72,13 @@ export const PageTesting: FC = (): JSX.Element => {
         setWhform(prev => ({ ...prev, [type]: target.files[0] }))
     }
     const isActive = (id: number) => (active.id === id)
-    const JST = (obj: any) => JSON.stringify(obj, null, 4)?.slice(1, -1)
-    const str = active ? JST(active) : ""
-    // console.log('str', str)
-    const sorted = sortedByTypeName(sklads as ISklad[])
+
     useEffect(() => {
 
         setWhs([...sortedWhByTypeName(warehouse)])
-    }, [warehouse, sorted, active])
-    useEffect(() => {
+    }, [warehouse, active])
 
 
-
-    }, [active])
-    const cont = (item: IWarehouse): string => (item.quant > 3) ? `"Norm"` : `"TO LOW!"`;
     const submitHandler = () => {
         const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
         const form_wh = new FormData();
@@ -117,13 +91,12 @@ export const PageTesting: FC = (): JSX.Element => {
         form_wh.append('img_sec', whform.img_sec)
         form_wh.append('file_main', files.file_main)
         form_wh.append('file_sec', files.file_sec)
-        editWarehouse(form_wh, active).then((data) => setWhs([...sortedWH].reverse()))
-        setActive({})
-        setFiles({})
+        editWarehouse(form_wh, active).then((data) => setWhs([...sortedWH]))
+        setActive({} as IWarehouse)
+        setFiles({} as IFiles)
         // setWhs(prev => [...prev])
     }
-
-
+    const changeForm = (e: React.ChangeEvent<HTMLInputElement>, key: string) => setWhform(prev => ({ ...prev, [key]: e.target.value }))
 
     if (errorWH) return (
         <>
@@ -131,284 +104,90 @@ export const PageTesting: FC = (): JSX.Element => {
         </>
     )
 
+
     return (
         <div className="row">
             <div className="col s2">
                 <Container borderRight={'4px '} borderColor='gray.500' borderStyle={'groove'} className='mt1'>
                     {
-                        isLoadingWH && <Spinner
-                            size={'xl'}
-                            emptyColor='red.500'
-                            color='black.300'
-                            speed='0.65s'
-                            thickness='6px' />
+                        isLoadingWH ?
+                            <Center>
+                                <Spinner
+                                    size={'xl'}
+                                    emptyColor='red.500'
+                                    color='black.300'
+                                    speed='0.65s'
+                                    thickness='6px' />
+                            </Center>
+                            :
+                            <BtnsStack sklads={sklads} />
                     }
-
-                    {/* <Button
-                            bg={'green.200'}
-                            onClick={setShowcopy.toggle}
-
-                        >
-                            Copy Sklad Item
-                        </Button> */}
-                    {/* <CopyModal onShow={showcopy} onHide={setShowcopy.off} clickHandlers={clickHandlers} >
-                                
-                            </CopyModal> */}
-                    <VStack spacing={4}>
-
-                        <Popover
-                            placement='auto'
-                            closeOnBlur
-
-                        >
-                            <PopoverTrigger>
-                                <Button>Скопировать со склада</Button>
-                            </PopoverTrigger>
-                            <PopoverContent >
-                                <PopoverHeader fontWeight='bold' border='0'>
-                                    Что копируем?
-                                </PopoverHeader>
-                                <PopoverArrow />
-                                <PopoverCloseButton />
-                                <PopoverBody>
-                                    <Wrap>
-                                        {sklads.map(s => (
-                                            <WrapItem key={s.id} onClick={() => setActiveSklad(s)}>
-                                                <Button className='btn-dark' ><Icon as={IoAppsOutline} w={7} />{s.type.name}</Button>
-                                            </WrapItem>
-                                        ))}
-                                    </Wrap>
-                                </PopoverBody>
-                                <PopoverFooter
-                                    border='0'
-                                    display='flex'
-                                    alignItems='center'
-                                    justifyContent='space-between'
-
-                                >
-                                    <Button
-                                        colorScheme={'blue'}
-                                    >
-                                        GO!
-                                    </Button>
-
-                                </PopoverFooter>
-                            </PopoverContent>
-                        </Popover>
-
-                        <Button
-                        >
-                            Create Warehouse Item
-                        </Button>
-                        {/* <Button
-                                onClick={submitHandler}
-                            >
-                                Edit Warehouse Item
-                            </Button> */}
-                        <Button
-
-                        >
-                            Delete Warehouse Item
-                        </Button>
-                        <Button
-                            bg={'red.300'}
-                        >
-                            DELETE ALL WAREHOUSE
-                        </Button>
-                    </VStack>
                 </Container>
             </div>
-            <div className="col s2 mt1">
-                {active &&
-                    <>
-                        <Heading textAlign={'center'}>
-                            ID Склада: {active.id || "###"}
-                        </Heading>
 
-                        <FormControl className='col '
-
-                        >
-
-                            <Input
-                                variant='filled'
-                                placeholder='ТИП'
-                                // defaultValue={active.typename}
-                                value={whform.typename}
-                                borderWidth={1}
-                                borderStyle='double'
-                                onChange={(e) => setWhform(prev => ({ ...prev, typename: e.target.value }))}
-                            />
-                            <InputGroup>
-                                <Input
-                                    variant='filled'
-                                    placeholder='ЦЕНА'
-                                    // defaultValue={active.price}
-                                    borderWidth={1}
-                                    borderStyle='double'
-                                    type={'number'}
-                                    value={whform.price}
-                                    onChange={e => setWhform(prev => ({ ...prev, price: parseInt(e.target.value) }))}
-                                />
-                                <InputRightElement pointerEvents={'none'} children={'руб.'} />
-                            </InputGroup>
-                            <InputGroup>
-                                <Input
-                                    variant='filled'
-                                    placeholder='Количество'
-                                    // defaultValue={active.quant}
-                                    borderWidth={1}
-                                    borderStyle='double'
-                                    borderColor={'coral'}
-                                    type='number'
-                                    value={whform.quant}
-                                    onChange={e => setWhform(prev => ({ ...prev, quant: parseInt(e.target.value) }))}
-                                />
-                                <InputRightElement pointerEvents={'none'} children={'шт.'} />
-                            </InputGroup>
-                            <div className="file-field input-field">
-                                <div className="btn">
-                                    <span>Изображение</span>
-                                    <input type="file" onChange={(e) => selectFiles(e, 'file_main')} />
-                                </div>
-                                <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" value={files.src_main} />
-                                </div>
-                            </div>
-                            <div className="file-field input-field">
-                                <div className="btn">
-                                    <span>Дополнительно</span>
-                                    <input type="file" onChange={(e) => selectFiles(e, 'file_sec')} />
-                                </div>
-                                <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" value={files.src_sec} />
-                                </div>
-                            </div>
-                            {/* <InputFile title='Дополнительно' changeHandler={(e) => selectFiles(e, 'file_sec')} value={files.file_main} /> */}
-                            <Button
-                                onClick={submitHandler}
-                            >Сохранить изменения</Button>
-                        </FormControl>
-                    </>
-                }
-            </div>
             <div className="col s7 mt1">
-                <Wrap>
+                <Wrap overflow={'visible'} maxHeight='110vh'>
                     {whs?.map((wh) =>
                         <WrapItem key={wh.id}>
-                            <Box className={'m1 z-depth-3'}
-                                maxHeight='7rem'
-                                width={'max-content'}
-                                display='flex'
-                                flexDir='row'
-                                border='2px'
-                                borderRadius='lg'
-                                justifyContent={'space-between'}
-                                alignItems='flex-start'
-                                padding='.5em'
-                                // margin='.3em'
-                                bgColor={isActive(wh.id) ? 'blue.600' : 'gray.500'}
-                                onClick={() => selectItem(wh)}
-                                _hover={{ border: "3px solid white", cursor: "pointer" }}
-                                _after={{ content: cont(wh), position: 'absolute', right: 0, bottom: '-2em' }}
-                                position='relative'
-                            >
-                                <Image
-                                    alt='No IMAGE'
-                                    borderRadius={'lg'}
-                                    maxHeight={'5em'}
-                                    src={`${host}${wh.img_main || 'noimage.jpg'}`}
-                                />
-                                <Image className='mx1'
-                                    alt='No IMAGE'
-                                    borderRadius={'lg'}
-                                    maxHeight={'5em'}
-                                    src={`${host}${wh.img_sec || 'noimage.jpg'}`}
-                                />
-                                <Box
-                                    className='mx1'
-                                    display='flex'
-                                    flexDir='column'
-                                    fontSize={'1.8em'}
-
-                                >
-                                    <div className="flex-row-between txt-bold w100 white-text">
-                                        <Icon as={BsCalendar2EventFill} color={'gray.100'} />
-                                        <i>{wh.typename}</i>
-                                    </div>
-                                    <div className="flex-row-between  w100 txt-bold">
-                                        <Icon as={FaWarehouse} w={8} h={8} />
-                                        <i>{wh.quant} шт.</i>
-                                    </div>
-                                </Box>
-                            </Box>
+                            <WhControlCard
+                                isActive={isActive}
+                                whItem={wh}
+                                selectItem={selectItem}
+                                server_url={host} />
                         </WrapItem>
                     )}
                 </Wrap>
             </div>
+            <div className="col s3 mt1">
+                <Box border={'1rem groove #0c99eb'} padding='2rem' borderRadius={'2rem'} marginRight={4}>
+                    <Heading size={'lg'}>Selected Item: {active.typename}</Heading>
+                    <HStack spacing={6}>
+                        <Image
+                            className='mx1 my1'
+                            border='2px solid grey'
+                            alt='No IMAGE'
+                            borderRadius={'lg'}
+                            maxHeight={'5em'}
+                            src={`${host}${active.img_main || 'noimage.jpg'}`} />
+                        <Image
+                            border='2px solid grey'
+                            className='mx1 my1'
+                            alt='No IMAGE'
+                            borderRadius={'lg'}
+                            maxHeight={'5em'}
+                            src={`${host}${active.img_sec || 'noimage.jpg'}`} />
+                    </HStack>
+                    <VStack align={'flex-start'}>
+                        <PopoverInput>
+                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1' >
+                                <span><Icon as={TiDatabase} color='purple.900' width={'2rem'} />Название: </span><span>{active.typename}</span>
+                            </div>
+                        </PopoverInput>
+                        <PopoverInput>
+                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
+                                <span><Icon as={IoLogoUsd} width={'2rem'} />Стоимость: </span><span>{active.price} руб.</span>
+                            </div>
+                        </PopoverInput>
+                        <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
+                            <PopoverInput>
+                                <span><Icon as={TiHomeOutline} width={'2rem'} /> Количество: </span>
+                            </PopoverInput>
+                            <span>{active.quant} шт.</span>
+                        </div>
+                    </VStack>
 
+                </Box>
+                {/* {active &&
+                    <ActiveItemForm active={active}
+                        whform={whform}
+                        selectFiles={selectFiles}
+                        files={files}
+                        submitHandler={submitHandler}
+                        onChangeForm={changeForm} />
+                } */}
+            </div>
         </div >
 
     )
 }
 
-
-
-// <Editable
-// value={active.quant?.toString()}
-// bg={'gray.300'}
-// fontSize='2xl'
-
-// >
-// <EditablePreview cursor={'pointer'} className='mx1' />
-// <EditableInput
-//     value={active.quant}
-//     onChange={(e: ChangeEvent<HTMLInputElement>) => { setActive({ ...active, quant: e.target.value }) }}
-// />
-// <span> Шт.</span>
-// </Editable>
-
-
-/* <Wrap spacing='-2'>
-                       {sklads?.map(s =>
-                           <WrapItem key={s.id}>
-                               <Box className={'m1 z-depth-3'}
-                                   maxHeight='7rem'
-                                   width={'max-content'}
-                                   display='flex'
-                                   flexDir='row'
-                                   border='2px'
-                                   borderRadius='lg'
-                                   justifyContent={'space-between'}
-                                   alignItems='flex-start'
-                                   padding='.5em'
-                                   // margin='.3em'
-                                   bgColor={isActive(s.id) ? 'blue.600' : 'gray.500'}
-                                   onClick={() => selectItem(s)}
-                                   _hover={{ border: "3px solid white", cursor: "pointer" }}
-                               >
-                                   <Image
-                                       alt='No IMAGE'
-                                       borderRadius={'lg'}
-                                       maxHeight={'5em'}
-                                       src={`${host}${s.type?.img || 'noimage.jpg'}`}
-                                   />
-                                   <Box
-                                       className='mx1'
-                                       display='flex'
-                                       flexDir='column'
-                                       fontSize={'1.8em'}
-
-                                   >
-                                       <div className="flex-row-between txt-bold w100 white-text">
-                                           <Icon as={BsCalendar2EventFill} color={'gray.100'} />
-                                           <i>{s.type.name}</i>
-                                       </div>
-                                       <div className="flex-row-between  w100 txt-bold">
-                                           <Icon as={FaWarehouse} w={8} h={8} />
-                                           <i>{s.quant} шт.</i>
-                                       </div>
-                                   </Box>
-                               </Box>
-                           </WrapItem>
-                       )}
-                   </Wrap> */
