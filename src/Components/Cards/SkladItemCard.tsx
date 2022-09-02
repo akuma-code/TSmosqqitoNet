@@ -15,7 +15,7 @@ import {
     StatLabel,
     StatNumber
 } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import React, { HTMLAttributes, useContext } from 'react'
 import { HostContext } from '../../App'
 import { useToggle } from '../../hooks/useToggle'
 import { ISklad } from '../../types/IServerData'
@@ -31,7 +31,7 @@ const onHover = (cond: boolean) => {
 }
 
 
-const SkladItemCard: React.FC<ISklad> = (props) => {
+const SkladItemCard: React.FC<ISklad & HTMLAttributes<HTMLDivElement>> = (props) => {
     const [isHover, setHoverState] = useToggle()
     const [isHoverImg, setHoverStateImg] = useToggle()
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')

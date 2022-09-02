@@ -1,6 +1,6 @@
 import { $api } from "."
-import { IWarehouse } from "../Components/pages/PageTesting"
 import { ISklad } from "../types/IServerData"
+import { IWarehouse } from "../types/WarehouseTypes"
 import { fetchApi } from "./useFetchApi"
 
 export const editOGO = async ({ form_type, form_sklad, form_shop }: any, sklad_item: ISklad) => {

@@ -20,12 +20,13 @@ import {
     StatLabel,
     StatNumber
 } from '@chakra-ui/react'
-import React, { useContext } from 'react'
+import React, { HTMLAttributes, useContext } from 'react'
 import { HostContext } from '../../App'
 import { useToggle } from '../../hooks/useToggle'
 import { ISklad } from '../../types/IServerData'
 import { I } from './I'
-import { IWarehouse } from '../pages/PageTesting'
+import { IWarehouse } from "../../types/WarehouseTypes";
+
 
 const onHover = (cond: boolean) => {
     function changeCls(initial: string, newCls: string) {
@@ -35,9 +36,12 @@ const onHover = (cond: boolean) => {
 
     return { changeCls }
 }
+export type WarehouseItemProps = {
+    children?: React.ReactNode
+    id: number | string
+} & HTMLAttributes<HTMLDivElement> & IWarehouse
 
-
-const WarehouseItemCard: React.FC<IWarehouse> = (whItem) => {
+const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHover, setHoverState] = useToggle()
     const [isHoverImg, setHoverStateImg] = useToggle()
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { IWarehouse } from "../Components/pages/PageTesting";
 import { HOSTURL, PATHS } from "../types/IServerData";
 
 export const getURL = () => {
@@ -15,7 +14,7 @@ const $api = axios.create({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchApi = (path: string) => {
 
-    const fetchAll = async () => {
+    const fetchAll = async <T>(): Promise<T> => {
         const { data } = await $api.get(`api/${path}`)
         return data.rows
     }
@@ -43,12 +42,12 @@ export const fetchApi = (path: string) => {
     }
     // console.log("APIFUNC", fetchAll());
 
-    return { fetchAll, fetchOne, edit, copySklad, remove }
+    return { fetchAll, fetchOne, edit, copySklad, remove } as const
 
 }
-export const useFetchApi = (path: PATHS, id?: number) => {
+export const useFetchApi = <T>(path: PATHS, id?: number) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setFetchedData] = useState<any[]>([])
+    const [data, setFetchedData] = useState<T[]>([])
     const [error, setError] = useState("")
 
     const fetchAll = async () => {

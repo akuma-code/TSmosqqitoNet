@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, Container, FormControl, Heading, Icon, IconButton, Image, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Stack, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Container, FormControl, Heading, HStack, Icon, IconButton, Image, Input, InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Spinner, Stack, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { ChangeEvent, ChangeEventHandler, FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
@@ -20,50 +20,8 @@ import { useToggle } from '../../hooks/useToggle'
 import { CopyModal } from '../Modal/CopyModal'
 import WarehouseItemCard from '../Cards/WhItemCard'
 import SkladItemCard from '../Cards/SkladItemCard'
-export interface ISkladForm {
-    id: number | string
-    quant: string | Blob | any
-    typeId: string
-    shopId: string
-}
+import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
 
-export interface ITypeForm {
-    id: number | string
-    name: string | Blob
-    img: string | Blob
-    secondaryImg: string | Blob | any
-    infos?: any[]
-}
-
-export interface IShopForm {
-    id: number
-    title?: string
-    price: any
-}
-
-interface IFiles {
-    file_main: {} & Blob
-    file_sec: {} & Blob
-    src_main: string
-    src_second: string
-}
-export interface IWarehouse extends ISklad {
-    id: number
-    quant: number
-    typename: string
-    img_main: string
-    img_sec: string
-    price: number
-    file_main?: Blob
-    file_sec?: Blob
-}
-
-export interface IWarehouseForm extends IWarehouse {
-    img_main: string
-    img_sec: string
-    file_main?: Blob
-    file_sec?: Blob
-}
 const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
     return nameA - nameB
@@ -92,15 +50,14 @@ export const PageTesting: FC = (): JSX.Element => {
     const [active, setActive] = useState({} as IWarehouse | any)
     const [whform, setWhform] = useState({} as IWarehouseForm)
     const [files, setFiles] = useState({} as IFiles | any)
-    const [warehouse, isLoadingWH, errorWH] = useFetchApi(PATHS.WAREHOUSE)
-    const [whs, setWhs] = useState([] as IWarehouse[])
-    const [sklads, isLoad, err] = useFetchApi(PATHS.SKLAD)
-    const [activeSklad, setActiveSklad] = useState<ISklad & {}>({} as ISklad)
+    const [warehouse, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
+    const [whs, setWhs] = useState<IWarehouse[]>([])
+    const [sklads, isLoad, err] = useFetchApi<ISklad>(PATHS.SKLAD)
+    const [activeSklad, setActiveSklad] = useState({} as ISklad)
     const [showcopy, setShowcopy] = useToggle(false)
     const [skladPrev, skladNext] = arrControl(sklads)
     const clickHandlers = {
         clickPrev() {
-
             setActiveSklad(skladPrev() as ISklad)
         },
         clickNext() {
@@ -110,7 +67,7 @@ export const PageTesting: FC = (): JSX.Element => {
         async clickCopy() {
             await fetchApi('/sklad').copySklad(activeSklad.id)
         }
-    }
+    } as const
 
     const selectItem = (skladItem: IWarehouse) => {
         setActive(skladItem)
@@ -119,12 +76,12 @@ export const PageTesting: FC = (): JSX.Element => {
             ...prev,
             id: skladItem.id,
             typename: skladItem.typename,
-            // file_main: files.file_main,
-            // file_sec: files.file_sec,
             price: skladItem.price,
             quant: skladItem.quant,
             img_main: files.src_main || skladItem.img_main,
-            img_sec: files.src_second || skladItem.img_sec
+            img_sec: files.src_second || skladItem.img_sec || ""
+            // file_main: files.file_main,
+            // file_sec: files.file_sec,
         }))
 
     }
@@ -139,16 +96,15 @@ export const PageTesting: FC = (): JSX.Element => {
     // console.log('str', str)
     const sorted = sortedByTypeName(sklads as ISklad[])
     useEffect(() => {
-        // const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
-        // setActiveSklad(sorted[sorted.length - 1])
-        setWhs([...sortedWhByTypeName(warehouse as IWarehouse[])])
-    }, [warehouse, sorted, whform])
+
+        setWhs([...sortedWhByTypeName(warehouse)])
+    }, [warehouse, sorted, active])
     useEffect(() => {
-        console.log(sklads);
 
 
-    }, [])
 
+    }, [active])
+    const cont = (item: IWarehouse): string => (item.quant > 3) ? `"Norm"` : `"TO LOW!"`;
     const submitHandler = () => {
         const sortedWH = sortedWhByTypeName(warehouse as IWarehouse[])
         const form_wh = new FormData();
@@ -178,7 +134,7 @@ export const PageTesting: FC = (): JSX.Element => {
     return (
         <div className="row">
             <div className="col s2">
-                <Container borderRight={'4px '} borderColor='gray.500' borderStyle={'groove'}>
+                <Container borderRight={'4px '} borderColor='gray.500' borderStyle={'groove'} className='mt1'>
                     {
                         isLoadingWH && <Spinner
                             size={'xl'}
@@ -198,65 +154,68 @@ export const PageTesting: FC = (): JSX.Element => {
                     {/* <CopyModal onShow={showcopy} onHide={setShowcopy.off} clickHandlers={clickHandlers} >
                                 
                             </CopyModal> */}
-                    <Popover
-                        placement='auto'
-                        closeOnBlur={false}
-                    >
-                        <PopoverTrigger>
-                            <Button>Скопировать со склада</Button>
-                        </PopoverTrigger>
-                        <PopoverContent >
-                            <PopoverHeader fontWeight='bold' border='0'>
-                                Что копируем?
-                            </PopoverHeader>
-                            <PopoverArrow />
-                            <PopoverCloseButton />
-                            <PopoverBody>
-                                <Wrap>
-                                    {sklads.map(s => (
-                                        <WrapItem key={s.id} onClick={() => setActiveSklad({ ...s })}>
-                                            <Button className='btn-dark' ><Icon as={IoAppsOutline} w={7} />{s.type.name}</Button>
-                                        </WrapItem>
-                                    ))}
-                                </Wrap>
-                            </PopoverBody>
-                            <PopoverFooter
-                                border='0'
-                                display='flex'
-                                alignItems='center'
-                                justifyContent='space-between'
+                    <VStack spacing={4}>
 
-                            >
-                                <Button
+                        <Popover
+                            placement='auto'
+                            closeOnBlur
+
+                        >
+                            <PopoverTrigger>
+                                <Button>Скопировать со склада</Button>
+                            </PopoverTrigger>
+                            <PopoverContent >
+                                <PopoverHeader fontWeight='bold' border='0'>
+                                    Что копируем?
+                                </PopoverHeader>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverBody>
+                                    <Wrap>
+                                        {sklads.map(s => (
+                                            <WrapItem key={s.id} onClick={() => setActiveSklad(s)}>
+                                                <Button className='btn-dark' ><Icon as={IoAppsOutline} w={7} />{s.type.name}</Button>
+                                            </WrapItem>
+                                        ))}
+                                    </Wrap>
+                                </PopoverBody>
+                                <PopoverFooter
+                                    border='0'
+                                    display='flex'
+                                    alignItems='center'
+                                    justifyContent='space-between'
 
                                 >
-                                    GO!
-                                </Button>
+                                    <Button
+                                        colorScheme={'blue'}
+                                    >
+                                        GO!
+                                    </Button>
 
-                            </PopoverFooter>
-                        </PopoverContent>
-                    </Popover>
+                                </PopoverFooter>
+                            </PopoverContent>
+                        </Popover>
 
-                    <Button
-
-                    >
-                        Create Warehouse Item
-                    </Button>
-                    {/* <Button
+                        <Button
+                        >
+                            Create Warehouse Item
+                        </Button>
+                        {/* <Button
                                 onClick={submitHandler}
                             >
                                 Edit Warehouse Item
                             </Button> */}
-                    <Button
+                        <Button
 
-                    >
-                        Delete Warehouse Item
-                    </Button>
-                    <Button
-                        bg={'red.300'}
-                    >
-                        DELETE ALL WAREHOUSE
-                    </Button>
+                        >
+                            Delete Warehouse Item
+                        </Button>
+                        <Button
+                            bg={'red.300'}
+                        >
+                            DELETE ALL WAREHOUSE
+                        </Button>
+                    </VStack>
                 </Container>
             </div>
             <div className="col s2 mt1">
@@ -350,6 +309,8 @@ export const PageTesting: FC = (): JSX.Element => {
                                 bgColor={isActive(wh.id) ? 'blue.600' : 'gray.500'}
                                 onClick={() => selectItem(wh)}
                                 _hover={{ border: "3px solid white", cursor: "pointer" }}
+                                _after={{ content: cont(wh), position: 'absolute', right: 0, bottom: '-2em' }}
+                                position='relative'
                             >
                                 <Image
                                     alt='No IMAGE'

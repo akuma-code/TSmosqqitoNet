@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react'
 import { Box, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
-import { ISklad, PATHS } from '../../types/IServerData'
-import SkladItemCard from '../Cards/SkladItemCard'
+import { PATHS } from '../../types/IServerData'
 import { useFetchApi } from '../../http/useFetchApi'
-import { IWarehouse } from './PageTesting'
 import WarehouseItemCard from '../Cards/WhItemCard'
+import { IWarehouse } from '../../types/WarehouseTypes'
 
 export const getNumb = (name: string): number => {
     const signs = name.split("")
@@ -14,20 +13,19 @@ export const getNumb = (name: string): number => {
 
 export const SkladPage: FC = (): JSX.Element => {
     // const [items, setItems] = useState<ISklad[]>([])
-    const [data, isLoading, error] = useFetchApi(PATHS.SKLAD)
-    const [sklads, setSklads] = useState<ISklad[]>([])
-    const [warehouse, isLoadingWH, errorWH] = useFetchApi(PATHS.WAREHOUSE)
+    // const [data, isLoading, error] = useFetchApi(PATHS.SKLAD)
+    // const [sklads, setSklads] = useState<ISklad[]>([])
+    const [warehouse, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState([] as IWarehouse[])
-
+    const sortedByTypeName = warehouse.sort((a, b) => {
+        const [nameA, nameB] = [a.typename, b.typename]
+        const na = getNumb(nameA);
+        const nb = getNumb(nameB);
+        return na - nb
+    })
     useEffect(() => {
-        const sortedByTypeName = warehouse.sort((a, b) => {
-            const [nameA, nameB] = [a.typename, b.typename]
-            const na = getNumb(nameA);
-            const nb = getNumb(nameB);
-            return na - nb
-        })
         setWhs(sortedByTypeName)
-    }, [warehouse])
+    }, [warehouse, sortedByTypeName])
 
     if (errorWH) return (<Text fontSize={'9xl'}>ERROR: {errorWH}</Text>)
 
@@ -40,13 +38,8 @@ export const SkladPage: FC = (): JSX.Element => {
             justifyContent='flex-start'
             flexDir={'row'}
             alignItems='start'
-        // alignContent={'center'}
         >
 
-            {/* <Box className=' blue darken-2'
-                maxHeight={'90vh'}>
-                <Heading textAlign={'center'}>Products Form</Heading>
-            </Box> */}
 
             <Box
                 // className=' blue lighten-2'
@@ -55,7 +48,8 @@ export const SkladPage: FC = (): JSX.Element => {
                 width={'100%'}
             >
 
-                <Heading paddingBottom='0'>Складские остатки
+                <Heading paddingBottom='0'>
+                    Складские остатки
                 </Heading>
 
 
@@ -63,8 +57,8 @@ export const SkladPage: FC = (): JSX.Element => {
                     isLoadingWH ? <Spinner
                         size={'xl'}
                         emptyColor='red.500'
-                        color='black.300'
-                        speed='0.65s'
+                        color='green.300'
+                        speed='0.35s'
                         thickness='6px' />
                         :
                         <Wrap spacing={'0px'}>
