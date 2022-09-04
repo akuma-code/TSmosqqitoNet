@@ -1,15 +1,15 @@
-import React, { FC } from 'react'
+import React, { FC, HTMLAttributes } from 'react'
 
-export interface IconProps {
+export type IconProps = {
     title: string
     clsI?: string
     children?: React.ReactNode
     className?: string
     rest?: any[]
     wrapped?: boolean
-}
+} & HTMLAttributes<HTMLDivElement>
 
-export const I: FC<IconProps> = ({ title, clsI, className, wrapped, ...rest }) => {
+export const I: FC<IconProps> = ({ title, clsI, className, wrapped, rest }) => {
     const CLS = ["material-icons "]
     if (clsI) CLS.push(clsI)
     if (className) CLS.push(className)

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Button, ButtonSpinner, Center, Container, Heading, HStack, Icon, Image, Spinner, Text, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, ButtonSpinner, Center, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, HStack, Icon, IconButton, Image, Input, Spinner, Tag, Text, useEditableControls, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { FC, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
@@ -14,7 +14,9 @@ import { ActiveItemForm } from './ActiveItemForm'
 import { PopoverInput } from '../Modal/PopoverInput'
 import { TiDatabase, TiHomeOutline } from 'react-icons/ti'
 import { IoLogoUsd } from 'react-icons/io'
-
+import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
+import { AiFillEdit } from 'react-icons/ai'
+import { CustomInput } from './CustomInput'
 const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
     return nameA - nameB
@@ -107,7 +109,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
     return (
         <div className="row">
-            <div className="col s2">
+            {/* <div className="col s2">
                 <Container borderRight={'4px '} borderColor='gray.500' borderStyle={'groove'} className='mt1'>
                     {
                         isLoadingWH ?
@@ -123,23 +125,43 @@ export const PageTesting: FC = (): JSX.Element => {
                             <BtnsStack sklads={sklads} />
                     }
                 </Container>
-            </div>
+            </div> */}
 
-            <div className="col s7 mt1">
-                <Wrap overflow={'visible'} maxHeight='110vh'>
-                    {whs?.map((wh) =>
-                        <WrapItem key={wh.id}>
-                            <WhControlCard
-                                isActive={isActive}
-                                whItem={wh}
-                                selectItem={selectItem}
-                                server_url={host} />
-                        </WrapItem>
-                    )}
-                </Wrap>
+            <div className="col s9 mt1">
+                {
+                    isLoadingWH ?
+                        <Center>
+                            <Spinner
+                                size={'xl'}
+                                emptyColor='red.500'
+                                color='black.300'
+                                speed='0.65s'
+                                thickness='6px' />
+                        </Center>
+                        :
+
+                        <Wrap bgGradient={'linear(to-bl, #72b9e9, #0e324b)'} >
+
+
+                            {whs?.map((wh) =>
+                                <WrapItem key={wh.id}>
+                                    <WhControlCard
+                                        isActive={isActive}
+                                        whItem={wh}
+                                        selectItem={selectItem}
+                                        server_url={host} />
+                                </WrapItem>
+                            )}
+                        </Wrap>
+                }
             </div>
             <div className="col s3 mt1">
-                <Box border={'1rem groove #0c99eb'} padding='2rem' borderRadius={'2rem'} marginRight={4}>
+                <Box border={'1rem groove #0c99eb'}
+                    padding='2rem'
+                    borderRadius={'2rem'}
+                    marginRight={4}
+                    bgGradient={'linear(to-l, #087cc9, #bda7e0)'}
+                >
                     <Heading size={'lg'}>Selected Item: {active.typename}</Heading>
                     <HStack spacing={6}>
                         <Image
@@ -157,24 +179,22 @@ export const PageTesting: FC = (): JSX.Element => {
                             maxHeight={'5em'}
                             src={`${host}${active.img_sec || 'noimage.jpg'}`} />
                     </HStack>
-                    <VStack align={'flex-start'}>
-                        <PopoverInput>
-                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1' >
-                                <span><Icon as={TiDatabase} color='purple.900' width={'2rem'} />Название: </span><span>{active.typename}</span>
-                            </div>
-                        </PopoverInput>
-                        <PopoverInput>
-                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
-                                <span><Icon as={IoLogoUsd} width={'2rem'} />Стоимость: </span><span>{active.price} руб.</span>
-                            </div>
-                        </PopoverInput>
-                        <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
-                            <PopoverInput>
-                                <span><Icon as={TiHomeOutline} width={'2rem'} /> Количество: </span>
-                            </PopoverInput>
-                            <span>{active.quant} шт.</span>
-                        </div>
-                    </VStack>
+                    {active &&
+                        <VStack >
+
+
+                            <CustomInput active={active} value={active.typename}
+                                changeHandler={(e) => setActive(prev => ({ ...prev, typename: e.target.value }))}
+                            />
+                            <CustomInput active={active} value={`${active.price}`}
+                                changeHandler={(e) => setActive(prev => ({ ...prev, price: parseInt(e.target.value) }))}
+                            />
+                            <CustomInput active={active} value={`${active.quant}`}
+                                changeHandler={(e) => setActive(prev => ({ ...prev, quant: parseInt(e.target.value) }))}
+                            />
+
+                        </VStack>}
+
 
                 </Box>
                 {/* {active &&
@@ -191,3 +211,84 @@ export const PageTesting: FC = (): JSX.Element => {
     )
 }
 
+export function EditableControls(props: any): JSX.Element {
+    const {
+        isEditing,
+        getSubmitButtonProps,
+        getCancelButtonProps,
+        getEditButtonProps,
+    } = useEditableControls()
+
+    return isEditing ? (
+        <ButtonGroup justifyContent='space-between' size='sm'>
+            <Button
+                {...getSubmitButtonProps()}
+                as={IconButton}
+                icon={<CheckIcon fontSize={'xl'} />}
+            />
+            <Button
+                {...getCancelButtonProps()}
+                as={IconButton}
+                icon={<CloseIcon fontSize={'xl'} />}
+            />
+        </ButtonGroup>
+    ) : (
+        <Flex >
+            <Button
+                {...getEditButtonProps()}
+                as={IconButton}
+                size='sm'
+                icon={<EditIcon as={AiFillEdit}
+                    fontSize={'xl'} />}
+            />
+        </Flex>
+    )
+}
+
+/* <VStack align={'flex-start'}>
+                        <PopoverInput>
+                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1' >
+                                <span><Icon as={TiDatabase} color='purple.900' width={'2rem'} />Название: </span><span>{active.typename}</span>
+                            </div>
+                        </PopoverInput>
+                        <PopoverInput>
+                            <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
+                                <span><Icon as={IoLogoUsd} width={'2rem'} />Стоимость: </span><span>{active.price} руб.</span>
+                            </div>
+                        </PopoverInput>
+                        <div className='blue accent-1 txt-bold flex-row-between w100 p1 bdr-radius-1'>
+                            <PopoverInput>
+                                <span><Icon as={TiHomeOutline} width={'2rem'} /> Количество: </span>
+                            </PopoverInput>
+                            <span>{active.quant} шт.</span>
+                        </div>
+                    </VStack> */
+
+                    // <Editable width={'100%'}
+                    //             textAlign='center'
+                    //             fontSize='2xl'
+                    //             isPreviewFocusable={false}
+                    //             value={`${active.price}`}
+                    //         >
+                    //             <HStack>
+                    //                 <EditablePreview />
+                    //                 <Input
+                    //                     as={EditableInput}
+                    //                     onChange={(e) => setActive(prev => ({ ...prev, price: parseInt(e.target.value) }))} />
+                    //                 <EditableControls />
+                    //             </HStack>
+                    //         </Editable>
+                    //         <Editable width={'100%'}
+                    //             textAlign='center'
+                    //             fontSize='2xl'
+                    //             isPreviewFocusable={false}
+                    //             value={`${active.quant}`}
+                    //         >
+                    //             <HStack alignContent={'space-between'} className='w100'>
+                    //                 <EditablePreview />
+                    //                 <Input
+                    //                     as={EditableInput}
+                    //                     onChange={(e) => setActive(prev => ({ ...prev, quant: parseInt(e.target.value) }))} />
+                    //                 <EditableControls />
+                    //             </HStack>
+                    //         </Editable>
