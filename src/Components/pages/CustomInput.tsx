@@ -1,5 +1,4 @@
-import { Button, ButtonGroup, Editable, EditableInput, EditablePreview, Flex, HStack, IconButton, Image, Input, useConst, useEditableControls } from '@chakra-ui/react';
-import { IWarehouse } from '../../types/WarehouseTypes';
+import { Button, ButtonGroup, Editable, EditableInput, EditablePreview, Flex, HStack, IconButton, Image, Input, useEditableControls } from '@chakra-ui/react';
 
 import React, { HTMLAttributes, useContext, useRef } from 'react'
 import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
