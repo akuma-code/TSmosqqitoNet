@@ -25,7 +25,25 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
         // console.log(active[field], active[field + '_new']);
         return res
     }
-
+    const getLabel = (field: string) => {
+        const result = { label: "" }
+        switch (field) {
+            case 'typename':
+                result.label = 'Тип'
+                break;
+            case 'price':
+                result.label = 'Цена';
+                break;
+            case 'quant':
+                result.label = 'Кол-во';
+                break;
+            default:
+                result.label = 'Изменить'
+                break;
+        }
+        const { label } = result
+        return label
+    }
 
     // console.log('isChanged', isChanged('price'))
     return (
@@ -36,63 +54,24 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
             isPreviewFocusable={false}
             value={value}
         >
-            <HStack justifyContent='flex-start'>
+            <HStack justifyContent='space-between'>
 
                 <EditablePreview
                     fontSize={'1.3em'}
                     fontWeight={field && isChanged(field) ? 'bold' : 'normal'}
-                    minW={'30%'} className='blue-text  text-darken-4 waves-effect waves-light btn-flat' />
+                    minW={'30%'}
+                    className='blue-text  text-darken-4 waves-effect waves-light btn-flat'
+                />
                 <Input bg={'cyan'}
                     as={EditableInput}
                     onChange={changeHandler} />
-                <EditableControls />
+                <EditableControls label={field && getLabel(field)} />
             </HStack>
         </Editable>)
 }
-export const CustomFileInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value }): JSX.Element => {
-    const { host } = useContext(HostContext)
-    const fileref = useRef<HTMLInputElement>(null)
-    // console.log('isChanged', isChanged('price'))
-    return (
-        <Editable
-            width={'90%'}
-            textAlign='center'
-            fontSize='2xl'
-            isPreviewFocusable={false}
-            defaultValue={value}
-        >
-            <HStack justifyContent='flex-start'>
-                <Image
-                    className='mx1 my1'
-                    border='2px solid grey'
-                    alt='No IMAGE'
-                    borderRadius={'lg'}
-                    maxHeight={'5em'}
-                    src={`${host}${active.img_main || 'noimage.jpg'}`}
-                    onClick={() => fileref.current && fileref.current.click()} />
-                {/* <EditablePreview
-                    fontSize={'1.3em'}
-                    fontWeight='normal'
-                    minW={'30%'} className='blue-text  text-darken-4 waves-effect waves-light btn-flat' /> */}
-
-                <Input bg={'cyan'}
-                    // as={EditableInput}
-                    onChange={changeHandler}
-                    type='file'
-                    // visibility={'hidden'}
-                    ref={fileref} />
-                {/* <Button
-                    as={IconButton}
-                    size='sm'
-                    icon={<EditIcon as={AiFillEdit}
-                        fontSize={'xl'} />}
-                /> */}
-                {/* <EditableControls /> */}
-            </HStack>
-        </Editable>)
-}
-
 export function EditableControls(props: any): JSX.Element {
+
+    const { label } = props
     const {
         isEditing,
         getSubmitButtonProps,
@@ -102,6 +81,7 @@ export function EditableControls(props: any): JSX.Element {
 
     return isEditing ? (
         <ButtonGroup justifyContent='space-between' size='sm'>
+
             <Button
                 {...getSubmitButtonProps()}
                 as={IconButton}
@@ -114,7 +94,8 @@ export function EditableControls(props: any): JSX.Element {
             />
         </ButtonGroup>
     ) : (
-        <Flex >
+        <Flex gap={2}>
+            <span>{label}</span>
             <Button
                 {...getEditButtonProps()}
                 as={IconButton}

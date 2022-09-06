@@ -17,3 +17,16 @@
 .bdr-radius-3 {
     border-radius: 3em;
 }
+
+.btn-custom__file {
+    font-size: .7em;
+    background: linear-gradient(45deg rgb(136, 146, 145) rgb(0, 129, 116));
+}
+
+.wrap-normal {
+    word-wrap: normal;
+}
+
+.no-wrap {
+    flex-wrap: nowrap;
+}
