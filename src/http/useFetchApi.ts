@@ -77,5 +77,5 @@ export const useFetchApi = <T>(path: PATHS, id?: number) => {
 
     // const result: [IWarehouse[], boolean, string] = [data, isLoading, error]
 
-    return [data, isLoading, error] as const
+    return [data, setFetchedData, isLoading, error] as const
 }
