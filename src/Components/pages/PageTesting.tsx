@@ -16,7 +16,7 @@ import { TiDatabase, TiHomeOutline } from 'react-icons/ti'
 import { IoLogoUsd } from 'react-icons/io'
 import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { AiFillEdit } from 'react-icons/ai'
-import { CustomInput } from './CustomInput'
+import { CustomInput, IFields } from './CustomInput'
 import { CustomFileInput } from "./CustomFileInput"
 // const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
 //     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
@@ -41,11 +41,18 @@ const arrControl = (array: Array<any>, initial: number = 5) => {
     return [prev, next] as const
 }
 
+
+type whFields={
+    typename:string
+    price:string
+    quant:number
+}
 export interface AddedValues extends IWarehouse {
     typename_new?: string
     price_new?: number
     quant_new?: number
     [field: string]: any
+    // [field:string]: keyof whFields
 }
 
 export interface IEditableForm extends AddedValues {
@@ -102,7 +109,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
     const editableSubmitHandler = () => {
-        const isChanged = (field: string): boolean => {
+        const isChanged = (field: keyof IFields ): boolean => {
             if (!active[field + '_new']) return false
             const res = active[field] !== active[field + '_new'];
             return res

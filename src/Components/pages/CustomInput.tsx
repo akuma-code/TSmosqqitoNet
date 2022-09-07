@@ -11,21 +11,46 @@ export type CustomInputProps<T> = {
     changeHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void
     active: AddedValues
     value?: T
-    field?: string
+    field?: keyof IFields
 
 } & HTMLAttributes<HTMLInputElement>
 
+const InitialFields = {
+    typename: "",
+    price: "",
+    quant: "",
+}
+
+export type IFields = typeof InitialFields
+
+const onToggleChanged = (cond: boolean) => {
+    function changeAddCls(initial: string, newCls: string) {
+        if (cond) return [initial, newCls].join(" ")
+        else return initial
+    }
+
+    function tglCls(init: string, optT: string, optF: string) {
+        const added = cond ? optT : optF
+        const res = [init, added].join(" ")
+        return res
+    }
+
+    return { changeAddCls, tglCls } as const
+}
 
 
 export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value, field }): JSX.Element => {
 
-    const isChanged = (field: string): boolean => {
-        if (!active[field + '_new']) return false
-        const res = active[field] !== active[field + '_new'];
+    const isChanged = (field: keyof IFields): boolean => {
+        const [val, newval] = [field, field + '_new']
+        if (!newval) return false
+        // if (!active[field + '_new']) return false
+        const res = active[val] !== active[newval];
         // console.log(active[field], active[field + '_new']);
         return res
     }
-    const getLabel = (field: string) => {
+
+    const getLabel = (field: keyof IFields) => {
         const result = { label: "" }
         switch (field) {
             case 'typename':
@@ -44,6 +69,10 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
         const { label } = result
         return label
     }
+    const init_text = ' waves-effect waves-light btn-flat'
+    const true_text = 'green-text  text-accent-4'
+    const false_text = 'black-text  text-accent-4'
+    const textCls = (bool: boolean) => [init_text, bool ? true_text : false_text].join(" ")
 
     // console.log('isChanged', isChanged('price'))
     return (
@@ -55,13 +84,16 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
             value={value}
         >
             <HStack justifyContent='space-between'>
+                {field &&
+                    <EditablePreview
+                        fontSize={'1.3em'}
+                        fontWeight={isChanged(field) ? 'bold' : 'normal'}
+                        minW={'30%'}
+                        // className='blue-text  text-darken-4 waves-effect waves-light btn-flat'
+                        className={textCls(!isChanged(field))}
+                    />
+                }
 
-                <EditablePreview
-                    fontSize={'1.3em'}
-                    fontWeight={field && isChanged(field) ? 'bold' : 'normal'}
-                    minW={'30%'}
-                    className='blue-text  text-darken-4 waves-effect waves-light btn-flat'
-                />
                 <Input bg={'cyan'}
                     as={EditableInput}
                     onChange={changeHandler} />
