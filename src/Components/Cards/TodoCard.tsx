@@ -1,11 +1,13 @@
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { useTodoContext } from '../../Context/TodoContext'
 import { ITodoListItem } from '../../types/props'
-import { TodoContext } from '../pages/Todos'
+
 import { I } from './I'
 
 const TodoCard: FC<ITodoListItem> = (todo) => {
-    const TODO = useContext(TodoContext)
 
+    const { context } = useTodoContext()
+    const TODO = context
     const { text, checked, rem, numb, type } = todo
     const [isCheck, setIsCheck] = useState(checked)
     const cls = isCheck ? "done" : ""

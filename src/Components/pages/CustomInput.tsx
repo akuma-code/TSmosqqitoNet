@@ -11,7 +11,8 @@ export type CustomInputProps<T> = {
     changeHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void
     active: AddedValues
     value?: T
-    field?: keyof IFields
+    field: keyof IFields
+    desc?: string
 
 } & HTMLAttributes<HTMLInputElement>
 
@@ -39,40 +40,45 @@ const onToggleChanged = (cond: boolean) => {
 }
 
 
-export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value, field }): JSX.Element => {
+export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value, field, desc }): JSX.Element => {
 
     const isChanged = (field: keyof IFields): boolean => {
         const [val, newval] = [field, field + '_new']
+        // console.log('val: ', val)
+        // console.log('newval: ', newval)
         if (!newval) return false
         // if (!active[field + '_new']) return false
-        const res = active[val] !== active[newval];
-        // console.log(active[field], active[field + '_new']);
-        return res
+        if (active[newval]) return active[val] !== active[newval];
+        else return false
     }
 
     const getLabel = (field: keyof IFields) => {
-        const result = { label: "" }
+        const result = { label: "", desc: "" }
         switch (field) {
             case 'typename':
                 result.label = 'Тип'
+                result.desc = ""
                 break;
             case 'price':
                 result.label = 'Цена';
+                result.desc = "руб."
                 break;
             case 'quant':
                 result.label = 'Кол-во';
+                result.desc = "шт."
                 break;
             default:
                 result.label = 'Изменить'
+                result.desc = ""
                 break;
         }
-        const { label } = result
-        return label
+        const { label, desc } = result
+        return { label, desc } as const
     }
-    const init_text = ' waves-effect waves-light btn-flat'
-    const true_text = 'green-text  text-accent-4'
-    const false_text = 'black-text  text-accent-4'
-    const textCls = (bool: boolean) => [init_text, bool ? true_text : false_text].join(" ")
+    const init_text = ' waves-effect waves-light btn-flat text-accent-4'
+    const true_text = 'deep-purple-text cyan lighten-2'
+    const false_text = 'black-text'
+    const textCls = field && [init_text, isChanged(field) ? true_text : false_text].join(" ")
 
     // console.log('isChanged', isChanged('price'))
     return (
@@ -86,18 +92,24 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
             <HStack justifyContent='space-between'>
                 {field &&
                     <EditablePreview
-                        fontSize={'1.3em'}
+                        fontSize={'.9em'}
                         fontWeight={isChanged(field) ? 'bold' : 'normal'}
-                        minW={'30%'}
+                        minW={'40%'}
+                        alignContent={'center'}
                         // className='blue-text  text-darken-4 waves-effect waves-light btn-flat'
-                        className={textCls(!isChanged(field))}
+                        className={textCls}
                     />
-                }
 
-                <Input bg={'cyan'}
-                    as={EditableInput}
-                    onChange={changeHandler} />
-                <EditableControls label={field && getLabel(field)} />
+                }
+                <Flex gap={4} direction='row'>
+
+                    <Input bg={'cyan'}
+                        as={EditableInput}
+                        onChange={changeHandler} />
+                    <EditableControls label={field && getLabel(field).label} desc={getLabel(field).desc} />
+                </Flex>
+
+
             </HStack>
         </Editable>)
 }
@@ -133,8 +145,9 @@ export function EditableControls(props: any): JSX.Element {
                 as={IconButton}
                 size='sm'
                 icon={<EditIcon as={AiFillEdit}
-                    fontSize={'xl'} />}
+                    fontSize={'md'} />}
             />
+
         </Flex>
     )
 }

@@ -6,7 +6,7 @@ import { ListContainer } from '../Cards/ListContainer'
 import TodoCard from '../Cards/TodoCard'
 import { TagSelector } from '../Forms/TagSelector'
 import { TodoForm } from '../Forms/TodoForm'
-
+import { TodoContext } from '../../Context/TodoContext'
 
 export const getFromLS = (): ITodoItem[] => {
     const saved = JSON.parse(localStorage.getItem('saved_todos') || '[]')
@@ -17,12 +17,8 @@ export const saveToLS = (todos: ITodoItem[]): void => {
     const saved = JSON.stringify(todos)
     return localStorage.setItem('saved_todos', saved)
 }
-export interface ITodoContext {
-    todos: ITodoItem[],
-    setTodos: (todos: ITodoItem[]) => void
-    reverse?: (todos: ITodoItem[]) => void
-}
-export const TodoContext = React.createContext<ITodoContext | null>(null)
+
+
 
 
 export const Todos = () => {

@@ -18,10 +18,13 @@ import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
 import { AiFillEdit } from 'react-icons/ai'
 import { CustomInput, IFields } from './CustomInput'
 import { CustomFileInput } from "./CustomFileInput"
+import auth from '../../GoggleSheets/gsheet'
 // const sortedByTypeName = (obj: ISklad[]) => [...obj].sort((a, b) => {
 //     const [nameA, nameB] = [getNumb(a.type?.name), getNumb(b.type?.name)]
 //     return nameA - nameB
 // })
+
+
 const sortedWhByTypeName = (obj: IWarehouse[]) => [...obj].sort((a, b) => {
     const [nameA, nameB] = [getNumb(a.typename), getNumb(b.typename)]
     return nameA - nameB
@@ -42,15 +45,18 @@ const arrControl = (array: Array<any>, initial: number = 5) => {
 }
 
 
-type whFields={
-    typename:string
-    price:string
-    quant:number
-}
+const initialState={
+    typename_new: "",
+    price_new: "",
+    quant_new: "",
+    typename: "",
+    price: "",
+    quant: "",
+} as AddedValues
 export interface AddedValues extends IWarehouse {
     typename_new?: string
-    price_new?: number
-    quant_new?: number
+    price_new?: number|string
+    quant_new?: number|string
     [field: string]: any
     // [field:string]: keyof whFields
 }
@@ -66,7 +72,7 @@ export interface IEditableForm extends AddedValues {
 export const PageTesting: FC = (): JSX.Element => {
     const { host } = useContext(HostContext)
 
-    const [active, setActive] = useState<AddedValues & {}>({} as IWarehouse)
+    const [active, setActive] = useState<AddedValues & {} >({} as IWarehouse)
     const [whform, setWhform] = useState({} as IEditableForm)
     const [files, setFiles] = useState<IEditableForm & {}>({} as IEditableForm)
     const [warehouse, setWH, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
@@ -75,22 +81,12 @@ export const PageTesting: FC = (): JSX.Element => {
     const selectItem = (skladItem: IEditableForm) => {
         setActive(skladItem)
         setFiles((prev: any) => ({ ...prev, src_main: skladItem.img_main, src_second: skladItem.img_sec }))
-        // setWhform(prev => ({
-        //     ...prev,
-        //     img_main: files.src_main || skladItem.img_main,
-        //     img_sec: files.src_second || skladItem.img_sec || ""
-        //     // id: skladItem.id,
-        //     // typename: skladItem.typename,
-        //     // price: skladItem.price,
-        //     // quant: skladItem.quant,
-        //     // file_main: files.file_main,
-        //     // file_sec: files.file_sec,
-        // }))
+     
 
     }
     const selectFiles = (e: any, type: string) => {
         const target = e.target
-        setFiles((prev: any) => ({ 
+        active && setFiles((prev: any) => ({ 
             ...prev, 
             [type]: target.files[0],
             src_main: active.img_main, 
@@ -99,7 +95,7 @@ export const PageTesting: FC = (): JSX.Element => {
         // setWhform(prev => ({ ...prev, [type]: target.files[0] }))
         // setActive(prev=>({...prev, [type]: target.files[0]}))
     }
-    const isActive = (id: number) => (active.id === id)
+    const isActive = (id: number) => (active!.id === id)
 
     useEffect(() => {
         fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
@@ -110,26 +106,29 @@ export const PageTesting: FC = (): JSX.Element => {
 
     const editableSubmitHandler = () => {
         const isChanged = (field: keyof IFields ): boolean => {
-            if (!active[field + '_new']) return false
-            const res = active[field] !== active[field + '_new'];
-            return res
+            if (active && !active[field + '_new']) return false
+            
+            return active ? active[field] !== active[field + '_new'] : false
         }
 
 
         const form = new FormData()
-        isChanged('typename') && active.typename_new ? form.append('typename', active.typename_new):form.append('typename', active.typename)
-        isChanged('price') && active.price && form.append('price', JSON.stringify(active.price_new))
-        isChanged('quant') && active.quant && form.append('quant', JSON.stringify(active.quant_new))
+        isChanged('typename') && active!.typename_new ? form.append('typename', active!.typename_new):form.append('typename', active!.typename)
+        isChanged('price') && active!.price && form.append('price', JSON.stringify(active!.price_new))
+        isChanged('quant') && active!.quant && form.append('quant', JSON.stringify(active!.quant_new))
         files.file_main && form.append('file_main', files.file_main)
         files.file_sec && form.append('file_sec', files.file_sec)
-        form.append('src_main', active.img_main)
-        form.append('src_sec', active.img_sec)
-        editWarehouse(form, active).then(data => setWH(prev => [...prev]))
+        form.append('src_main', active!.img_main)
+        form.append('src_sec', active!.img_sec)
+       active && editWarehouse(form, active).then(data => setWH(prev => [...prev]))
         setActive({} as IWarehouse)
         setFiles({} as IEditableForm)
     }
 
-
+    const resetHandler = () => {
+        setActive(initialState)
+        setFiles({} as IEditableForm)
+    }
 
     if (errorWH) return (
         <>
@@ -193,7 +192,7 @@ export const PageTesting: FC = (): JSX.Element => {
                     marginRight={4}
                     bgGradient={'linear(to-l, #087cc9, #bda7e0)'}
                 >
-                    <Heading size={'lg'}>Selected Item: {active.typename}</Heading>
+                    <Heading size={'lg'}>Selected Item: {active!.typename}</Heading>
                     
                     <HStack  className=' my1' justifyContent={'space-between'}>
                         <Image
@@ -202,7 +201,7 @@ export const PageTesting: FC = (): JSX.Element => {
                             alt='No IMAGE'
                             borderRadius={'lg'}
                             maxHeight={'5em'}
-                            src={`${host}${active.img_main || 'noimage.jpg'}`}
+                            src={`${host}${active!.img_main || 'noimage.jpg'}`}
                              />
                         {/* <div className='file-field '>
                             <div className="btn ">
@@ -221,7 +220,7 @@ export const PageTesting: FC = (): JSX.Element => {
                             alt='No IMAGE'
                             borderRadius={'lg'}
                             maxHeight={'4em'}
-                            src={`${host}${active.img_sec || 'noimage.jpg'}`}
+                            src={`${host}${active!.img_sec || 'noimage.jpg'}`}
                              />
                         <CustomFileInput selectFile={(e) => selectFiles(e, 'file_sec')} >
                             <div className='flex-row-between wrap-normal'><i className="material-icons">edit</i> загрузить</div>
@@ -229,36 +228,29 @@ export const PageTesting: FC = (): JSX.Element => {
                     </HStack>
                     {active &&
                         <VStack justifyContent={'space-between'}>
-                            {/* <div className="file-field input-field">
-                                <div className="btn-floating">
-                                    <i className="material-icons">edit</i>
-                                    <input type="file" onChange={(e) => selectFiles(e, 'file_main')} />
-                                </div>
-                                 <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" defaultValue={files.src_main} />
-                                </div> 
-                            </div>
-                            <div className="file-field input-field">
-                                <div className="btn">
-                                    <span>Доп</span>
-                                    <input type="file" onChange={(e) => selectFiles(e, 'file_sec')} />
-                                </div>
-                                <div className="file-path-wrapper">
-                                    <input className="file-path validate" type="text" defaultValue={files.src_second} />
-                                </div>
-                            </div> */}
-                            <CustomInput active={active} value={active.typename_new || active.typename} field='typename'
+                            
+                            <CustomInput active={active} value={active!.typename_new || active!.typename} field='typename' 
                                 changeHandler={(e) => setActive(prev => ({ ...prev, typename_new: e.target.value }))}
                             />
-                            <CustomInput active={active} value={`${active.price_new || active.price}`} field='price'
+                            <CustomInput active={active} value={`${active.price_new || active.price}`} field='price' desc=' руб.'
                                 changeHandler={(e) => setActive(prev => ({ ...prev, price_new: parseInt(e.target.value) }))}
                             />
-                            <CustomInput active={active} value={`${active.quant_new || active.quant}`} field='quant'
+                            <CustomInput active={active} value={`${active.quant_new || active.quant}`} field='quant' desc=" шт."
                                 changeHandler={(e) => setActive(prev => ({ ...prev, quant_new: parseInt(e.target.value) }))}
                             />
-                            <Button onClick={editableSubmitHandler}
-                                colorScheme='green'
-                            >Accept</Button>
+                            <ButtonGroup dir='horisontal'>
+                                <Button onClick={editableSubmitHandler}
+                                    colorScheme='green'
+                                >
+                                    Accept
+                                </Button>
+                                <Button onClick={resetHandler}
+                                    colorScheme='red'
+                                >
+                                    Decline
+                                </Button>
+                            </ButtonGroup>
+                            
                         </VStack>}
 
 

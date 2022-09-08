@@ -30,11 +30,11 @@ export interface IFiles {
 }
 export interface IWarehouse extends ISklad {
     id: number & string
-    quant: number
+    quant: number | string
     typename: string
     img_main: string
     img_sec: string
-    price: number
+    price: number | string
     file_main?: Blob
     file_sec?: Blob
 }

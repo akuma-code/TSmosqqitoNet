@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "typescript-361922",
+  "private_key_id": "7437b2dd1edf67db91ed20eae21612e269c18c60",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCh3WFh/Aj8nLUG\nfQDHPEiMcqFRGELQUDMY2E0q8CFYTnOPOATnrNyN1152hJRgMhGkkUIz/XANXqbn\njXV90JkjHy7dOJmrZX/+q0iEWOFGb5W8qNU5FGUGDy1YpPbp4Os3zTCKyYvihiXY\nMOfaBrC9+9/CSRBTT/CF9OoM3NcXOBcsRDwEOaN7Z+VdYRN8UCikLXhBBNF3KQ82\n6d7ikiBaKy1W9JObrqo3o1C8DMSYD5b/n4PQ9IqP1h8N7j1JECeT63nW+fNzCxmw\nVfOzqGXyI0xVAH3lL4J3+WBpUG4s4p9R1LBAQ/g5DfsTz3j02aBGcc0jfFxOHFY9\nZlcWbz2VAgMBAAECggEAB8ngwTfA8PLTbRv/uRaIASYU6BOMR3zMcKIb2HiUiizA\nN8CAz+sL89FMrNRFVXmjSrFop5rG1QXcbyDp6eNrMvrxpNhv4ITySz1PsHqcYGjH\nIjxXgjceg1OgoXbSoL9fYiB/+PWowv4kfQohZebTg1jG1BDy9adPkgqOZo8L1ISd\nRV3paxlFv6af7QPg31RXKnZ4FQNDDbQBZU31nVtiIRUYpxhiMssz2rG3KCbvheZv\nDZu7y1mPbs01upbNw/i89qz2IRR/+Hb4+eq3JLLoLVfiwqPItv6R5jkujd4+uiAQ\ns63Hn2QzlH8Vlvzvp3NQ6+UXQxEWEIhI/37tefcJoQKBgQDcsPXHy4Mf2QohTY0G\nCRH7Q1CooHMQctDDhwAQkkAz97kkShu8QLcdU7EwbUao+7n/Qwb80OyNxwjDeBmv\nQJ+rhf+hL0qtvw/44SjDEmR/+u3AaAZrKgX9BUpTiudBMH7nVCkdEbHuCoeThQN8\nmvJlTIx6vIvMWpp2NQKaD1r2cQKBgQC7wwOK6Q9rFWh5sJ7ZMbawVkxZJaKsry7D\npT/8Esk3zZ/2xOs+w4jPLpW3HBHVkOQ6qSusYGc6ksP6oexkkYLLvTwbtL59Rfy3\nSOPMdhLV1MitIEdeNJ/ZZ447LX8BXMRBXhz1WtPg942U+NC5JMYJzgRmpMUzo+xC\nMl2SLGuzZQKBgBGop0IBatCVkVXw2qPs/d9ZF48mp45dYY8DsmGhEjoWTF42/9kk\nZIKYO8lgNRM4cT2Xo2t/XC5MCst5RLTdOumCo13GZvdYHnMPsS9KvXfwIC4RJNJW\nXnxMfBILP03cD4t7FH8a913QweBv+EN0Mokggu0fQSBs74cd3sNtDx5BAoGAO+sF\nzGSHiRKx3nOgnYsh07AWeTRrb1QQRlsLyjNshyRVcfhxYfwgQo2JNX/9qPut+ZJW\n35F8H9MKO4dE2uscpEvlTKonR+73sL3QBEWByT84Mxdj7wo4ILbNStFAAH1MG9ge\nwaWUi+w0AGBOq2ay1BosiVz3mX0sPgu4lJccX4kCgYBg9uQ5ds9WTMTkEKYY8PYt\nuLE391guU3zJBTFEGZTqnbogXG3dqY1wILJOR5q/7KGqL4X9wGXzK8lDDEgYpnv1\n5Bfxin/QaF4PAr+b8gPyjXWFx+kUoKrMKNlyGyzVgi8No7A+T7DsJw9wmGi1nEDz\nY62/GXHbOa5AoCLPzlo66A==\n-----END PRIVATE KEY-----\n",
+  "client_email": "akuma-admin@typescript-361922.iam.gserviceaccount.com",
+  "client_id": "111778745015292263173",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/akuma-admin%40typescript-361922.iam.gserviceaccount.com"
+}
