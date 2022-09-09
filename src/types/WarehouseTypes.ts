@@ -46,3 +46,4 @@ export interface IWarehouseForm extends IWarehouse {
     file_sec?: Blob
 }
 
+export type StrNum = string | number

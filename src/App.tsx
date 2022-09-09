@@ -7,12 +7,14 @@ import { AppRouter } from './Components/AppRouter';
 import NavBar from './Components/NavBar';
 import { HOSTURL } from './types/IServerData';
 import { getURL } from './http/useFetchApi';
+import { ContextDataType, ContextWarehouse, IWhContext } from './Context/WhContext';
 
 
 export const HostContext = React.createContext<any>(null)
 
 const App = (): JSX.Element => {
   const [host, setHost] = useState<HOSTURL | string>(HOSTURL.WORK)
+  const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
     const url = getURL() + "/"
     // if (host !== url) setHost(url)
