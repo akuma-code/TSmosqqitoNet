@@ -141,7 +141,16 @@ export const PageTesting: FC = (): JSX.Element => {
             <Text fontSize={'6xl'}>ERROR: {errorWH}</Text>
         </>
     )
-
+    if (isLoadingWH) return (
+        <Center mt={10}>
+            <Spinner
+                size={'xl'}
+                emptyColor='red.500'
+                color='black.300'
+                speed='0.65s'
+                thickness='6px' />
+        </Center>
+    )
 
     return (
         <div className="row">
@@ -189,11 +198,7 @@ export const PageTesting: FC = (): JSX.Element => {
                         :
                         <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
                     } */}
-                <ModalWrap isOpen={isOpen}
-                    onClose={onClose}
-
-                >
-
+                <ModalWrap isOpen={isOpen} onClose={onClose}>
                     <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
                 </ModalWrap>
 
