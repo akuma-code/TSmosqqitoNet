@@ -9,6 +9,7 @@ type WhControlCardProps = {
     whItem: IWarehouse,
     selectItem: (skladItem: IWarehouse) => void,
     server_url: string
+
 } & HTMLAttributes<HTMLDivElement>
 
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {

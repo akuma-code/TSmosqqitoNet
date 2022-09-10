@@ -5,13 +5,14 @@ import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 import { AiFillEdit } from 'react-icons/ai';
 import { AddedValues } from './PageTesting';
 import { HostContext } from '../../App';
+import { EditFields } from '../../types/WHTypes';
 export type CustomInputProps<T> = {
     children?: React.ReactNode
     props?: any
     changeHandler?: (e: React.ChangeEvent<HTMLInputElement>) => void
     active: AddedValues
     value?: T
-    field: keyof IFields
+    field?: keyof IFields
     desc?: string
 
 } & HTMLAttributes<HTMLInputElement>
@@ -52,7 +53,7 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
         else return false
     }
 
-    const getLabel = (field: keyof IFields) => {
+    const getLabel = (field: keyof EditFields) => {
         const result = { label: "", desc: "" }
         switch (field) {
             case 'typename':
@@ -79,7 +80,7 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
     const true_text = 'deep-purple-text cyan lighten-2'
     const false_text = 'black-text'
     const textCls = field && [init_text, isChanged(field) ? true_text : false_text].join(" ")
-
+    const desc_txt = field && getLabel(field).desc
     // console.log('isChanged', isChanged('price'))
     return (
         <Editable
@@ -106,7 +107,7 @@ export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, change
                     <Input bg={'cyan'}
                         as={EditableInput}
                         onChange={changeHandler} />
-                    <EditableControls label={field && getLabel(field).label} desc={getLabel(field).desc} />
+                    <EditableControls label={field && getLabel(field).label} desc={desc_txt} />
                 </Flex>
 
 
