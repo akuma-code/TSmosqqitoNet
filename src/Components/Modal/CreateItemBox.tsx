@@ -1,5 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import { createWhItem } from '../../http/ClientSkladApi'
+
 import { StrNum } from '../../types/WarehouseTypes'
 import { CustomFileInput } from '../pages/CustomFileInput'
 import { IFields } from '../pages/CustomInput'
@@ -8,8 +10,8 @@ import { IEditableForm } from '../pages/PageTesting'
 
 export interface ICreateForm {
     typename: string
-    price?: StrNum
-    quant?: StrNum
+    price?: StrNum & ""
+    quant?: StrNum & ""
     file_main?: Blob
     file_sec?: Blob
     src_main?: string
@@ -18,17 +20,18 @@ export interface ICreateForm {
 
 interface CreateItemBoxProps {
     children?: React.ReactNode
-    onCreate: (item: ICreateForm) => void
+    onFinish?: () => void
+
 }
 
 
 
-export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onCreate }) => {
+export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
     const [createForm, setCreateForm] = useState<ICreateForm & {}>({} as ICreateForm)
     const [files, setFiles] = useState<IEditableForm & {}>({} as IEditableForm)
-    const selectFiles = (e: any, type: string) => {
+    const AddFiles = (e: any, type: string) => {
         const target = e.target
-        setCreateForm((prev: any) => ({
+        setFiles((prev: any) => ({
             ...prev,
             [type]: target.files[0],
         }))
@@ -37,7 +40,16 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onCreate }) => {
     const ADD_TO_FORM = (field: keyof IFields, e: React.ChangeEvent<HTMLInputElement>) => {
         setCreateForm(prev => ({ ...prev, [field]: e.target.value }))
     }
-
+    const onCreate = () => {
+        const form = new FormData()
+        form.append('typename', createForm.typename);
+        createForm.price && form.append('price', createForm.price);
+        createForm.quant && form.append('quant', createForm.quant);
+        files.file_main && form.append('file_main', files.file_main);
+        files.file_sec && form.append('file_sec', files.file_sec);
+        createWhItem(form)
+        onFinish && onFinish()
+    }
     return (
         <VStack align={'stretch'}>
             <fieldset style={{ border: "1px solid red" }}
@@ -60,7 +72,7 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onCreate }) => {
                 </legend>
                 <input type={'text'}
                     onChange={(e) => ADD_TO_FORM('price', e)}
-                    value={createForm.price}
+                    value={createForm.price || ""}
                 />
             </fieldset>
             <fieldset style={{ border: "1px solid red" }}
@@ -71,16 +83,16 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onCreate }) => {
                 </legend>
                 <input type={'text'}
                     onChange={(e) => ADD_TO_FORM('quant', e)}
-                    value={createForm.quant}
+                    value={createForm.quant || ""}
                 />
             </fieldset>
             <CustomFileInput
-                selectFile={(e) => selectFiles(e, 'file_main')}
+                selectFile={(e) => AddFiles(e, 'file_main')}
             >
                 Загрузить основное изображение
             </CustomFileInput>
             <CustomFileInput
-                selectFile={(e) => selectFiles(e, 'file_sec')}
+                selectFile={(e) => AddFiles(e, 'file_sec')}
             >
                 Загрузить дополнительное изображение
             </CustomFileInput>
@@ -88,7 +100,7 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onCreate }) => {
                 className='mt1'
                 variant='outline'
                 colorScheme='orange'
-                onClick={() => onCreate(createForm)}
+                onClick={onCreate}
             >
                 Добавить изделие
             </Button>

@@ -18,6 +18,11 @@ export const fetchApi = (path: string) => {
         const { data } = await $api.get(`api/${path}`)
         return data.rows
     }
+    const create = async <T>(item: T): Promise<T> => {
+        const { data } = await $api.post(`api/${path}`, item)
+        console.log('Created item: ', data)
+        return data
+    }
     const fetchOne = async (id: number) => {
         const { data } = await $api.get(`api/${path}/${id}`)
         console.log('fetchOneApiData:', data)
@@ -42,7 +47,7 @@ export const fetchApi = (path: string) => {
     }
     // console.log("APIFUNC", fetchAll());
 
-    return { fetchAll, fetchOne, edit, copySklad, remove } as const
+    return { fetchAll, fetchOne, edit, copySklad, remove, create } as const
 
 }
 export const useFetchApi = <T>(path: PATHS, id?: number) => {

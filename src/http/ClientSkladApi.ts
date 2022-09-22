@@ -22,3 +22,9 @@ export const editWarehouse = async (form_wh: any, activeItem: IWarehouse) => {
     const item = await fetchWH.edit(id, form_wh)
     return item
 }
+
+export const createWhItem = async (item_form: any) => {
+    const WhAPI = fetchApi('/sklad/wh')
+    const item = await WhAPI.create(item_form)
+    return item
+}

@@ -129,16 +129,16 @@ export const PageTesting: FC = (): JSX.Element => {
         setFiles({} as IEditableForm)
         onClose()
     }
-    const createItem = (item: any) => {
-        const form = new FormData()
-        form.append('typename', item.typename);
-        form.append('price', item.price);
-        form.append('quant', item.quant);
-        form.append('file_main', item.file_main);
-        form.append('file_sec', item.file_sec);
+    // const createItem = (item: any) => {
+    //     const form = new FormData()
+    //     form.append('typename', item.typename);
+    //     form.append('price', item.price);
+    //     form.append('quant', item.quant);
+    //     form.append('file_main', item.file_main);
+    //     form.append('file_sec', item.file_sec);
 
-        console.log('item', item)
-    }
+    //     console.log('item', item)
+    // }
     const resetHandler = () => {
         setActive(initialState)
         setFiles({} as IEditableForm)
@@ -209,6 +209,7 @@ export const PageTesting: FC = (): JSX.Element => {
                 <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
             </ModalWrap>
             <ModalWrap isOpen={createMdl} onClose={setCreateState.off} title='Создать новое окно'>
+                <CreateItemBox onFinish={setCreateState.off} />
             </ModalWrap>
         </div >
 
