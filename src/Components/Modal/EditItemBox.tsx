@@ -19,11 +19,7 @@ export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handler
 
 
     const { inputFileHandler, resetHandler, submitHandler } = handlers
-    // active: AddedValues,
-    // setActive: () => void,
-    // selectFiles: (e: any, type: string) => void,
-    // editableSubmitHandler: () => void,
-    // resetHandler: () => void
+
 
     const { host } = useContext(HostContext);
 
@@ -74,16 +70,16 @@ export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handler
                             changeHandler={(e) => setItem((prev: any) => ({ ...prev, price_new: parseInt(e.target.value) }))} />
                         <CustomInput active={item} value={`${item.quant_new || item.quant}`} field='quant' desc=" шт."
                             changeHandler={(e) => setItem((prev: any) => ({ ...prev, quant_new: parseInt(e.target.value) }))} />
-                        <ButtonGroup dir='horisontal' justifyContent={'space-between'} display='flex' w={'80%'}>
+                        <ButtonGroup dir='horisontal'>
                             <Button onClick={submitHandler}
                                 colorScheme='green'
                             >
-                                Подтвердить
+                                Accept
                             </Button>
                             <Button onClick={resetHandler}
-                                colorScheme='blue'
+                                colorScheme='red'
                             >
-                                Отмена
+                                Decline
                             </Button>
                         </ButtonGroup>
 
