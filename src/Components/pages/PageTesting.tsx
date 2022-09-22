@@ -78,14 +78,19 @@ export const PageTesting: FC = (): JSX.Element => {
     const [warehouse, setWH, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState<IWarehouse[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [createMdl, setCreateState] = useToggle()
+
+
+
     const selectItem = (skladItem: IEditableForm) => {
         setActive(skladItem)
         setFiles((prev: any) => ({ ...prev, src_main: skladItem.img_main, src_second: skladItem.img_sec }))
-        onOpen()
-
 
     }
+
+
     const selectFiles = (e: any, type: string) => {
+        //TODO: вернуть рандомное название файлов на серваке
         const target = e.target
         active && setFiles((prev: any) => ({
             ...prev,
@@ -93,8 +98,7 @@ export const PageTesting: FC = (): JSX.Element => {
             src_main: active.img_main,
             src_second: active.img_sec
         }))
-        // setWhform(prev => ({ ...prev, [type]: target.files[0] }))
-        // setActive(prev=>({...prev, [type]: target.files[0]}))
+
     }
     const isActive = (id: number) => (active!.id === id)
 
@@ -111,7 +115,6 @@ export const PageTesting: FC = (): JSX.Element => {
 
             return active ? active[field] !== active[field + '_new'] : false
         }
-
 
         const form = new FormData()
         isChanged('typename') && active!.typename_new ? form.append('typename', active!.typename_new) : form.append('typename', active!.typename)
@@ -130,6 +133,7 @@ export const PageTesting: FC = (): JSX.Element => {
     const resetHandler = () => {
         setActive(initialState)
         setFiles({} as IEditableForm)
+        onClose()
     }
     const formHandlers = {
         inputFileHandler: selectFiles,
@@ -176,6 +180,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                         whItem={wh}
                                         selectItem={selectItem}
                                         server_url={host}
+                                        openModal={onOpen}
                                     />
                                 </WrapItem>
                             )}
@@ -183,26 +188,19 @@ export const PageTesting: FC = (): JSX.Element => {
                 }
             </div>
             <div className="col s3 mt1">
+                <Button
+                    variant={'outline'}
+                    size='lg'
+                    onClick={setCreateState.on}
+                >Create Item</Button>
 
-                {/* {
-                    isLoadingWH ?
-                        <Center>
-                            <Spinner
-                                size={'xl'}
-                                emptyColor='blackAlpha.500'
-                                color='teal.700'
-                                speed='0.35s'
-                                thickness='4px'
-                                bg={'whatsapp.400'} />
-                        </Center>
-                        :
-                        <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
-                    } */}
-                <ModalWrap isOpen={isOpen} onClose={onClose}>
-                    <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
-                </ModalWrap>
 
             </div>
+            <ModalWrap isOpen={isOpen} onClose={onClose} title="Редактировать элемент">
+                <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
+            </ModalWrap>
+            <ModalWrap isOpen={createMdl} onClose={setCreateState.off} title='Создать новое окно'>
+            </ModalWrap>
         </div >
 
     )
@@ -211,11 +209,3 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
 
-/* {active &&
-                    <ActiveItemForm active={active}
-                        whform={whform}
-                        selectFiles={selectFiles}
-                        files={files}
-                        submitHandler={submitHandler}
-                        onChangeForm={changeForm} />
-                } */

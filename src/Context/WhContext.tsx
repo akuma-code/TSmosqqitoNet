@@ -27,11 +27,11 @@ export interface IWhContext {
 
 export const ContextWarehouse = React.createContext<ContextDataType | null>(null)
 
+export const useWhContext = () => useContext(ContextWarehouse)
 export const WhProvider = ({ children }: any) => {
     const [state, setState] = useState<ContextDataType & {}>({} as ContextDataType)
 
 }
 
-export const useWhContext = () => useContext(ContextWarehouse)
 
 
