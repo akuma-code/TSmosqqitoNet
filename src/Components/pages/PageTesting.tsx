@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, ButtonSpinner, Center, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Icon, IconButton, Input, Spinner, Tag, Text, useDisclosure, useEditableControls, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, ButtonSpinner, Center, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, Icon, IconButton, Input, Spinner, Tag, Text, useDisclosure, useEditableControls, Wrap, WrapItem } from '@chakra-ui/react'
 import { FC, ReactEventHandler, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
@@ -20,6 +20,7 @@ import { IFields } from './CustomInput'
 import * as WT from '../../types/WHTypes'
 import { EditItemBox } from '../Modal/EditItemBox'
 import { ModalWrap } from '../Modal/ModalWrap'
+import { CreateItemBox } from '../Modal/CreateItemBox'
 
 
 
@@ -78,12 +79,13 @@ export const PageTesting: FC = (): JSX.Element => {
     const [warehouse, setWH, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState<IWarehouse[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [isOpenCreate, setIsOpenCreate] = useState(false)
+
+
     const selectItem = (skladItem: IEditableForm) => {
         setActive(skladItem)
         setFiles((prev: any) => ({ ...prev, src_main: skladItem.img_main, src_second: skladItem.img_sec }))
         onOpen()
-
-
     }
     const selectFiles = (e: any, type: string) => {
         const target = e.target
@@ -126,7 +128,16 @@ export const PageTesting: FC = (): JSX.Element => {
         setFiles({} as IEditableForm)
         onClose()
     }
+    const createItem = (item: any) => {
+        const form = new FormData()
+        form.append('typename', item.typename);
+        form.append('price', item.price);
+        form.append('quant', item.quant);
+        form.append('file_main', item.file_main);
+        form.append('file_sec', item.file_sec);
 
+        console.log('item', item)
+    }
     const resetHandler = () => {
         setActive(initialState)
         setFiles({} as IEditableForm)
@@ -183,21 +194,11 @@ export const PageTesting: FC = (): JSX.Element => {
                 }
             </div>
             <div className="col s3 mt1">
+                <Heading as={'h3'}>Создать новое изделие</Heading>
+                <CreateItemBox
+                    onCreate={createItem}
+                />
 
-                {/* {
-                    isLoadingWH ?
-                        <Center>
-                            <Spinner
-                                size={'xl'}
-                                emptyColor='blackAlpha.500'
-                                color='teal.700'
-                                speed='0.35s'
-                                thickness='4px'
-                                bg={'whatsapp.400'} />
-                        </Center>
-                        :
-                        <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
-                    } */}
                 <ModalWrap isOpen={isOpen} onClose={onClose}>
                     <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />
                 </ModalWrap>
