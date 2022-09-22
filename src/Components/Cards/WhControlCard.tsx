@@ -5,6 +5,7 @@ import { BsCalendar2EventFill } from 'react-icons/bs'
 import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdStore, MdViewHeadline } from "react-icons/md";
+import { fetchApi } from '../../http/useFetchApi'
 type WhControlCardProps = {
     isActive: (id: number) => boolean,
     whItem: IWarehouse,
@@ -16,8 +17,9 @@ type WhControlCardProps = {
 
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {
     const { isActive, whItem, selectItem, server_url, openModal, ...rest } = props
-    const onDelete = () => {
+    const onDelete = (id: number) => {
         const toast = global.confirm('Удалить окно навсегда?')
+        if (toast) fetchApi(`sklad/wh/`).remove(id)
     }
 
     const isConf = (text: string) => global.confirm(text)
@@ -89,7 +91,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                 <WrapItem>
                     <IconButton
                         // disabled
-                        onClick={onDelete}
+                        onClick={() => onDelete(whItem.id)}
                         colorScheme='red'
                         bgColor={'blackAlpha.700'}
                         size={'md'}

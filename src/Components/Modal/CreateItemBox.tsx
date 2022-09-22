@@ -2,7 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { createWhItem } from '../../http/ClientSkladApi'
 
-import { StrNum } from '../../types/WarehouseTypes'
+import { IWarehouse, StrNum } from '../../types/WarehouseTypes'
 import { CustomFileInput } from '../pages/CustomFileInput'
 import { IFields } from '../pages/CustomInput'
 import { IEditableForm } from '../pages/PageTesting'
@@ -24,7 +24,7 @@ interface CreateItemBoxProps {
 
 }
 
-
+type F = keyof IFields
 
 export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
     const [createForm, setCreateForm] = useState<ICreateForm & {}>({} as ICreateForm)
@@ -37,6 +37,8 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
         }))
 
     }
+    const FIELDS: F[] = ['typename', 'price', 'quant']
+    const TITELS: string[] = ['Название', "Цена", "Количество"]
     const ADD_TO_FORM = (field: keyof IFields, e: React.ChangeEvent<HTMLInputElement>) => {
         setCreateForm(prev => ({ ...prev, [field]: e.target.value }))
     }
@@ -51,59 +53,77 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
         onFinish && onFinish()
     }
     return (
-        <VStack align={'stretch'}>
-            <fieldset style={{ border: "1px solid red" }}
-                className='p1'
-            >
-                <legend>
-                    Название
-                </legend>
-                <input
-                    type={'text'}
-                    onChange={(e) => ADD_TO_FORM('typename', e)}
-                    value={createForm.typename}
-                />
-            </fieldset>
-            <fieldset style={{ border: "1px solid red" }}
-                className='p1'
-            >
-                <legend>
-                    Цена
-                </legend>
-                <input type={'text'}
-                    onChange={(e) => ADD_TO_FORM('price', e)}
-                    value={createForm.price || ""}
-                />
-            </fieldset>
-            <fieldset style={{ border: "1px solid red" }}
-                className='p1'
-            >
-                <legend>
-                    Количество
-                </legend>
-                <input type={'text'}
-                    onChange={(e) => ADD_TO_FORM('quant', e)}
-                    value={createForm.quant || ""}
-                />
-            </fieldset>
-            <CustomFileInput
-                selectFile={(e) => AddFiles(e, 'file_main')}
-            >
-                Загрузить основное изображение
-            </CustomFileInput>
-            <CustomFileInput
-                selectFile={(e) => AddFiles(e, 'file_sec')}
-            >
-                Загрузить дополнительное изображение
-            </CustomFileInput>
-            <Button
-                className='mt1'
-                variant='outline'
-                colorScheme='orange'
-                onClick={onCreate}
-            >
-                Добавить изделие
-            </Button>
+        <VStack align={'stretch'} className='p1'>
+
+
+
+            <>
+                {FIELDS.map((field: keyof ICreateForm & F, idx: number) => {
+                    return (
+                        <fieldset style={{ border: "1px solid red" }}
+                            className='p1'
+                            key={idx}
+                        >
+                            <legend>
+                                {TITELS[idx]}
+                            </legend>
+                            <input
+                                type={'text'}
+                                onChange={(e) => ADD_TO_FORM(field, e)}
+                                value={createForm[field as keyof ICreateForm & F]}
+                            />
+                        </fieldset>
+                    )
+                })}
+
+
+
+
+
+                <CustomFileInput
+                    selectFile={(e) => AddFiles(e, 'file_main')}
+                >
+                    Загрузить основное изображение
+                </CustomFileInput>
+                <CustomFileInput
+                    selectFile={(e) => AddFiles(e, 'file_sec')}
+                >
+                    Загрузить дополнительное изображение
+                </CustomFileInput>
+                <Button
+                    className='mt1'
+                    variant='solid'
+                    colorScheme='orange'
+                    onClick={onCreate}
+                >
+                    Добавить изделие
+                </Button>
+            </>
+
         </VStack>
     )
 }
+
+
+/* <fieldset style={{ border: "1px solid red" }}
+                    className='p1'
+                >
+                    <legend>
+                        Цена
+                    </legend>
+                    <input type={'text'}
+                        onChange={(e) => ADD_TO_FORM('price', e)}
+                        value={createForm.price || ""}
+                    />
+                </fieldset>
+                <fieldset style={{ border: "1px solid red" }}
+                    className='p1'
+                >
+                    <legend>
+                        Количество
+                    </legend>
+                    <input type={'text'}
+                        onChange={(e) => ADD_TO_FORM('quant', e)}
+                        value={createForm.quant || ""}
+                    />
+                </fieldset>  */
