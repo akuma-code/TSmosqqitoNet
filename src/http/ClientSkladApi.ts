@@ -28,3 +28,9 @@ export const createWhItem = async (item_form: any) => {
     const item = await WhAPI.create(item_form)
     return item
 }
+
+export const deleteWhItem = async (id: number) => {
+    const WhAPI = fetchApi('/sklad/wh')
+    const item = await WhAPI.remove(id)
+    return item
+}
