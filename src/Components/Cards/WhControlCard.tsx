@@ -6,6 +6,7 @@ import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdStore, MdViewHeadline } from "react-icons/md";
 import { fetchApi } from '../../http/useFetchApi'
+import { deleteWhItem } from '../../http/ClientSkladApi'
 type WhControlCardProps = {
     isActive: (id: number) => boolean,
     whItem: IWarehouse,
@@ -19,7 +20,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
     const { isActive, whItem, selectItem, server_url, openModal, ...rest } = props
     const onDelete = (id: number) => {
         const toast = global.confirm('Удалить окно навсегда?')
-        if (toast) fetchApi(`sklad/wh/`).remove(id)
+        if (toast) deleteWhItem(id)
     }
 
     const isConf = (text: string) => global.confirm(text)
