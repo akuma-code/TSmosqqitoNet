@@ -19,7 +19,7 @@ export type ModalWrapProps = {
 export const ModalWrap: React.FC<ModalWrapProps> = ({ isOpen, onClose, children, ...modalOpts }) => {
     const { title } = modalOpts
     return (
-        <Modal isOpen={isOpen} onClose={onClose} {...modalOpts} scrollBehavior='outside'>
+        <Modal isOpen={isOpen} onClose={onClose} {...modalOpts} scrollBehavior='outside' >
             <ModalOverlay />
             <ModalContent bgColor={'#5378a5'} >
                 {title &&

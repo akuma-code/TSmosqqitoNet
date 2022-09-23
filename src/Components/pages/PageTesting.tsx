@@ -21,6 +21,7 @@ import * as WT from '../../types/WHTypes'
 import { EditItemBox } from '../Modal/EditItemBox'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { CreateItemBox } from '../Modal/CreateItemBox'
+import { ProductionBox } from '../Modal/ProductionBox'
 
 
 
@@ -83,6 +84,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
 
+
     const selectItem = (skladItem: IEditableForm) => {
         setActive(skladItem)
         setFiles((prev: any) => ({ ...prev, src_main: skladItem.img_main, src_second: skladItem.img_sec }))
@@ -129,16 +131,7 @@ export const PageTesting: FC = (): JSX.Element => {
         setFiles({} as IEditableForm)
         onClose()
     }
-    // const createItem = (item: any) => {
-    //     const form = new FormData()
-    //     form.append('typename', item.typename);
-    //     form.append('price', item.price);
-    //     form.append('quant', item.quant);
-    //     form.append('file_main', item.file_main);
-    //     form.append('file_sec', item.file_sec);
 
-    //     console.log('item', item)
-    // }
     const resetHandler = () => {
         setActive(initialState)
         setFiles({} as IEditableForm)
@@ -181,7 +174,8 @@ export const PageTesting: FC = (): JSX.Element => {
                                 thickness='6px' />
                         </Center>
                         :
-                        <Wrap bgGradient={'linear(to-bl, #72b9e9, #0e324b)'} >
+                        <Wrap bgGradient={'linear(to-bl, #72b9e9, #0e324b)'}
+                            className='p1'>
                             {[...whs].sort(sortByTypename)?.map((wh) =>
                                 <WrapItem key={wh.id}>
                                     <WhControlCard
@@ -190,6 +184,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                         selectItem={selectItem}
                                         server_url={host}
                                         openModal={onOpen}
+
                                     />
                                 </WrapItem>
                             )}
@@ -201,8 +196,9 @@ export const PageTesting: FC = (): JSX.Element => {
                     variant={'outline'}
                     size='lg'
                     onClick={setCreateState.on}
-                >Create Item</Button>
-
+                    colorScheme='twitter'
+                >Создать новое изделие
+                </Button>
 
             </div>
             <ModalWrap isOpen={isOpen} onClose={onClose} title="Редактировать элемент">
@@ -211,6 +207,7 @@ export const PageTesting: FC = (): JSX.Element => {
             <ModalWrap isOpen={createMdl} onClose={setCreateState.off} title='Создать новое окно'>
                 <CreateItemBox onFinish={setCreateState.off} />
             </ModalWrap>
+
         </div >
 
     )

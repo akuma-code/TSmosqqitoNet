@@ -1,4 +1,4 @@
-import { StrNum } from "./WarehouseTypes"
+import { IWarehouse, StrNum } from "./WarehouseTypes"
 
 export type Partial<T> = {
     [P in keyof T]?: T[P]
@@ -38,5 +38,11 @@ export interface EditProp {
     type_new?: string
     price_new?: StrNum
     quant_new?: StrNum
+}
+
+export interface IActiveItem {
+    item: IWarehouse
+
+
 }
 

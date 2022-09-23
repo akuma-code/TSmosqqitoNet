@@ -1,12 +1,13 @@
-import { Box, Button, ButtonGroup, Icon, IconButton, Image, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Icon, IconButton, Image, Wrap, WrapItem } from '@chakra-ui/react'
 import React, { HTMLAttributes } from 'react'
-import { AiOutlineSetting } from 'react-icons/ai'
 import { BsCalendar2EventFill } from 'react-icons/bs'
 import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
-import { MdAssignment, MdDeleteForever, MdGrading, MdStore, MdViewHeadline } from "react-icons/md";
-import { fetchApi } from '../../http/useFetchApi'
+import { MdAssignment, MdDeleteForever, MdGrading, MdViewHeadline } from "react-icons/md";
 import { deleteWhItem } from '../../http/ClientSkladApi'
+import { ModalWrap } from '../Modal/ModalWrap'
+import { ProductionBox } from '../Modal/ProductionBox'
+import { useToggle } from '../../hooks/useToggle'
 type WhControlCardProps = {
     isActive: (id: number) => boolean,
     whItem: IWarehouse,
@@ -14,10 +15,12 @@ type WhControlCardProps = {
     server_url: string
     openModal: () => void
 
+
 } & HTMLAttributes<HTMLDivElement>
 
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {
     const { isActive, whItem, selectItem, server_url, openModal, ...rest } = props
+    const [showProd, prodState] = useToggle()
     const onDelete = (id: number) => {
         const toast = global.confirm('Удалить окно навсегда?')
         if (toast) deleteWhItem(id)
@@ -85,7 +88,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                         size={'md'}
                         variant='outline'
                         aria-label='edit item'
-                        icon={<MdViewHeadline size={'sm'} />}
+                        icon={<MdViewHeadline size={'30'} />}
                         onClick={() => { openModal(); selectItem(whItem) }}
                     />
                 </WrapItem>
@@ -98,19 +101,19 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                         size={'md'}
                         variant='ghost'
                         aria-label='delete item'
-                        icon={<MdDeleteForever size={'lg'} />}
+                        icon={<MdDeleteForever size={'30'} />}
                     />
                 </WrapItem>
                 <WrapItem>
                     <IconButton
                         // disabled
-                        onClick={() => isConf('Production Start')}
+                        onClick={prodState.on}
                         colorScheme='cyan'
                         bgColor={'blackAlpha.700'}
                         size={'md'}
                         variant='outline'
                         aria-label='start production'
-                        icon={<MdGrading size={'lg'} />}
+                        icon={<MdGrading size={'30'} />}
                     />
                 </WrapItem>
                 <WrapItem>
@@ -122,12 +125,14 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                         size={'md'}
                         variant='ghost'
                         aria-label='show production'
-                        icon={<MdAssignment size={'lg'} />}
+                        icon={<MdAssignment size={'30'} />}
                     />
                 </WrapItem>
 
 
             </Wrap>
-
+            <ModalWrap isOpen={showProd} onClose={prodState.off} title='Запустить в производство'>
+                <ProductionBox item={whItem} />
+            </ModalWrap>
         </Box>)
 }

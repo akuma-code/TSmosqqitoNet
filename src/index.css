@@ -1,4 +1,5 @@
 @import url('./extStyle.scss');
+@import url('./boxes.scss');
 
 body {
   margin: 0;
