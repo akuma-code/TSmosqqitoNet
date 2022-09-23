@@ -1,32 +1,45 @@
 import { Box, Icon, IconButton, Image, Wrap, WrapItem } from '@chakra-ui/react'
-import React, { HTMLAttributes } from 'react'
+import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { BsCalendar2EventFill } from 'react-icons/bs'
 import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdViewHeadline } from "react-icons/md";
-import { deleteWhItem } from '../../http/ClientSkladApi'
+import { deleteWhItem, getProdInfos } from '../../http/ClientSkladApi'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { ProductionBox } from '../Modal/ProductionBox'
 import { useToggle } from '../../hooks/useToggle'
+import { WhInfo } from '../../types/WHTypes'
+import { fetchApi } from '../../http/useFetchApi'
+import { PATHS } from '../../types/IServerData'
 type WhControlCardProps = {
     isActive: (id: number) => boolean,
     whItem: IWarehouse,
     selectItem: (skladItem: IWarehouse) => void,
     server_url: string
     openModal: () => void
-
+    updateGlobal?: () => void
 
 } & HTMLAttributes<HTMLDivElement>
 
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {
-    const { isActive, whItem, selectItem, server_url, openModal, ...rest } = props
+    const { isActive, whItem, selectItem, server_url, openModal, updateGlobal, ...rest } = props
     const [showProd, prodState] = useToggle()
+    const [showProdInfo, infoState] = useToggle()
+    const [info, setInfo] = useState([] as WhInfo[])
+
+
     const onDelete = (id: number) => {
         const toast = global.confirm('Удалить окно навсегда?')
         if (toast) deleteWhItem(id)
+        updateGlobal && updateGlobal()
     }
+    const infos = async () => await fetchApi(PATHS.WHINFO).fetchAll<WhInfo[]>()
+    const prodOpen = () => {
+        infoState.on()
+        infos().then(setInfo)
+        console.log(JSON.stringify(info, null, 2));
 
-    const isConf = (text: string) => global.confirm(text)
+    }
     return (
         <Box
             {...rest}
@@ -119,7 +132,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                 <WrapItem>
                     <IconButton
                         // disabled
-                        onClick={() => isConf('Production Info')}
+                        onClick={prodOpen}
                         colorScheme='linkedin'
                         // bgColor={'aquamarine'}
                         size={'md'}
@@ -131,8 +144,15 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
 
 
             </Wrap>
+            <ModalWrap isOpen={showProdInfo} onClose={infoState.off} title='Запустить в производство'>
+                <Box>
+                    {
+                        JSON.stringify(info, null, 2)
+                    }
+                </Box>
+            </ModalWrap>
             <ModalWrap isOpen={showProd} onClose={prodState.off} title='Запустить в производство'>
-                <ProductionBox item={whItem} />
+                <ProductionBox item={whItem} onFinish={prodState.off} />
             </ModalWrap>
         </Box>)
 }

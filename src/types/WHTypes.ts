@@ -42,7 +42,12 @@ export interface EditProp {
 
 export interface IActiveItem {
     item: IWarehouse
-
-
 }
 
+export interface WhInfo {
+    count: StrNum,
+    dateReady: string,
+    warehouseId: StrNum,
+    quant: StrNum,
+    status: 'inProduction' | 'Ready'
+}

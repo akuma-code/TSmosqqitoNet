@@ -1,7 +1,9 @@
 // import { $api } from "."
 // import { ISklad } from "../types/IServerData"
+import { $api } from "."
 import { PATHS } from "../types/IServerData"
 import { IWarehouse } from "../types/WarehouseTypes"
+import { WhInfo } from "../types/WHTypes"
 import { fetchApi } from "./useFetchApi"
 
 export const editWarehouse = async (form_wh: any, activeItem: IWarehouse) => {
@@ -23,11 +25,18 @@ export const deleteWhItem = async (id: number) => {
     return item
 }
 
-export const addProdTask = async (task: any) => {
-    const API = fetchApi(PATHS.WAREHOUSE)
+export const addProdTask = async (task_form: any) => {
+    const WhAPI = fetchApi('/whinfo/start')
+    const item = await WhAPI.create(task_form) as WhInfo
+    return item
 
 }
 
+export const getProdInfos = async () => {
+    const API = fetchApi(PATHS.WHINFO)
+    const infos = await API.fetchAll() as WhInfo
+    return infos
+}
 
 
 // export const editOGO = async ({ form_type, form_sklad, form_shop }: any, sklad_item: ISklad) => {

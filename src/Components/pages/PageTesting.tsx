@@ -24,7 +24,7 @@ import { CreateItemBox } from '../Modal/CreateItemBox'
 import { ProductionBox } from '../Modal/ProductionBox'
 
 
-
+export const isConfirmed = (text: string) => global.confirm(text)
 
 const sortedWhByTypeName = (obj: WT.BaseProps[]) => [...obj].sort((a, b) => {
     const [nameA, nameB] = [getNumb(a.typename), getNumb(b.typename)]
@@ -84,7 +84,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
 
-
+    const updateWH = async () => await fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
     const selectItem = (skladItem: IEditableForm) => {
         setActive(skladItem)
         setFiles((prev: any) => ({ ...prev, src_main: skladItem.img_main, src_second: skladItem.img_sec }))
@@ -105,7 +105,7 @@ export const PageTesting: FC = (): JSX.Element => {
     const isActive = (id: number) => (active!.id === id)
 
     useEffect(() => {
-        fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
+        updateWH()
     }, [warehouse])
 
 
@@ -184,7 +184,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                         selectItem={selectItem}
                                         server_url={host}
                                         openModal={onOpen}
-
+                                        updateGlobal={updateWH}
                                     />
                                 </WrapItem>
                             )}

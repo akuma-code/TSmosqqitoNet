@@ -3,28 +3,29 @@ import React, { useState } from 'react'
 import { IActiveItem } from '../../types/WHTypes'
 import { IWarehouse, StrNum } from '../../types/WarehouseTypes'
 import { NUM } from '../pages/PageTesting'
-import { editWarehouse } from '../../http/ClientSkladApi'
+import { addProdTask, editWarehouse } from '../../http/ClientSkladApi'
 import dayjs from 'dayjs'
 
 
 interface ProductionBoxProps extends IActiveItem {
     children?: React.ReactNode
+    onFinish?: () => void
 }
 type IProd = {
     count: StrNum,
     dateReady: string,
-    wh_id: StrNum,
+    warehouseId: StrNum,
     quant: StrNum,
     status: 'inProduction' | 'Ready'
 
 }
 
 
-export const ProductionBox: React.FC<ProductionBoxProps> = ({ item }) => {
+export const ProductionBox: React.FC<ProductionBoxProps> = ({ item, onFinish }) => {
     const initial_prod = {
         count: 1,
         dateReady: dayjs().add(8, 'day').format('YYYY-MM-DD'),
-        wh_id: item.id,
+        warehouseId: item.id,
         quant: item.quant,
         status: 'inProduction'
     }
@@ -34,9 +35,16 @@ export const ProductionBox: React.FC<ProductionBoxProps> = ({ item }) => {
     function StartProd(whItem: IWarehouse) {
         const rest = NUM(production.quant) - NUM(production.count)
         const form = new FormData()
+        const formInfo = new FormData()
         form.append('quant', rest.toString())
-        editWarehouse(form, whItem)
+        formInfo.append('warehouseId', whItem.id)
+        formInfo.append('dateReady', production.dateReady)
+        formInfo.append('status', 'inProduction')
+        formInfo.append('count', production.count.toString())
 
+        editWarehouse(form, whItem)
+        addProdTask(formInfo)
+        onFinish && onFinish()
     }
 
     return (
