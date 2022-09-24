@@ -49,5 +49,6 @@ export interface WhInfo {
     dateReady: string,
     warehouseId: StrNum,
     quant: StrNum,
-    status: 'inProduction' | 'Ready'
+    status: 'inProduction' | 'Ready',
+    id: string
 }

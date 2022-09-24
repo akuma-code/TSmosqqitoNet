@@ -11,9 +11,12 @@ import { useToggle } from '../../hooks/useToggle'
 import { WhInfo } from '../../types/WHTypes'
 import { fetchApi } from '../../http/useFetchApi'
 import { PATHS } from '../../types/IServerData'
+import dayjs from 'dayjs'
+
+
 type WhControlCardProps = {
     isActive: (id: number) => boolean,
-    whItem: IWarehouse,
+    whItem: IWarehouse & { prod_info?: WhInfo[] },
     selectItem: (skladItem: IWarehouse) => void,
     server_url: string
     openModal: () => void
@@ -21,11 +24,34 @@ type WhControlCardProps = {
 
 } & HTMLAttributes<HTMLDivElement>
 
+
+const INFOBOX = (whItem: IWarehouse & { prod_info?: WhInfo[] }) => {
+    const DATE = (dateReady: string) => {
+        const now = dayjs()
+
+
+        const formatted = dayjs(now, 'DD MMMM YYYY', 'ru', true).format('DD MMMM')
+        return formatted
+
+    }
+    return (
+        <Box className='p1' textAlign='center'>
+            {
+                whItem.prod_info && whItem.prod_info?.map(i =>
+                    <div key={i.id}>
+                        <span >{i.count} шт.</span> || <span style={{ textTransform: "uppercase" }}>{DATE(i.dateReady)}</span>
+                    </div>
+                )
+            }
+        </Box>
+    )
+}
+
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {
     const { isActive, whItem, selectItem, server_url, openModal, updateGlobal, ...rest } = props
     const [showProd, prodState] = useToggle()
     const [showProdInfo, infoState] = useToggle()
-    const [info, setInfo] = useState([] as WhInfo[])
+    const [info, setInfo] = useState<WhInfo[]>([] as WhInfo[])
 
 
     const onDelete = (id: number) => {
@@ -37,7 +63,6 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
     const prodOpen = () => {
         infoState.on()
         infos().then(setInfo)
-        console.log(JSON.stringify(info, null, 2));
 
     }
     return (
@@ -144,12 +169,8 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
 
 
             </Wrap>
-            <ModalWrap isOpen={showProdInfo} onClose={infoState.off} title='Запустить в производство'>
-                <Box>
-                    {
-                        JSON.stringify(info, null, 2)
-                    }
-                </Box>
+            <ModalWrap isOpen={showProdInfo} onClose={infoState.off} title='Информация по готовности'>
+                {INFOBOX(whItem)}
             </ModalWrap>
             <ModalWrap isOpen={showProd} onClose={prodState.off} title='Запустить в производство'>
                 <ProductionBox item={whItem} onFinish={prodState.off} />

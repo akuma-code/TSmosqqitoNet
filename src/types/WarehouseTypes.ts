@@ -46,4 +46,10 @@ export interface IWarehouseForm extends IWarehouse {
     file_sec?: Blob
 }
 
+export interface IWhProdInfo {
+    warehouseId: string
+    quant: StrNum
+
+}
+
 export type StrNum = string | number
