@@ -1,5 +1,4 @@
-// import { $api } from "."
-// import { ISklad } from "../types/IServerData"
+
 import { $api } from "."
 import { PATHS } from "../types/IServerData"
 import { IWarehouse } from "../types/WarehouseTypes"
@@ -29,11 +28,20 @@ export const addProdTask = async (task_form: any) => {
     const WhAPI = fetchApi('/whinfo/start')
     const item = await WhAPI.create(task_form) as WhInfo
     return item
-
 }
 export const FinProdTask = async (id: string) => {
     const API = $api.put(`api/${PATHS.WHINFO}/${id}/fin`)
     return API
+}
+
+export const FinishTaskAndRestore = async (id: string, warehouseId: string) => {
+    const { data } = await $api.put(`api/${PATHS.WHINFO}/${id}/${warehouseId}/fin_and_res`)
+    return data
+}
+export const StartTaskAndRemove = async (task_form: any) => {
+    const WhAPI = fetchApi('/whinfo/start_and_remove')
+    const item = await WhAPI.create(task_form) as WhInfo
+    return item
 }
 export const getProdInfos = async () => {
     const API = fetchApi(PATHS.WHINFO)
@@ -42,15 +50,3 @@ export const getProdInfos = async () => {
 }
 
 
-// export const editOGO = async ({ form_type, form_sklad, form_shop }: any, sklad_item: ISklad) => {
-//     const { id, type, shop } = sklad_item
-//     const editType = await $api.put(`/api/type/${type.id}/s`, form_type)
-//     const editSklad = await $api.put(`api/sklad/${id}/s`, form_sklad)
-//     const editShop = await $api.put(`api/shop/${shop?.id}/s`, form_shop)
-//     // const editSklad = await $api.put(`/api/sklad/${id}/s`, form_sklad)
-//     // const editShop = await $api.put(`/api/shop/${shop?.id}/s`, form_shop)
-//     // const editType = await $api.put(`api/type/${typeId}`, typedata)
-//     // const editSklad = await $api.put(`api/sklad/${id}`, skladdata)
-//     // const editShop = await $api.put(`api/shop/${typeId}`, shopdata)
-//     return { editSklad, editType, editShop }
-// }

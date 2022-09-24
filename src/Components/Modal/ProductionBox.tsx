@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { IActiveItem } from '../../types/WHTypes'
 import { IWarehouse, StrNum } from '../../types/WarehouseTypes'
 import { NUM } from '../pages/PageTesting'
-import { addProdTask, editWarehouse } from '../../http/ClientSkladApi'
+import { addProdTask, editWarehouse, StartTaskAndRemove } from '../../http/ClientSkladApi'
 import dayjs from 'dayjs'
 
 
@@ -42,7 +42,7 @@ export const ProductionBox: React.FC<ProductionBoxProps> = ({ item, onFinish }) 
         formInfo.append('status', 'inProduction')
         formInfo.append('count', production.count.toString())
 
-        addProdTask(formInfo).then(() => editWarehouse(form, whItem))
+        StartTaskAndRemove(formInfo)
 
         onFinish && onFinish()
     }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, ButtonSpinner, Center, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, Icon, IconButton, Input, Spinner, Tag, Text, useDisclosure, useEditableControls, Wrap, WrapItem } from '@chakra-ui/react'
-import { FC, ReactEventHandler, useContext, useEffect, useState } from 'react'
+import { FC, ReactEventHandler, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
 import { ISklad, PATHS } from '../../types/IServerData'
@@ -8,7 +8,7 @@ import { getNumb } from './SkladPage'
 import { editWarehouse } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
 import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
-import { WhControlCard } from '../Cards/WhControlCard'
+import { daysLeft, WhControlCard } from '../Cards/WhControlCard'
 import { BtnsStack } from './BtnsStack'
 import { ActiveItemForm } from './ActiveItemForm'
 import { PopoverInput } from '../Modal/PopoverInput'
@@ -75,7 +75,6 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
     const [active, setActive] = useState<AddedValues & {}>(initialState as IWarehouse)
-    const [whform, setWhform] = useState({} as IEditableForm)
     const [files, setFiles] = useState<IEditableForm & {}>({} as IEditableForm)
     const [warehouse, setWH, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState<IWarehouse[]>([])
@@ -92,7 +91,6 @@ export const PageTesting: FC = (): JSX.Element => {
 
 
     const selectFiles = (e: any, type: string) => {
-        //TODO: вернуть рандомное название файлов на серваке
         const target = e.target
         active && setFiles((prev: any) => ({
             ...prev,
@@ -104,14 +102,21 @@ export const PageTesting: FC = (): JSX.Element => {
     }
     const isActive = (id: number) => (active!.id === id)
 
+    // useMemo(() => {
+    //     console.count('memo update')
+    //     updateWH()
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [warehouse, createMdl])
+
+
     useEffect(() => {
         updateWH()
-        console.log('updated');
-
-    }, [warehouse, isOpen, createMdl, isLoadingWH])
 
 
+    }, [warehouse, isOpen, createMdl])
 
+
+    const onDelete = (delid: number) => setWhs(prev => prev.filter(w => w.id !== delid))
 
     const editableSubmitHandler = () => {
         const isChanged = (field: keyof IFields): boolean => {
@@ -187,6 +192,7 @@ export const PageTesting: FC = (): JSX.Element => {
                                         server_url={host}
                                         openModal={onOpen}
                                         updateGlobal={updateWH}
+                                        onDelete={onDelete}
                                     />
                                 </WrapItem>
                             )}
@@ -199,7 +205,8 @@ export const PageTesting: FC = (): JSX.Element => {
                     size='lg'
                     onClick={setCreateState.on}
                     colorScheme='twitter'
-                >Создать новое изделие
+                >
+                    Создать новое изделие
                 </Button>
 
             </div>

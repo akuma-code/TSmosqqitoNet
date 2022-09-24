@@ -1,9 +1,10 @@
 import { Box, Button, ButtonGroup, Center, Heading, HStack, Image, Spinner, VStack } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { HostContext } from '../../App';
 import { CustomInput } from '../pages/CustomInput';
 import { CustomFileInput } from "../pages/CustomFileInput";
-import { AddedValues } from '../pages/PageTesting';
+import { AddedValues, NUM } from '../pages/PageTesting';
+import { StrNum } from '../../types/WarehouseTypes';
 
 export interface EditItemBoxProps {
     item: AddedValues
@@ -17,8 +18,10 @@ export interface EditItemBoxProps {
 
 export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handlers }): JSX.Element => {
 
-
+    const change = (field: string, value: StrNum) => setItem((prev: any) => ({ ...prev, [field]: (field === 'typename_new') ? value : NUM(value) }))
     const { inputFileHandler, resetHandler, submitHandler } = handlers
+
+
 
 
     const { host } = useContext(HostContext);
@@ -64,22 +67,26 @@ export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handler
 
                     <VStack justifyContent={'space-between'}>
 
-                        <CustomInput active={item} value={item!.typename_new || item!.typename} field='typename'
-                            changeHandler={(e) => setItem((prev: any) => ({ ...prev, typename_new: e.target.value }))} />
+                        <CustomInput
+                            active={item}
+                            value={item!.typename_new || item!.typename}
+                            field='typename'
+                            changeHandler={e => change('typename_new', e.target.value)}
+                        />
                         <CustomInput active={item} value={`${item.price_new || item.price}`} field='price' desc=' руб.'
-                            changeHandler={(e) => setItem((prev: any) => ({ ...prev, price_new: parseInt(e.target.value) }))} />
+                            changeHandler={e => change('price_new', e.target.value)} />
                         <CustomInput active={item} value={`${item.quant_new || item.quant}`} field='quant' desc=" шт."
-                            changeHandler={(e) => setItem((prev: any) => ({ ...prev, quant_new: parseInt(e.target.value) }))} />
-                        <ButtonGroup dir='horisontal'>
+                            changeHandler={e => change('quant_new', e.target.value)} />
+                        <ButtonGroup dir='horisontal' spacing={20}>
                             <Button onClick={submitHandler}
                                 colorScheme='green'
                             >
-                                Accept
+                                Подтвердить
                             </Button>
                             <Button onClick={resetHandler}
                                 colorScheme='red'
                             >
-                                Decline
+                                Отмена
                             </Button>
                         </ButtonGroup>
 
