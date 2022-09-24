@@ -1,16 +1,14 @@
 import { Box, Icon, IconButton, Image, Wrap, WrapItem } from '@chakra-ui/react'
-import React, { HTMLAttributes, useEffect, useState } from 'react'
+import React, { HTMLAttributes, useEffect } from 'react'
 import { BsCalendar2EventFill } from 'react-icons/bs'
 import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdViewHeadline } from "react-icons/md";
-import { deleteWhItem, editWarehouse, FinProdTask, getProdInfos } from '../../http/ClientSkladApi'
+import { deleteWhItem, editWarehouse, FinProdTask } from '../../http/ClientSkladApi'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { ProductionBox } from '../Modal/ProductionBox'
 import { useToggle } from '../../hooks/useToggle'
 import { WhInfo } from '../../types/WHTypes'
-import { fetchApi } from '../../http/useFetchApi'
-import { PATHS } from '../../types/IServerData'
 import dayjs from 'dayjs'
 import { NUM } from '../pages/PageTesting'
 
@@ -29,7 +27,7 @@ type WhControlCardProps = {
 const INFOBOX = (whItem: IWarehouse & { prod_info?: WhInfo[] }) => {
     const DATE = (dateReady: string) => {
         const now = dayjs()
-        const formatted = dayjs(dateReady, 'DD MMMM YYYY', 'ru', true).format('DD MMMM')
+        const formatted = dayjs(dateReady, 'DD MMMM YYYY', 'ru').format('DD MMMM')
         return formatted
     }
     const FIN = (id: string, count: number) => {
