@@ -31,7 +31,10 @@ export const addProdTask = async (task_form: any) => {
     return item
 
 }
-
+export const FinProdTask = async (id: string) => {
+    const API = $api.put(`api/${PATHS.WHINFO}/${id}/fin`)
+    return API
+}
 export const getProdInfos = async () => {
     const API = fetchApi(PATHS.WHINFO)
     const infos = await API.fetchAll() as WhInfo

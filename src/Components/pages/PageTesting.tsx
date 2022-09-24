@@ -106,7 +106,9 @@ export const PageTesting: FC = (): JSX.Element => {
 
     useEffect(() => {
         updateWH()
-    }, [warehouse])
+        console.log('updated');
+
+    }, [warehouse, isOpen, createMdl, isLoadingWH])
 
 
 

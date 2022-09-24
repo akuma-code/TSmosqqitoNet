@@ -42,8 +42,8 @@ export const ProductionBox: React.FC<ProductionBoxProps> = ({ item, onFinish }) 
         formInfo.append('status', 'inProduction')
         formInfo.append('count', production.count.toString())
 
-        editWarehouse(form, whItem)
-        addProdTask(formInfo)
+        addProdTask(formInfo).then(() => editWarehouse(form, whItem))
+
         onFinish && onFinish()
     }
 

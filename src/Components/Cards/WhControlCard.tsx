@@ -4,7 +4,7 @@ import { BsCalendar2EventFill } from 'react-icons/bs'
 import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdViewHeadline } from "react-icons/md";
-import { deleteWhItem, getProdInfos } from '../../http/ClientSkladApi'
+import { deleteWhItem, editWarehouse, FinProdTask, getProdInfos } from '../../http/ClientSkladApi'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { ProductionBox } from '../Modal/ProductionBox'
 import { useToggle } from '../../hooks/useToggle'
@@ -12,6 +12,7 @@ import { WhInfo } from '../../types/WHTypes'
 import { fetchApi } from '../../http/useFetchApi'
 import { PATHS } from '../../types/IServerData'
 import dayjs from 'dayjs'
+import { NUM } from '../pages/PageTesting'
 
 
 type WhControlCardProps = {
@@ -28,18 +29,25 @@ type WhControlCardProps = {
 const INFOBOX = (whItem: IWarehouse & { prod_info?: WhInfo[] }) => {
     const DATE = (dateReady: string) => {
         const now = dayjs()
-
-
-        const formatted = dayjs(now, 'DD MMMM YYYY', 'ru', true).format('DD MMMM')
+        const formatted = dayjs(dateReady, 'DD MMMM YYYY', 'ru', true).format('DD MMMM')
         return formatted
-
     }
+    const FIN = (id: string, count: number) => {
+        const resultQuant = NUM(whItem.quant) + count
+        const form = new FormData()
+        form.append('quant', resultQuant.toString())
+        FinProdTask(id).then(() => editWarehouse(form, whItem))
+    }
+    const working = whItem.prod_info?.filter(i => i.status === 'inProduction') || []
     return (
         <Box className='p1' textAlign='center'>
             {
-                whItem.prod_info && whItem.prod_info?.map(i =>
+                working.map(i =>
                     <div key={i.id}>
-                        <span >{i.count} шт.</span> || <span style={{ textTransform: "uppercase" }}>{DATE(i.dateReady)}</span>
+                        <span >{i.count} шт.</span> || <span style={{ textTransform: "uppercase" }}>{DATE(i.dateReady)}</span> || <em>{i.status}</em>
+                        <button className='btn-small mx1'
+                            onClick={() => FIN(i.id, NUM(i.count))}
+                        >FIN</button>
                     </div>
                 )
             }
@@ -51,7 +59,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
     const { isActive, whItem, selectItem, server_url, openModal, updateGlobal, ...rest } = props
     const [showProd, prodState] = useToggle()
     const [showProdInfo, infoState] = useToggle()
-    const [info, setInfo] = useState<WhInfo[]>([] as WhInfo[])
+    // const [info, setInfo] = useState<WhInfo[]>([] as WhInfo[])
 
 
     const onDelete = (id: number) => {
@@ -59,12 +67,12 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
         if (toast) deleteWhItem(id)
         updateGlobal && updateGlobal()
     }
-    const infos = async () => await fetchApi(PATHS.WHINFO).fetchAll<WhInfo[]>()
-    const prodOpen = () => {
-        infoState.on()
-        infos().then(setInfo)
 
-    }
+
+    useEffect(() => {
+        updateGlobal && updateGlobal()
+    }, [showProd, showProdInfo])
+
     return (
         <Box
             {...rest}
@@ -157,7 +165,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
                 <WrapItem>
                     <IconButton
                         // disabled
-                        onClick={prodOpen}
+                        onClick={infoState.on}
                         colorScheme='linkedin'
                         // bgColor={'aquamarine'}
                         size={'md'}

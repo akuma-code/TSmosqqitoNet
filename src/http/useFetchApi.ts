@@ -8,7 +8,7 @@ export const getURL = () => {
     // console.log("Server Url: ", saved_url);
     return saved_url
 }
-const $api = axios.create({
+export const $api = axios.create({
     baseURL: getURL()
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
