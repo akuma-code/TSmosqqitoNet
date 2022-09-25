@@ -5,7 +5,7 @@ import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
 import { ISklad, PATHS } from '../../types/IServerData'
 import { getNumb } from './SkladPage'
-import { editWarehouse } from '../../http/ClientSkladApi'
+import { editWarehouse, RunAutoCompleteTasks } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
 import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
 import { daysLeft, WhControlCard } from '../Cards/WhControlCard'
@@ -149,6 +149,8 @@ export const PageTesting: FC = (): JSX.Element => {
         submitHandler: editableSubmitHandler,
         resetHandler
     }
+    const ac = async () => await RunAutoCompleteTasks(1)
+
     if (errorWH) return (
         <>
             <Text fontSize={'6xl'}>ERROR: {errorWH}</Text>
@@ -207,6 +209,15 @@ export const PageTesting: FC = (): JSX.Element => {
                     colorScheme='twitter'
                 >
                     Создать новое изделие
+                </Button>
+                <Button
+                    className='my1'
+                    variant={'outline'}
+                    size='lg'
+                    onClick={ac}
+                    colorScheme='twitter'
+                >
+                    AutoComplete
                 </Button>
 
             </div>

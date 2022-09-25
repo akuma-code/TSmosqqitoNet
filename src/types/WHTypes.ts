@@ -50,5 +50,6 @@ export interface WhInfo {
     warehouseId: StrNum,
     quant: StrNum,
     status: 'inProduction' | 'Ready',
+    isRestored?: boolean,
     id: string
 }

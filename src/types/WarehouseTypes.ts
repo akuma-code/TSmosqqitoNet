@@ -28,7 +28,7 @@ export interface IFiles {
     src_main: string
     src_second: string
 }
-export interface IWarehouse extends ISklad {
+export interface IWarehouse {
     id: number & string
     quant: number | string
     typename: string

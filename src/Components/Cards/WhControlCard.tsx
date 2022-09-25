@@ -149,7 +149,7 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
 
 
     const FIN = async (id: string, warehouseId: string) => {
-        const s = await FinishTaskAndRestore(id, warehouseId)
+        const s = await FinishTaskAndRestore(id)
 
         console.log(s);
 
