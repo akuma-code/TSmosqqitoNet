@@ -34,8 +34,7 @@ export const FinProdTask = async (id: string) => {
     return API
 }
 export const RunAutoCompleteTasks = async (days: number) => {
-    // if (!days) return await $api.post(`api/${PATHS.WHINFO}/autocomplete`)
-    // else 
+
     return await $api.post(`api/${PATHS.WHINFO}/autocomplete/` + days)
 }
 

@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { HOSTURL, PATHS } from "../types/IServerData";
 
 export const getURL = () => {
-    const saved_url = localStorage.getItem('server_url') || HOSTURL.WORK
-    // console.log("Server Url: ", saved_url);
+    const saved_url = localStorage.getItem('server_url') || HOSTURL.CKO3
     return saved_url
 }
+
 export const $api = axios.create({
     baseURL: getURL()
 })

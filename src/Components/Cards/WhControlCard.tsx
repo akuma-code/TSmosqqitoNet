@@ -12,6 +12,7 @@ import { WhInfo } from '../../types/WHTypes'
 import dayjs from 'dayjs'
 import { NUM } from '../pages/PageTesting'
 import { I } from './I'
+import { useDaysJS } from '../../hooks/useDaysJS'
 
 type IProdInfo = {
     prod_info?: WhInfo[]
@@ -32,13 +33,13 @@ interface InfoBoxPorps {
     whItem: IWarehouse & IProdInfo
 
 }
-export const daysLeft = (dateReady: string) => {
-    const today = dayjs()
-    const date = dayjs(dateReady)
-    const daysRest = date.diff(today, 'days')
-    return daysRest
+// export const daysLeft = (dateReady: string) => {
+//     const today = dayjs()
+//     const date = dayjs(dateReady)
+//     const daysRest = date.diff(today, 'days')
+//     return daysRest
 
-}
+// }
 
 export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element => {
     const { isActive, whItem, selectItem, server_url, openModal, updateGlobal, onDelete, ...rest } = props
@@ -138,27 +139,34 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
 }
 
 const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
-    const DATE = (dateReady: string) => {
-        const formatted = dayjs(dateReady, 'DD MMMM YYYY', 'ru').format('DD MMMM')
 
-        return formatted
+    const { daysLeft, localDate, HoursLeft } = useDaysJS()
+
+    const alertstyle = (hours: number) => {
+        if (hours <= 6) return 'error'
+        if (hours <= 48) return 'warning'
+        return 'info'
     }
 
+    const sortAndFilter = (infos: WhInfo[]) => infos
+        ?.filter(i => daysLeft(i.dateReady) >= 0 && i.status === 'inProduction')
+        ?.sort((a, b) => HoursLeft(a.dateReady) - HoursLeft(b.dateReady))
 
-    const working = whItem.prod_info?.filter(i => i.status === 'inProduction' && daysLeft(i.dateReady) > 0) || null
+    const working = whItem.prod_info && sortAndFilter(whItem.prod_info)
+
 
 
     const FIN = async (id: string) => {
         const s = await FinishTaskAndRestore(id)
-
         console.log(s);
-
         return s
 
     }
-    if (!working) return (
+
+
+    if (!working || working.length < 1) return (
         <Box>
-            <Alert status='error'>
+            <Alert status='warning'>
                 <AlertIcon />
                 В данный момент ничего не производится
             </Alert>
@@ -168,11 +176,11 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
     return (
         <Box className='p1' textAlign='center'>
             {
-                working.map(i =>
+                working && [...working].map(i =>
                     <div key={i.id}>
-                        <Alert status='info' justifyContent='space-between'>
-
-
+                        <Alert
+                            status={alertstyle(HoursLeft(i.dateReady))}
+                            justifyContent='space-between'>
                             <HStack>
                                 <I title='confirmation_number' />
                                 <span>  {i.count} шт.</span>
@@ -181,7 +189,8 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
                             <HStack>
                                 <I title='event_available' />
                                 <span>
-                                    {DATE(i.dateReady)}
+                                    {localDate(i.dateReady)}
+                                    {/* [{daysLeft(i.dateReady)} дн.] */}
                                 </span>
                             </HStack>
                             <div>

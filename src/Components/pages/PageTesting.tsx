@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, ButtonSpinner, Center, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, Icon, IconButton, Input, Spinner, Tag, Text, useDisclosure, useEditableControls, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, ButtonSpinner, Center, Checkbox, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, HStack, Icon, IconButton, Input, Spinner, Stack, Tag, Text, useDisclosure, useEditableControls, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { FC, ReactEventHandler, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
@@ -8,7 +8,7 @@ import { getNumb } from './SkladPage'
 import { CleanUpTasks, editWarehouse, RunAutoCompleteTasks } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
 import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
-import { daysLeft, WhControlCard } from '../Cards/WhControlCard'
+import { WhControlCard } from '../Cards/WhControlCard'
 import { BtnsStack } from './BtnsStack'
 import { ActiveItemForm } from './ActiveItemForm'
 import { PopoverInput } from '../Modal/PopoverInput'
@@ -80,8 +80,18 @@ export const PageTesting: FC = (): JSX.Element => {
     const [whs, setWhs] = useState<IWarehouse[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [createMdl, setCreateState] = useToggle()
+    const [autofinish, setAF] = useToggle()
 
-
+    const check = () => {
+        const bool = localStorage.getItem("auto_finish")
+        if (!bool) {
+            localStorage.setItem("auto_finish", "false")
+            setAF.on()
+        } else {
+            localStorage.setItem("auto_finish", "true")
+            setAF.off()
+        }
+    }
 
     const updateWH = async () => await fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
     const selectItem = (skladItem: IEditableForm) => {
@@ -102,26 +112,26 @@ export const PageTesting: FC = (): JSX.Element => {
     }
     const isActive = (id: number) => (active!.id === id)
 
-    // useMemo(() => {
-    //     console.count('memo update')
-    //     updateWH()
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [warehouse, createMdl])
-
-
     useEffect(() => {
         updateWH()
-
-
     }, [warehouse, isOpen, createMdl])
 
+    useEffect(() => {
+
+        if (autofinish) {
+            console.log("AutoFinish Done!");
+            RunAutoCompleteTasks(0)
+        }
+
+
+    }, [])
 
     const onDelete = (delid: number) => setWhs(prev => prev.filter(w => w.id !== delid))
 
     const editableSubmitHandler = () => {
+
         const isChanged = (field: keyof IFields): boolean => {
             if (active && !active[field + '_new']) return false
-
             return active ? active[field] !== active[field + '_new'] : false
         }
 
@@ -149,7 +159,6 @@ export const PageTesting: FC = (): JSX.Element => {
         submitHandler: editableSubmitHandler,
         resetHandler
     }
-    const ac = async (days: number) => await RunAutoCompleteTasks(days)
 
     if (errorWH) return (
         <>
@@ -202,34 +211,49 @@ export const PageTesting: FC = (): JSX.Element => {
                 }
             </div>
             <div className="col s3 mt1">
-                <Button
-                    className='mx1 mt1'
-                    variant={'outline'}
-                    size='sm'
-                    onClick={setCreateState.on}
-                    colorScheme='twitter'
-                >
-                    Создать новое изделие
-                </Button>
-                <Button
-                    className='mx1 mt1'
-                    variant={'outline'}
-                    size='sm'
-                    onClick={() => RunAutoCompleteTasks(1)}
-                    colorScheme='twitter'
-                >
-                    AutoComplete
-                </Button>
-                <Button
-                    className='mx1 mt1'
-                    variant={'outline'}
-                    size='sm'
-                    onClick={CleanUpTasks}
-                    colorScheme='red'
-                >
-                    Очистить очередь производства
-                </Button>
+                <VStack align={'flex-start'}>
 
+
+                    <Button
+                        className=' mt1'
+                        variant={'outline'}
+                        size='sm'
+                        onClick={setCreateState.on}
+                        colorScheme='twitter'
+                    >
+                        Создать новое изделие
+                    </Button>
+
+
+                    <Button
+                        className='mx1 mt1'
+                        variant={'outline'}
+                        size='sm'
+                        onClick={() => RunAutoCompleteTasks(0)}
+                        colorScheme='twitter'
+                    >
+                        Завершить выполенные
+                    </Button>
+
+                    <label>
+                        <input type="checkbox"
+                            className="filled-in"
+                            checked={autofinish}
+                            onChange={check}
+                        />
+                        <span>Автозавершение заданий</span>
+                    </label>
+
+                    <Button
+                        className='mx1 mt1'
+                        variant={'outline'}
+                        size='sm'
+                        onClick={CleanUpTasks}
+                        colorScheme='red'
+                    >
+                        Очистить очередь производства
+                    </Button>
+                </VStack>
             </div>
             <ModalWrap isOpen={isOpen} onClose={onClose} title="Редактировать элемент">
                 <EditItemBox handlers={formHandlers} item={active} setItem={setActive} />

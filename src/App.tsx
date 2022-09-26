@@ -13,7 +13,7 @@ import { ContextDataType, ContextWarehouse, IWhContext } from './Context/WhConte
 export const HostContext = React.createContext<any>(null)
 
 const App = (): JSX.Element => {
-  const [host, setHost] = useState<HOSTURL | string>(HOSTURL.WORK)
+  const [host, setHost] = useState<HOSTURL | string>(HOSTURL.CKO3)
   const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
     const url = getURL() + "/"
