@@ -10,8 +10,8 @@ import { IEditableForm } from '../pages/PageTesting'
 
 export interface ICreateForm {
     typename: string
-    price?: StrNum & ""
-    quant?: StrNum & ""
+    price: StrNum & ""
+    quant: StrNum & ""
     file_main?: Blob
     file_sec?: Blob
     src_main?: string
@@ -23,11 +23,15 @@ interface CreateItemBoxProps {
     onFinish?: () => void
 
 }
-
+const initialFormValues = {
+    typename: "",
+    price: "",
+    quant: ""
+} as const
 type F = keyof IFields
 
 export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
-    const [createForm, setCreateForm] = useState<ICreateForm & {}>({} as ICreateForm)
+    const [createForm, setCreateForm] = useState<ICreateForm>(initialFormValues)
     const [files, setFiles] = useState<IEditableForm & {}>({} as IEditableForm)
     const AddFiles = (e: any, type: string) => {
         const target = e.target
@@ -38,7 +42,7 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
 
     }
     const FIELDS: F[] = ['typename', 'price', 'quant']
-    const TITELS: string[] = ['Название', "Цена", "Количество"]
+    const TITLES: string[] = ['Название', "Цена", "Количество"]
     const ADD_TO_FORM = (field: keyof IFields, e: React.ChangeEvent<HTMLInputElement>) => {
         setCreateForm(prev => ({ ...prev, [field]: e.target.value }))
     }
@@ -54,9 +58,6 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
     }
     return (
         <VStack align={'stretch'} className='p1'>
-
-
-
             <>
                 {FIELDS.map((field: keyof ICreateForm & F, idx: number) => {
                     return (
@@ -65,20 +66,16 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
                             key={idx}
                         >
                             <legend>
-                                {TITELS[idx]}
+                                {TITLES[idx]}
                             </legend>
                             <input
                                 type={'text'}
                                 onChange={(e) => ADD_TO_FORM(field, e)}
-                                value={createForm[field as keyof ICreateForm & F]}
+                                value={createForm[field]}
                             />
                         </fieldset>
                     )
                 })}
-
-
-
-
 
                 <CustomFileInput
                     selectFile={(e) => AddFiles(e, 'file_main')}
@@ -104,26 +101,3 @@ export const CreateItemBox: React.FC<CreateItemBoxProps> = ({ onFinish }) => {
     )
 }
 
-
-/* <fieldset style={{ border: "1px solid red" }}
-                    className='p1'
-                >
-                    <legend>
-                        Цена
-                    </legend>
-                    <input type={'text'}
-                        onChange={(e) => ADD_TO_FORM('price', e)}
-                        value={createForm.price || ""}
-                    />
-                </fieldset>
-                <fieldset style={{ border: "1px solid red" }}
-                    className='p1'
-                >
-                    <legend>
-                        Количество
-                    </legend>
-                    <input type={'text'}
-                        onChange={(e) => ADD_TO_FORM('quant', e)}
-                        value={createForm.quant || ""}
-                    />
-                </fieldset>  */

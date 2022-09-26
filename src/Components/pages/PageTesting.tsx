@@ -5,7 +5,7 @@ import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
 import { ISklad, PATHS } from '../../types/IServerData'
 import { getNumb } from './SkladPage'
-import { editWarehouse, RunAutoCompleteTasks } from '../../http/ClientSkladApi'
+import { CleanUpTasks, editWarehouse, RunAutoCompleteTasks } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
 import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
 import { daysLeft, WhControlCard } from '../Cards/WhControlCard'
@@ -149,7 +149,7 @@ export const PageTesting: FC = (): JSX.Element => {
         submitHandler: editableSubmitHandler,
         resetHandler
     }
-    const ac = async () => await RunAutoCompleteTasks(1)
+    const ac = async (days: number) => await RunAutoCompleteTasks(days)
 
     if (errorWH) return (
         <>
@@ -203,21 +203,31 @@ export const PageTesting: FC = (): JSX.Element => {
             </div>
             <div className="col s3 mt1">
                 <Button
+                    className='mx1 mt1'
                     variant={'outline'}
-                    size='lg'
+                    size='sm'
                     onClick={setCreateState.on}
                     colorScheme='twitter'
                 >
                     Создать новое изделие
                 </Button>
                 <Button
-                    className='my1'
+                    className='mx1 mt1'
                     variant={'outline'}
-                    size='lg'
-                    onClick={ac}
+                    size='sm'
+                    onClick={() => RunAutoCompleteTasks(1)}
                     colorScheme='twitter'
                 >
                     AutoComplete
+                </Button>
+                <Button
+                    className='mx1 mt1'
+                    variant={'outline'}
+                    size='sm'
+                    onClick={CleanUpTasks}
+                    colorScheme='red'
+                >
+                    Очистить очередь производства
                 </Button>
 
             </div>

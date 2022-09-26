@@ -148,7 +148,7 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
     const working = whItem.prod_info?.filter(i => i.status === 'inProduction' && daysLeft(i.dateReady) > 0) || null
 
 
-    const FIN = async (id: string, warehouseId: string) => {
+    const FIN = async (id: string) => {
         const s = await FinishTaskAndRestore(id)
 
         console.log(s);
@@ -189,7 +189,7 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
                                 <Button
                                     variant='outline'
                                     colorScheme='twitter'
-                                    onClick={() => FIN(i.id, whItem.id)}
+                                    onClick={() => FIN(i.id)}
                                 >
                                     Завершить
                                 </Button>

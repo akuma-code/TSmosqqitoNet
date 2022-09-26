@@ -33,9 +33,10 @@ export const FinProdTask = async (id: string) => {
     const API = $api.put(`api/${PATHS.WHINFO}/${id}/fin`)
     return API
 }
-export const RunAutoCompleteTasks = async (days: number | null) => {
-    if (!days) return await $api.post(`api/${PATHS.WHINFO}/autocomplete`)
-    else return $api.post(`api/${PATHS.WHINFO}/autocomplete/` + days)
+export const RunAutoCompleteTasks = async (days: number) => {
+    // if (!days) return await $api.post(`api/${PATHS.WHINFO}/autocomplete`)
+    // else 
+    return await $api.post(`api/${PATHS.WHINFO}/autocomplete/` + days)
 }
 
 export const FinishTaskAndRestore = async (id: string) => {
@@ -53,4 +54,7 @@ export const getProdInfos = async () => {
     return infos
 }
 
-
+export const CleanUpTasks = async () => {
+    const { data } = await $api.delete(`api/${PATHS.WHINFO}/clean`)
+    return data
+}

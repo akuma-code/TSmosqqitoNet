@@ -42,5 +42,6 @@ export enum PATHS {
 export enum HOSTURL {
     LOCALHOST = 'http://localhost:5000',
     HOME = 'http://akumapc:5000',
-    WORK = 'http://prodnyan:5000'
+    WORK = 'http://prodnyan:5000',
+    CKO3 = 'http://cko3:5000'
 }
