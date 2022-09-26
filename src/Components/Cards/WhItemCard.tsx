@@ -22,10 +22,11 @@ import {
 } from '@chakra-ui/react'
 import React, { HTMLAttributes, useContext } from 'react'
 import { HostContext } from '../../App'
-import { useToggle } from '../../hooks/useToggle'
+import { IToggleFuncs, useToggle } from '../../hooks/useToggle'
 import { ISklad } from '../../types/IServerData'
 import { I } from './I'
 import { IWarehouse } from "../../types/WarehouseTypes";
+import { INFOBOX } from "./WhControlCard";
 
 
 const onHover = (cond: boolean) => {
@@ -44,6 +45,7 @@ export type WarehouseItemProps = {
 const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHover, setHoverState] = useToggle()
     const [isHoverImg, setHoverStateImg] = useToggle()
+    const [isHoverInfo, setHoverStateInfo] = useToggle()
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')
 
     const { host } = useContext(HostContext)
@@ -61,51 +63,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
         >
             <Box alignItems='center' display={'flex'} margin='.5rem'>
 
-                <Popover isOpen={isHoverImg}
-                    closeOnBlur
-                >
-                    <PopoverTrigger>
-                        <Image
-                            alt='No IMAGE'
-                            borderRadius={'lg'}
-                            maxHeight={'9em'}
-                            onMouseEnter={setHoverStateImg.on}
-                            onMouseLeave={setHoverStateImg.off}
-                            src={`${host}${whItem.img_main || 'noimage.jpg'}`}
-
-                        />
-                    </PopoverTrigger>
-                    <Portal>
-                        <PopoverContent minWidth={'55em'}
-                            border='6px indigo'
-                            borderStyle='groove'
-                            borderRadius='lg'
-                        >
-                            <PopoverArrow bgColor={'indigo '} />
-                            <PopoverHeader fontSize={'3xl'}
-                                className="indigo lighten-4 z-depth-4"
-                                borderRadius={'md'}
-                            >
-                                <div className="w100 flex-row-between  ">
-                                    <div><b><Icon as={TiDatabase} /></b><b>{whItem.typename}</b></div>
-                                    <div><Icon as={TiHomeOutline} /><b> {whItem.quant} шт.</b></div>
-                                    <div><Icon as={IoLogoUsd} /><b>{whItem.price} руб.</b></div>
-                                </div>
-                            </PopoverHeader>
-                            <PopoverBody
-                                className="blue accent-1"
-                            >
-                                <Image
-                                    alt='No IMAGE'
-                                    borderRadius={'lg'}
-                                    src={`${host}${whItem.img_sec || 'noimage.jpg'}`}
-
-                                />
-                            </PopoverBody>
-
-                        </PopoverContent>
-                    </Portal>
-                </Popover>
+                {ImagePO()}
             </Box>
             <Box >
 
@@ -135,7 +93,25 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                             fontSize={'2xl'}
                         >{whItem.price} руб.</StatHelpText>
                     </Stat>
-                    <Heading className='mr1' alignItems={'center'} display='flex' flexDir={'column'}>{whItem.quant} шт.</Heading>
+                    <InfoPOP
+                        whItem={whItem}
+                        host={host}
+                        isHover={isHoverInfo}
+                        setHoverState={setHoverStateInfo}
+
+
+                    >
+
+                        <Heading className='mr1'
+                            alignItems={'center'}
+                            display='flex'
+                            flexDir={'column'}
+                            onMouseEnter={setHoverStateInfo.on}
+                            onMouseLeave={setHoverStateInfo.off}
+                        >
+                            {whItem.quant} шт.
+                        </Heading>
+                    </InfoPOP>
                 </StatGroup>
             </Box>
 
@@ -143,6 +119,94 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
 
         </Box >
     )
+
+    function ImagePO() {
+        return <Popover isOpen={isHoverImg}
+            closeOnBlur
+        >
+            <PopoverTrigger>
+                <Image
+                    alt='No IMAGE'
+                    borderRadius={'lg'}
+                    maxHeight={'9em'}
+                    onMouseEnter={setHoverStateImg.on}
+                    onMouseLeave={setHoverStateImg.off}
+                    src={`${host}${whItem.img_main || 'noimage.jpg'}`} />
+            </PopoverTrigger>
+            <Portal>
+                <PopoverContent minWidth={'55em'}
+                    border='6px indigo'
+                    borderStyle='groove'
+                    borderRadius='lg'
+                >
+                    <PopoverArrow bgColor={'indigo '} />
+                    <PopoverHeader fontSize={'3xl'}
+                        className="indigo lighten-4 z-depth-4"
+                        borderRadius={'md'}
+                    >
+                        <div className="w100 flex-row-between  ">
+                            <div><b><Icon as={TiDatabase} /></b><b>{whItem.typename}</b></div>
+                            <div><Icon as={TiHomeOutline} /><b> {whItem.quant} шт.</b></div>
+                            <div><Icon as={IoLogoUsd} /><b>{whItem.price} руб.</b></div>
+                        </div>
+                    </PopoverHeader>
+                    <PopoverBody
+                        className="blue accent-1"
+                    >
+                        <Image
+                            alt='No IMAGE'
+                            borderRadius={'lg'}
+                            src={`${host}${whItem.img_sec || 'noimage.jpg'}`} />
+                    </PopoverBody>
+
+                </PopoverContent>
+            </Portal>
+        </Popover>;
+    }
 }
+
+export type InfoPopsProps = {
+    children?: React.ReactNode,
+    isHover: boolean,
+    setHoverState: IToggleFuncs,
+    host: string,
+    whItem: IWarehouse
+}
+
+export const InfoPOP: React.FC<InfoPopsProps> = ({ isHover, setHoverState, host, whItem, children }) => {
+    return (<Popover isOpen={isHover}
+        closeOnBlur
+    >
+        <PopoverTrigger>
+            {children}
+        </PopoverTrigger>
+        <Portal>
+            <PopoverContent minWidth={'25em'}
+                border='6px indigo'
+                borderStyle='groove'
+                borderRadius='lg'
+            >
+                <PopoverArrow bgColor={'indigo '} />
+                <PopoverHeader fontSize={'xl'}
+                    className="indigo lighten-4 z-depth-4"
+                    borderRadius={'md'}
+                >
+                    <div className="w100 flex-row-between  ">
+                        <div><b>Количество</b></div>
+                        <div><b>Дата готовности</b></div>
+                    </div>
+                </PopoverHeader>
+                <PopoverBody
+                    className="blue accent-1"
+                >
+                    <INFOBOX whItem={whItem} hidebtn={true} />
+                </PopoverBody>
+
+            </PopoverContent>
+        </Portal>
+    </Popover>);
+}
+
+
 
 export default WarehouseItemCard

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-type IToggleFuncs = {
+export type IToggleFuncs = {
     on: () => void,
     off: () => void,
     toggle: () => void,

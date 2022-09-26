@@ -31,6 +31,7 @@ type WhControlCardProps = {
 interface InfoBoxPorps {
     children?: React.ReactNode
     whItem: IWarehouse & IProdInfo
+    hidebtn?: boolean
 
 }
 // export const daysLeft = (dateReady: string) => {
@@ -138,7 +139,7 @@ export const WhControlCard: React.FC<WhControlCardProps> = (props): JSX.Element 
         </Box>)
 }
 
-const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
+export const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem, hidebtn }) => {
 
     const { daysLeft, localDate, HoursLeft } = useDaysJS()
 
@@ -193,16 +194,18 @@ const INFOBOX: React.FC<InfoBoxPorps> = ({ whItem }) => {
                                     {/* [{daysLeft(i.dateReady)} дн.] */}
                                 </span>
                             </HStack>
-                            <div>
+                            {
+                                !hidebtn &&
+                                <div>
 
-                                <Button
-                                    variant='outline'
-                                    colorScheme='twitter'
-                                    onClick={() => FIN(i.id)}
-                                >
-                                    Завершить
-                                </Button>
-                            </div>
+                                    <Button
+                                        variant='outline'
+                                        colorScheme='twitter'
+                                        onClick={() => FIN(i.id)}
+                                    >
+                                        Завершить
+                                    </Button>
+                                </div>}
                         </Alert>
                     </div>
                 )
