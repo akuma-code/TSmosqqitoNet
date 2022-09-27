@@ -80,17 +80,10 @@ export const PageTesting: FC = (): JSX.Element => {
     const [whs, setWhs] = useState<IWarehouse[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [createMdl, setCreateState] = useToggle()
-    const [autofinish, setAF] = useToggle()
+    const [autofinish, setAF] = useToggle(true)
 
     const check = () => {
-        const bool = localStorage.getItem("auto_finish")
-        if (!bool) {
-            localStorage.setItem("auto_finish", "false")
-            setAF.on()
-        } else {
-            localStorage.setItem("auto_finish", "true")
-            setAF.off()
-        }
+
     }
 
     const updateWH = async () => await fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
@@ -235,14 +228,14 @@ export const PageTesting: FC = (): JSX.Element => {
                         Завершить выполенные
                     </Button>
 
-                    <label>
+                    {/* <label>
                         <input type="checkbox"
                             className="filled-in"
                             checked={autofinish}
                             onChange={check}
                         />
                         <span>Автозавершение заданий</span>
-                    </label>
+                    </label> */}
 
                     <Button
                         className='mx1 mt1'
