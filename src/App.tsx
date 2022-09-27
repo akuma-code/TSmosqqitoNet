@@ -14,6 +14,7 @@ export const HostContext = React.createContext<any>(null)
 
 const App = (): JSX.Element => {
   const [host, setHost] = useState<HOSTURL | string>(HOSTURL.CKO3)
+  const [auth, setAuth] = useState(false)
   const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
     const url = getURL() + "/"
@@ -27,7 +28,7 @@ const App = (): JSX.Element => {
   return (
 
     <HostContext.Provider
-      value={{ host, setHost }}
+      value={{ host, setHost, auth, setAuth }}
     >
 
       <BrowserRouter>
