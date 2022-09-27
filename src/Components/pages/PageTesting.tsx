@@ -22,6 +22,7 @@ import { EditItemBox } from '../Modal/EditItemBox'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { CreateItemBox } from '../Modal/CreateItemBox'
 import { ProductionBox } from '../Modal/ProductionBox'
+import { getHostUrl, ResetSkladModels } from '../../http/SettingsApi'
 
 
 export const isConfirmed = (text: string) => global.confirm(text)
@@ -130,7 +131,7 @@ export const PageTesting: FC = (): JSX.Element => {
 
         const form = new FormData()
         isChanged('typename') && active!.typename_new ? form.append('typename', active!.typename_new) : form.append('typename', active!.typename)
-        isChanged('price') && active!.price && form.append('price', JSON.stringify(active!.price_new))
+        isChanged('price') && form.append('price', JSON.stringify(active!.price_new))
         isChanged('quant') && active!.quant && form.append('quant', JSON.stringify(active!.quant_new))
         files.file_main && form.append('file_main', files.file_main)
         files.file_sec && form.append('file_sec', files.file_sec)
@@ -228,15 +229,6 @@ export const PageTesting: FC = (): JSX.Element => {
                         Завершить выполенные
                     </Button>
 
-                    {/* <label>
-                        <input type="checkbox"
-                            className="filled-in"
-                            checked={autofinish}
-                            onChange={check}
-                        />
-                        <span>Автозавершение заданий</span>
-                    </label> */}
-
                     <Button
                         className='mx1 mt1'
                         variant={'outline'}
@@ -245,6 +237,24 @@ export const PageTesting: FC = (): JSX.Element => {
                         colorScheme='red'
                     >
                         Очистить очередь производства
+                    </Button>
+                    <Button
+                        className='mx1 mt1'
+                        variant={'outline'}
+                        size='sm'
+                        onClick={getHostUrl}
+                        colorScheme='yellow'
+                    >
+                        SHOW HOST URL
+                    </Button>
+                    <Button
+                        className='mx1 mt1'
+                        variant={'outline'}
+                        size='sm'
+                        onClick={() => ResetSkladModels()}
+                        colorScheme='yellow'
+                    >
+                        Сбросить до дефолтных изделий
                     </Button>
                 </VStack>
             </div>

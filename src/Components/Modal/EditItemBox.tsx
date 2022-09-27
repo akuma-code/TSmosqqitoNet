@@ -18,7 +18,8 @@ export interface EditItemBoxProps {
 
 export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handlers }): JSX.Element => {
 
-    const change = (field: string, value: StrNum) => setItem((prev: any) => ({ ...prev, [field]: (field === 'typename_new') ? value : NUM(value) }))
+    const change = (field: string, value: StrNum) => setItem((prev: any) =>
+        ({ ...prev, [field]: (field === 'typename_new') ? value : NUM(value) }))
     const { inputFileHandler, resetHandler, submitHandler } = handlers
 
 

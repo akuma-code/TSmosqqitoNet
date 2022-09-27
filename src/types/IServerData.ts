@@ -37,6 +37,7 @@ export enum PATHS {
     OFFER = 'offer',
     WAREHOUSE = 'sklad/wh',
     WHINFO = 'whinfo',
+    SETTINGS = 'settings'
 }
 
 export enum HOSTURL {

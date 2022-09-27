@@ -41,7 +41,7 @@ const onToggleChanged = (cond: boolean) => {
 }
 
 
-export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value, field, desc }): JSX.Element => {
+export const CustomInput: React.FC<CustomInputProps<string>> = ({ active, changeHandler, value, field }): JSX.Element => {
 
     const isChanged = (field: keyof IFields): boolean => {
         const [val, newval] = [field, field + '_new']
