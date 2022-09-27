@@ -48,7 +48,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHoverInfo, setHoverStateInfo] = useToggle()
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')
 
-    const { host } = useContext(HostContext)
+    const { host } = useContext(HostContext) || ""
     return (
         <Box className={'m1 z-depth-3'}
             maxHeight='10em'

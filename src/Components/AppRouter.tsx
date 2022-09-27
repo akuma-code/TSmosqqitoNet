@@ -1,5 +1,8 @@
 import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { HostContext } from '../App'
+import { useAuth } from '../hooks/useAuth'
+import { check } from '../http/UsersApi'
 import { Nets } from './pages/Nets'
 import { PageCreateModel } from './pages/PageCreateModel'
 import { PageTesting } from './pages/PageTesting'
@@ -11,9 +14,40 @@ type AppRouterProps = {
 }
 
 export const AppRouter: FC<AppRouterProps> = () => {
+
+    const authRoutes = [
+        {
+            path: '/nets',
+            element: <Nets />
+        }, {
+            path: "/todos",
+            element: <Todos />
+        }, {
+            path: '/test',
+            element: <PageTesting />
+        }
+    ];
+
+    const publicRoutes = [
+        {
+            path: '/sklad',
+            element: <SkladPage />
+        },
+    ]
+
+    const { isAuth, setAuth } = useAuth()
     return (
+
         <Routes>
-            <Route
+            {isAuth ? authRoutes.map((r, idx) => (
+                <Route {...r} key={idx} />
+            ))
+                :
+                publicRoutes.map((r, idx) => (
+                    <Route {...r} key={idx} />
+                ))}
+
+            {/* <Route
                 path='/nets'
                 element={<Nets />}
             />
@@ -30,9 +64,9 @@ export const AppRouter: FC<AppRouterProps> = () => {
             />
             <Route path='/sklad'
                 element={<SkladPage />}
-            />
+            /> */}
             <Route path='/'
-                element={<Nets />}
+                element={<SkladPage />}
             />
         </Routes>
     )

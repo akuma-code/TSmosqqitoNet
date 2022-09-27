@@ -9,12 +9,18 @@ import { HOSTURL } from './types/IServerData';
 import { getURL } from './http/useFetchApi';
 import { ContextDataType, ContextWarehouse, IWhContext } from './Context/WhContext';
 
+type HostContextType = {
+  host: string,
+  setHost: (host: string) => void,
+  isAuth: boolean,
+  setAuth: (auth: boolean) => void
+}
 
 export const HostContext = React.createContext<any>(null)
 
 const App = (): JSX.Element => {
-  const [host, setHost] = useState<HOSTURL | string>(HOSTURL.CKO3)
-  const [auth, setAuth] = useState(false)
+  const [host, setHost] = useState(HOSTURL.CKO3 as any)
+  const [isAuth, setAuth] = useState(false)
   const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
     const url = getURL() + "/"
@@ -28,7 +34,7 @@ const App = (): JSX.Element => {
   return (
 
     <HostContext.Provider
-      value={{ host, setHost, auth, setAuth }}
+      value={{ host, setHost, isAuth, setAuth }}
     >
 
       <BrowserRouter>

@@ -1,33 +1,31 @@
 import { $api } from "."
-
-export const setPassword = (password: string) => {
-    try {
-        localStorage.setItem('auth_pass', password)
-    } catch (error) {
-        console.log(error);
-    }
-}
+import { PATHS } from "../types/IServerData"
 
 
-export const login = (pass: string) => {
-    try {
-        const saved = localStorage.getItem('auth_pass')
-        if (pass === saved) localStorage.setItem('isAuth', "true")
-        else localStorage.setItem('isAuth', "false")
 
-    } catch (e) {
-        console.log(e);
-
-    }
+export const login = async (password: string) => {
+    const { data } = await $api.post('auth/login', password)
+    return data
 }
 
 
 export const check = () => {
+    const saved = localStorage.getItem('isAuth')
+
+
     try {
-        const isAuth = JSON.parse(localStorage.getItem('isAuth') || "false") as boolean
-        return isAuth
+
+        if (!saved) {
+            localStorage.setItem("isAuth", "false")
+            return false
+        }
+        console.log(saved);
+        return !!saved
     } catch (error: unknown) {
         console.log(error);
 
+        return false
+
     }
 }
+
