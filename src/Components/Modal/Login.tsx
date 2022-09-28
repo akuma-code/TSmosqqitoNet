@@ -1,28 +1,25 @@
 import { Button, HStack, Input } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../../hooks/useAuth'
 import { login } from '../../http/UsersApi'
 import {
     Popover,
     PopoverTrigger,
     PopoverContent,
-    PopoverHeader,
     PopoverBody,
-    PopoverFooter,
-    PopoverArrow,
-    PopoverCloseButton,
-    PopoverAnchor,
 } from '@chakra-ui/react'
 import { useToggle } from '../../hooks/useToggle'
 export const Login = () => {
     const [pass, setPass] = useState("")
-    const { isAuth, setAuth } = useAuth()
+    const { setAuth } = useAuth()
     const [open, setOpen] = useToggle(false)
     const onLogin = async () => {
         const form = new FormData()
         form.append("password", pass)
         const lg = await login(form)
         const auth = JSON.parse(lg)
+        if (auth) localStorage.setItem("isAuth", "true")
+        else localStorage.setItem("isAuth", "false")
         setOpen.off()
         setAuth(auth)
         setPass("")

@@ -10,8 +10,10 @@ type NavBarProps = {
 
 const NavBar: FC<NavBarProps> = () => {
 
-    const { isAuth } = useAuth()
-
+    const checkAuth = () => {
+        const isAuth = localStorage.getItem('isAuth') || "false"
+        return JSON.parse(isAuth)
+    }
     return (
         <nav>
             <div className="nav-wrapper  blue accent-2 z-depth-2"
@@ -19,12 +21,12 @@ const NavBar: FC<NavBarProps> = () => {
                 <ul className="left hide-on-med-and-down"
                 >
                     {
-                        isAuth &&
+                        checkAuth() &&
                         <li className='ml1'><a href="/nets" style={{ fontSize: "2.3rem" }}>
                             <span className="material-icons mr1">border_clear</span>Сетки</a>
                         </li>
                     }
-                    {isAuth && <li>
+                    {checkAuth() && <li>
                         <a href="/todos" style={{ fontSize: "2.3rem" }}>
                             <span className="material-icons mr1">checklist</span>Заметки
                         </a>
@@ -35,7 +37,7 @@ const NavBar: FC<NavBarProps> = () => {
                             <span className="material-icons mr1">next_week</span>Складские остатки
                         </a>
                     </li>
-                    {isAuth &&
+                    {checkAuth() &&
                         <li>
                             <a href="/test">
                                 <PlusSquareIcon fontSize={'5xl'} background='grey' />

@@ -35,12 +35,16 @@ export const AppRouter: FC<AppRouterProps> = () => {
         },
     ]
 
-    const { isAuth, setAuth } = useAuth()
+
+    const checkAuth = () => {
+        const isAuth = localStorage.getItem('isAuth') || "false"
+        return JSON.parse(isAuth)
+    }
     return (
 
         <Routes>
             {
-                isAuth && authRoutes.map((r, idx) => (
+                checkAuth() && authRoutes.map((r, idx) => (
                     <Route {...r} key={idx} />
                 ))
             }
