@@ -39,15 +39,26 @@ export const AppRouter: FC<AppRouterProps> = () => {
     return (
 
         <Routes>
-            {isAuth ? authRoutes.map((r, idx) => (
-                <Route {...r} key={idx} />
-            ))
-                :
+            {
+                isAuth && authRoutes.map((r, idx) => (
+                    <Route {...r} key={idx} />
+                ))
+            }
+            {
                 publicRoutes.map((r, idx) => (
                     <Route {...r} key={idx} />
-                ))}
+                ))
+            }
 
-            {/* <Route
+            <Route path='/'
+                element={<SkladPage />}
+            />
+        </Routes>
+    )
+}
+
+
+/* <Route
                 path='/nets'
                 element={<Nets />}
             />
@@ -64,10 +75,4 @@ export const AppRouter: FC<AppRouterProps> = () => {
             />
             <Route path='/sklad'
                 element={<SkladPage />}
-            /> */}
-            <Route path='/'
-                element={<SkladPage />}
-            />
-        </Routes>
-    )
-}
+            /> */

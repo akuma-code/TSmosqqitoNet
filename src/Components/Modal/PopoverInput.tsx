@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 
 type PopoverInputProps = {
-    children?: React.ReactNode | React.ReactNode[],
+    children?: React.ReactNode,
     rest?: any
 
 } & HTMLAttributes<PopoverProps>

@@ -5,7 +5,6 @@ import { FaWarehouse } from 'react-icons/fa'
 import { IWarehouse } from '../../types/WarehouseTypes'
 import { MdAssignment, MdDeleteForever, MdGrading, MdViewHeadline } from "react-icons/md";
 import { deleteWhItem, editWarehouse, FinishTaskAndRestore, FinProdTask } from '../../http/ClientSkladApi'
-import { ModalWrap } from '../Modal/ModalWrap'
 import { ProductionBox } from '../Modal/ProductionBox'
 import { useToggle } from '../../hooks/useToggle'
 import { WhInfo } from '../../types/WHTypes'
@@ -13,6 +12,7 @@ import dayjs from 'dayjs'
 import { NUM } from '../pages/PageTesting'
 import { I } from './I'
 import { useDaysJS } from '../../hooks/useDaysJS'
+import { ModalWrap } from '../Modal/ModalWrap'
 
 type IProdInfo = {
     prod_info?: WhInfo[]

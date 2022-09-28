@@ -3,8 +3,8 @@ import { PATHS } from "../types/IServerData"
 
 
 
-export const login = async (password: string) => {
-    const { data } = await $api.post('auth/login', password)
+export const login = async (password: FormData) => {
+    const { data } = await $api.post('api/auth/login', password)
     return data
 }
 
