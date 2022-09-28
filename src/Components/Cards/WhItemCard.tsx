@@ -148,6 +148,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                     boxShadow={'3px 3px #0000006f'}
                     onClick={setHoverStateInfo.toggle}
                     cursor={'pointer'}
+
                     _hover={{
                         border: "solid white",
                         width: "transform(skaleX)"
