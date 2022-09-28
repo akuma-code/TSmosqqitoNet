@@ -16,8 +16,8 @@ export const Login = () => {
     const onLogin = async () => {
         const form = new FormData()
         form.append("password", pass)
-        const lg = await login(form)
-        const auth = JSON.parse(lg)
+        await login(form).then(res => localStorage.setItem("isAuth", res))
+        const auth = JSON.parse(localStorage.getItem("isAuth") || "false")
         if (auth) localStorage.setItem("isAuth", "true")
         else localStorage.setItem("isAuth", "false")
         setOpen.off()
