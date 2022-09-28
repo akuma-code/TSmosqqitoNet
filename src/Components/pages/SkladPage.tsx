@@ -12,17 +12,16 @@ export const getNumb = (name: string): number => {
 }
 
 export const SkladPage: FC = (): JSX.Element => {
-    // const [items, setItems] = useState<ISklad[]>([])
-    // const [data, isLoading, error] = useFetchApi(PATHS.SKLAD)
-    // const [sklads, setSklads] = useState<ISklad[]>([])
-    const [warehouse, setWH, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
+    const [warehouse, setWh, isLoadingWH, errorWH] = useFetchApi<IWarehouse>(PATHS.WAREHOUSE)
     const [whs, setWhs] = useState([] as IWarehouse[])
-    const sortedByTypeName = warehouse.sort((a, b) => {
+
+    const sortedByTypeName = [...warehouse].sort((a, b) => {
         const [nameA, nameB] = [a.typename, b.typename]
         const na = getNumb(nameA);
         const nb = getNumb(nameB);
         return na - nb
     })
+
     useEffect(() => {
         setWhs(sortedByTypeName)
     }, [warehouse, sortedByTypeName])

@@ -37,6 +37,7 @@ export interface IWarehouse {
     price: number | string
     file_main?: Blob
     file_sec?: Blob
+
 }
 
 export interface IWarehouseForm extends IWarehouse {
