@@ -77,6 +77,11 @@ code {
   padding-right: 1rem;
 }
 
+.px2 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .pr1 {
   padding-right: 1rem;
 }

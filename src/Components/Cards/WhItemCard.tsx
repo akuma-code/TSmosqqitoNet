@@ -3,6 +3,7 @@ import { TiDatabase, TiHomeOutline } from "react-icons/ti";
 import { GiFactory } from "react-icons/gi";
 import { TbCurrencyRubel } from 'react-icons/tb'
 import {
+    Badge,
     Box,
     Container,
     Heading,
@@ -11,6 +12,7 @@ import {
     Popover,
     PopoverArrow,
     PopoverBody,
+    PopoverCloseButton,
     PopoverContent,
     PopoverHeader,
     PopoverTrigger,
@@ -20,6 +22,7 @@ import {
     StatHelpText,
     StatLabel,
     StatNumber,
+    Text,
     VStack
 } from '@chakra-ui/react'
 import React, { HTMLAttributes, useContext } from 'react'
@@ -61,6 +64,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
             alignItems='stretch'
             padding='.6em'
             bgColor={'gray.500'}
+            position='relative'
         >
             <Box alignItems='center' display={'flex'} margin='.5rem'>
 
@@ -112,11 +116,11 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                                 alignItems={'center'}
                                 display='flex'
                                 flexDir={'column'}
-                                onMouseEnter={setHoverStateInfo.on}
-                                onMouseLeave={setHoverStateInfo.off}
+                            // onMouseEnter={setHoverStateInfo.on}
+                            // onMouseLeave={setHoverStateInfo.off}
                             >
-                                {whItem.quant} шт.
-                                {hasProd && <Icon w={20} h={10} as={GiFactory} />}
+                                <span>{whItem.typename}</span>
+                                <span>{whItem.quant} шт.</span>
                             </Heading>
                         </InfoPOP>
                     </VStack>
@@ -124,7 +128,40 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
             </Box>
 
 
-
+            {
+                hasProd &&
+                <Badge
+                    className="btn"
+                    borderRadius={10}
+                    position='absolute'
+                    right={4}
+                    top={1}
+                    // colorScheme='whatsapp'
+                    display={'flex'}
+                    flexDir={'row-reverse'}
+                    alignItems='center'
+                    gap={1}
+                    border='solid black'
+                    borderWidth={2}
+                    paddingRight={2}
+                    bg='#d8d8d8'
+                    boxShadow={'3px 3px #0000006f'}
+                    onClick={setHoverStateInfo.toggle}
+                    cursor={'pointer'}
+                    _hover={{
+                        border: "solid white",
+                        width: "transform(skaleX)"
+                    }}
+                >
+                    <Text fontSize={25} color='grey.700'>{whItem.prod_info?.length}</Text>
+                    <Icon
+                        width={25}
+                        height={25}
+                        // w={13}
+                        //  h={13}
+                        as={GiFactory} />
+                </Badge>
+            }
         </Box >
     )
 
@@ -141,7 +178,7 @@ export type SkladPopoverProps = {
     host: string,
 }
 
-export const InfoPOP: React.FC<SkladPopoverProps> = ({ isHover, whItem, children }) => {
+export const InfoPOP: React.FC<SkladPopoverProps> = ({ isHover, whItem, children, setHoverState }) => {
     return (
         <Popover isOpen={isHover}
             closeOnBlur
@@ -160,9 +197,12 @@ export const InfoPOP: React.FC<SkladPopoverProps> = ({ isHover, whItem, children
                         className="indigo lighten-4 z-depth-4"
                         borderRadius={'md'}
                     >
-                        <div className="w100 flex-row-between  ">
+                        <PopoverCloseButton onClick={setHoverState.off}
+                            colorScheme='blackAlpha'
+                        />
+                        <div className=" flex-row-between px2">
                             <div><b>Количество</b></div>
-                            <div><b>Дата готовности</b></div>
+                            <div><b >Дата готовности</b></div>
                         </div>
                     </PopoverHeader>
                     <PopoverBody

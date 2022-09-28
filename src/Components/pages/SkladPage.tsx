@@ -24,7 +24,7 @@ export const SkladPage: FC = (): JSX.Element => {
 
     useEffect(() => {
         setWhs(sortedByTypeName)
-    }, [warehouse, sortedByTypeName])
+    }, [warehouse])
 
     if (errorWH) return (<Text fontSize={'9xl'}>ERROR: {errorWH}</Text>)
 
