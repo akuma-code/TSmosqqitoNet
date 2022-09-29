@@ -53,6 +53,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHoverInfo, setHoverStateInfo] = useToggle()
     const hasProd = whItem.prod_info!.length >= 1 ? true : false
     const { host } = useContext(HostContext) || ""
+    const inProd = whItem.prod_info?.filter(p => p.status === 'inProduction' && !p.isRestored)
     return (
         <Box className={'m1 z-depth-3'}
             maxHeight='10em'
@@ -154,7 +155,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                         width: "transform(skaleX)"
                     }}
                 >
-                    <Text fontSize={25} color='grey.700'>{whItem.prod_info?.length}</Text>
+                    <Text fontSize={25} color='grey.700'>{inProd?.length}</Text>
                     <Icon
                         width={25}
                         height={25}
