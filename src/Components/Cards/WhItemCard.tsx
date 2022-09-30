@@ -33,6 +33,8 @@ import { I } from './I'
 import { IWarehouse } from "../../types/WarehouseTypes";
 import { INFOBOX } from "./WhControlCard";
 import { WhInfo } from "../../types/WHTypes";
+import { NUM } from "../pages/PageTesting";
+import { getNumb } from "../pages/SkladPage";
 
 
 const onHover = (cond: boolean) => {
@@ -51,9 +53,14 @@ export type WarehouseItemProps = {
 const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHoverImg, setHoverStateImg] = useToggle()
     const [isHoverInfo, setHoverStateInfo] = useToggle()
-    const hasProd = whItem.prod_info!.length >= 1 ? true : false
+    const filteredProd = whItem.prod_info!.filter(p => p.status === 'inProduction' && !p.isRestored)
+    const hasProd = filteredProd.length > 0 ? true : false
     const { host } = useContext(HostContext) || ""
     const inProd = whItem.prod_info?.filter(p => p.status === 'inProduction' && !p.isRestored)
+    const count = inProd?.reduce((sum, current) => sum + NUM(current.count), 0) || 0
+
+    const isVeka = getNumb(whItem.typename) > 5 ? true : false
+
     return (
         <Box className={'m1 z-depth-3'}
             maxHeight='10em'
@@ -64,7 +71,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
             justifyContent={'space-between'}
             alignItems='stretch'
             padding='.6em'
-            bgColor={'gray.500'}
+            bgColor={isVeka ? 'blue.800' : 'gray.500'}
             position='relative'
         >
             <Box alignItems='center' display={'flex'} margin='.5rem'>
@@ -95,15 +102,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                         <StatHelpText>рублей</StatHelpText>
                     </Stat> */}
 
-                    <Stat className='m1' textAlign='center'>
-                        <StatLabel>Наименование:</StatLabel>
-                        <StatNumber>{whItem.typename}</StatNumber>
-                        <StatHelpText
-                            color={'red'}
-                            fontWeight={'semibold'}
-                            fontSize={'2xl'}
-                        >{whItem.price} руб.</StatHelpText>
-                    </Stat>
+
                     <VStack>
 
                         <InfoPOP
@@ -113,18 +112,36 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                             setHoverState={setHoverStateInfo}
                         >
 
-                            <Heading className='mr1'
-                                alignItems={'center'}
+                            <Heading className=' px1'
+                                alignItems={'flex-start'}
                                 display='flex'
                                 flexDir={'column'}
                             // onMouseEnter={setHoverStateInfo.on}
                             // onMouseLeave={setHoverStateInfo.off}
                             >
                                 <span>{whItem.typename}</span>
-                                <span>{whItem.quant} шт.</span>
+                                <span>{whItem.price}<Icon as={TbCurrencyRubel} color='red' /></span>
                             </Heading>
                         </InfoPOP>
+                        <Stat className='my1' textAlign='center'>
+                            <StatLabel></StatLabel>
+                            {/* <StatNumber>на складе:</StatNumber> */}
+
+                        </Stat>
                     </VStack>
+                    <VStack paddingRight={10}>
+                        <Stat className="px1" >
+                            <StatHelpText
+                                fontWeight={'semibold'}
+                                fontSize={24}
+                                color='red'
+                            >{whItem.quant} шт.</StatHelpText>
+                            <StatHelpText fontSize={18}>{isVeka ? "Veka" : "WHS60"}</StatHelpText>
+                            <StatHelpText fontSize={18}>{isVeka ? "ст/п: 36мм " : "ст/п: 24мм"}</StatHelpText>
+                        </Stat>
+
+                    </VStack>
+
                 </StatGroup>
             </Box>
 
@@ -155,7 +172,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
                         width: "transform(skaleX)"
                     }}
                 >
-                    <Text fontSize={25} color='grey.700'>{inProd?.length}</Text>
+                    <Text fontSize={25} color='grey.700'>{count}</Text>
                     <Icon
                         width={25}
                         height={25}

@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react'
-import { Box, Container, Heading, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Container, Flex, Heading, Portal, Spinner, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { PATHS } from '../../types/IServerData'
 import { useFetchApi } from '../../http/useFetchApi'
 import WarehouseItemCard from '../Cards/WhItemCard'
 import { IWarehouse } from '../../types/WarehouseTypes'
+import { RunAutoCompleteTasks } from '../../http/ClientSkladApi'
 
 export const getNumb = (name: string): number => {
     const signs = name.split("")
@@ -24,7 +25,13 @@ export const SkladPage: FC = (): JSX.Element => {
 
     useEffect(() => {
         setWhs(sortedByTypeName)
+        return () => {
+            console.log("AutoFinish Done!");
+            RunAutoCompleteTasks(0)
+        }
     }, [warehouse])
+
+
 
     if (errorWH) return (<Text fontSize={'9xl'}>ERROR: {errorWH}</Text>)
 
@@ -46,12 +53,6 @@ export const SkladPage: FC = (): JSX.Element => {
                 maxHeight='100vh'
                 width={'100%'}
             >
-
-                <Heading paddingBottom='0'>
-                    Складские остатки
-                </Heading>
-
-
                 {
                     isLoadingWH ? <Spinner
                         size={'xl'}
@@ -60,13 +61,16 @@ export const SkladPage: FC = (): JSX.Element => {
                         speed='0.35s'
                         thickness='6px' />
                         :
-                        <Wrap spacing={'0px'}>
+                        <Flex
+                            direction={'column'}
+                            flexWrap='wrap'
+                            alignContent='flex-start'
+                            maxHeight={'100vh'}
+                        >
                             {whs?.map(s =>
-                                <WrapItem key={s.id}>
-                                    <WarehouseItemCard {...s} id={s.id} />
-                                </WrapItem>
+                                <WarehouseItemCard {...s} key={s.id} />
                             )}
-                        </Wrap>
+                        </Flex>
                 }
 
             </Box>
