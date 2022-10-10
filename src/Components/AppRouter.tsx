@@ -54,8 +54,7 @@ export const AppRouter: FC<AppRouterProps> = () => {
                 ))
             }
 
-            <Route path='/'
-                element={<SkladPage />}
+            <Route index element={<SkladPage />}
             />
         </Routes>
     )
