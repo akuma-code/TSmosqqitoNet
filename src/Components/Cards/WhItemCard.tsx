@@ -71,7 +71,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
             justifyContent={'space-between'}
             alignItems='stretch'
             padding='.6em'
-            bgColor={isVeka ? 'blue.800' : 'gray.500'}
+            bgColor={isVeka ? '#394164' : 'gray.500'}
             position='relative'
         >
             <Box alignItems='center' display={'flex'} margin='.5rem'>
