@@ -36,7 +36,7 @@ const SkladItemCard: React.FC<ISklad & HTMLAttributes<HTMLDivElement>> = (props)
     const [isHoverImg, setHoverStateImg] = useToggle()
     const HoverHandler = onHover(isHover).changeCls('m1 z-depth-3', 'blue accent-2')
     const { type, quant, shop } = props
-    const { host } = useContext(HostContext)
+    const { host } = useContext<any | null>(HostContext)
     return (
         <Box className={'m1 z-depth-3'}
             maxHeight='10em'

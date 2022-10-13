@@ -68,7 +68,7 @@ export interface IEditableForm extends AddedValues {
 
 
 export const PageTesting: FC = (): JSX.Element => {
-    const { host } = useContext(HostContext)
+    const { host } = useContext<any>(HostContext)
 
 
     const [active, setActive] = useState<AddedValues & {}>(initialState as IWarehouse)

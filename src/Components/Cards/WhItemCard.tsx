@@ -55,7 +55,7 @@ const WarehouseItemCard: React.FC<WarehouseItemProps> = (whItem) => {
     const [isHoverInfo, setHoverStateInfo] = useToggle()
     const filteredProd = whItem.prod_info!.filter(p => p.status === 'inProduction' && !p.isRestored)
     const hasProd = filteredProd.length > 0 ? true : false
-    const { host } = useContext(HostContext) || ""
+    const { host } = useContext<any>(HostContext) || ""
     const inProd = whItem.prod_info?.filter(p => p.status === 'inProduction' && !p.isRestored)
     const count = inProd?.reduce((sum, current) => sum + NUM(current.count), 0) || 0
 

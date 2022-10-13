@@ -17,7 +17,7 @@ type HostContextType = {
   setAuth: (auth: boolean) => void
 }
 
-export const HostContext = React.createContext<any>(null)
+export const HostContext = React.createContext<HostContextType | null>(null)
 
 const App = (): JSX.Element => {
   const [host, setHost] = useState(HOSTURL.CKO3 as any)

@@ -25,7 +25,7 @@ export const EditItemBox: React.FC<EditItemBoxProps> = ({ item, setItem, handler
 
 
 
-    const { host } = useContext(HostContext);
+    const { host } = useContext<any>(HostContext);
 
     return (
         <Box
