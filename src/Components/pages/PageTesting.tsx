@@ -1,28 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, ButtonSpinner, Center, Checkbox, Container, Editable, EditableInput, EditablePreview, Flex, FormLabel, Heading, HStack, Icon, IconButton, Input, Spinner, Stack, Tag, Text, useDisclosure, useEditableControls, VStack, Wrap, WrapItem } from '@chakra-ui/react'
-import { FC, ReactEventHandler, useContext, useEffect, useState, useMemo, useCallback } from 'react'
+import { Convert } from '../Testing/zCalc'
+import { Button, Center, Spinner, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { FC, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
 import { fetchApi, useFetchApi } from '../../http/useFetchApi'
-import { ISklad, PATHS } from '../../types/IServerData'
+import { PATHS } from '../../types/IServerData'
 import { getNumb } from './SkladPage'
 import { CleanUpTasks, editWarehouse, RunAutoCompleteTasks } from '../../http/ClientSkladApi'
 import { useToggle } from '../../hooks/useToggle'
-import { IFiles, IWarehouse, IWarehouseForm } from '../../types/WarehouseTypes'
+import { IWarehouse } from '../../types/WarehouseTypes'
 import { WhControlCard } from '../Cards/WhControlCard'
-import { BtnsStack } from './BtnsStack'
-import { ActiveItemForm } from './ActiveItemForm'
-import { PopoverInput } from '../Modal/PopoverInput'
-import { TiDatabase, TiHomeOutline } from 'react-icons/ti'
-import { IoLogoUsd } from 'react-icons/io'
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
-import { AiFillEdit } from 'react-icons/ai'
 import { IFields } from './CustomInput'
 import * as WT from '../../types/WHTypes'
 import { EditItemBox } from '../Modal/EditItemBox'
 import { ModalWrap } from '../Modal/ModalWrap'
 import { CreateItemBox } from '../Modal/CreateItemBox'
-import { ProductionBox } from '../Modal/ProductionBox'
 import { getHostUrl, ResetSkladModels } from '../../http/SettingsApi'
+import { fixframeF, shtulpframeF, stvframeF } from '../Testing/MockData'
 
 
 export const isConfirmed = (text: string) => global.confirm(text)
@@ -45,7 +39,9 @@ const arrControl = (array: Array<any>, initial: number = 5) => {
     const next = (idx: number = initial): object => array[idx++]
     return [prev, next] as const
 }
-
+console.log('Convert to STV', Convert(fixframeF).STV)
+console.log('Convert to FIX', Convert(shtulpframeF).FIX)
+console.log('Convert to SHTULP', Convert(stvframeF).SHTULP)
 
 const initialState = {
     typename_new: "",
@@ -83,9 +79,6 @@ export const PageTesting: FC = (): JSX.Element => {
     const [createMdl, setCreateState] = useToggle()
     const [autofinish, setAF] = useToggle(true)
 
-    const check = () => {
-
-    }
 
     const updateWH = async () => await fetchApi(PATHS.WAREHOUSE).fetchAll().then(data => setWhs(data as IWarehouse[]))
     const selectItem = (skladItem: IEditableForm) => {
@@ -110,15 +103,15 @@ export const PageTesting: FC = (): JSX.Element => {
         updateWH()
     }, [warehouse, isOpen, createMdl])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (autofinish) {
-            console.log("AutoFinish Done!");
-            RunAutoCompleteTasks(0)
-        }
+    //     if (autofinish) {
+    //         console.log("AutoFinish Done!");
+    //         RunAutoCompleteTasks(0)
+    //     }
 
 
-    }, [])
+    // }, [])
 
     const onDelete = (delid: number) => setWhs(prev => prev.filter(w => w.id !== delid))
 
@@ -169,7 +162,10 @@ export const PageTesting: FC = (): JSX.Element => {
                 thickness='6px' />
         </Center>
     )
-
+    if (autofinish) {
+        RunAutoCompleteTasks(2)
+        console.log("AutoFinish Done!");
+    }
     return (
         <div className="row">
 
@@ -223,7 +219,7 @@ export const PageTesting: FC = (): JSX.Element => {
                         className='mx1 mt1'
                         variant={'outline'}
                         size='sm'
-                        onClick={() => RunAutoCompleteTasks(0)}
+                        onClick={() => RunAutoCompleteTasks(2)}
                         colorScheme='twitter'
                     >
                         Завершить выполенные
