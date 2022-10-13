@@ -162,10 +162,10 @@ export const PageTesting: FC = (): JSX.Element => {
                 thickness='6px' />
         </Center>
     )
-    if (autofinish) {
-        RunAutoCompleteTasks(2)
-        console.log("AutoFinish Done!");
-    }
+    // if (autofinish) {
+    //     RunAutoCompleteTasks(2)
+    //     console.log("AutoFinish Done!");
+    // }
     return (
         <div className="row">
 

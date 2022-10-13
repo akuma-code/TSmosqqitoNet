@@ -8,6 +8,7 @@ import NavBar from './Components/NavBar';
 import { HOSTURL } from './types/IServerData';
 import { getURL } from './http/useFetchApi';
 import { ContextDataType, ContextWarehouse, IWhContext } from './Context/WhContext';
+import { RunAutoCompleteTasks } from './http/ClientSkladApi';
 
 type HostContextType = {
   host: string,
@@ -26,6 +27,7 @@ const App = (): JSX.Element => {
     const url = getURL() + "/"
     // if (host !== url) setHost(url)
     setHost(url)
+    RunAutoCompleteTasks(0)
     // localStorage.setItem("server_url", HOSTURL.WORK)
     // localStorage.setItem("server_url", HOSTURL.HOME)
 

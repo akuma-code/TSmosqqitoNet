@@ -26,8 +26,8 @@ export const SkladPage: FC = (): JSX.Element => {
     useEffect(() => {
         setWhs(sortedByTypeName)
         return () => {
-            console.log("AutoFinish Done!");
-            RunAutoCompleteTasks(0)
+            // console.log("AutoFinish Done!");
+            // RunAutoCompleteTasks(0)
         }
     }, [warehouse])
 
