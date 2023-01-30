@@ -1,24 +1,43 @@
-import React, { useState } from 'react'
-import { Box, Button, FormControl, HStack, Input } from '@chakra-ui/react'
+import React, { useState, useEffect } from 'react'
+import { Box, Button, FormControl, HStack, Input, } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
 import { useID } from '../../hooks/useID'
-import { useLocStorage } from '../../hooks/useLocStorage'
+import useOffersControl from '../../hooks/useOffersControl'
 
 
 type OfferNotesPageProps = {
 
 }
+export type OfferListData = {
 
+} & OfferFormData
 export const OfferNotesPage = (props: OfferNotesPageProps) => {
 
-  const [offerList, setOfferList] = useState([])
+  const [offerList, setOfferList] = useState<OfferListData[] | []>([])
+  const [offers, offControl] = useOffersControl()
+
+
   function handleSubmit(offer: OfferFormData) {
 
 
   }
+  useEffect(() => {
+    setOfferList(offControl.load())
+  }, [])
 
   return (
     <Box>
       <OfferForm onSubmit={handleSubmit} />
+      {offerList.map(offer => (
+        <Card key={offer.id} bg={'gray.600'} flexDir={'row'}>
+
+
+          <li>{offer.offerId}</li>
+          <li>{offer.clientFIO}</li>
+          <li>{offer.dateReady}</li>
+          <li>{offer.desc}</li>
+        </Card>
+      ))}
     </Box>
   )
 }

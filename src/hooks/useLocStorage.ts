@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext, HTMLAttributes, FC } from 'react'
 
-export const useLocStorage = <T>(offers: T, key: string) => {
-    const [saved, setSaved] = useState<typeof offers>()
-
-    useEffect(() => {
-        setSaved(JSON.parse(localStorage.getItem(key) || ""))
-        if (!saved) return
-    }, [])
-
-    const strOffers = JSON.stringify(offers)
+export const useLocalStateArray = (key: string) => {
+    const [savedItems, setSavedItems] = useState<any[] | []>([])
+    if (!localStorage.getItem(key)) return localStorage.setItem(key, '[]')
 
 
+    const saved = JSON.parse(localStorage.getItem(key) || '[]')
 
-    return saved
+    setSavedItems(saved)
+
+    const saveToLS = (items: any[]) => localStorage.setItem(key, JSON.stringify(items))
+
+
+
+    return [savedItems, setSavedItems] as const
 }
