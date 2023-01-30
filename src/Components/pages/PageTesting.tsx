@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Convert } from '../Testing/zCalc'
 import { Button, Center, Spinner, Text, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { FC, useContext, useEffect, useState } from 'react'
 import { HostContext } from '../../App'
@@ -39,9 +38,7 @@ const arrControl = (array: Array<any>, initial: number = 5) => {
     const next = (idx: number = initial): object => array[idx++]
     return [prev, next] as const
 }
-console.log('Convert to STV', Convert(fixframeF).STV)
-console.log('Convert to FIX', Convert(shtulpframeF).FIX)
-console.log('Convert to SHTULP', Convert(stvframeF).SHTULP)
+
 
 const initialState = {
     typename_new: "",

@@ -1,13 +1,11 @@
 import React, { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { HostContext } from '../App'
-import { useAuth } from '../hooks/useAuth'
-import { check } from '../http/UsersApi'
 import { Nets } from './pages/Nets'
-import { PageCreateModel } from './pages/PageCreateModel'
+import { OfferNotesPage } from './pages/OfferNotesPage'
 import { PageTesting } from './pages/PageTesting'
 import { SkladPage } from './pages/SkladPage'
 import { Todos } from './pages/Todos'
+
 
 type AppRouterProps = {
     children?: React.ReactNode[] | string
@@ -25,7 +23,10 @@ export const AppRouter: FC<AppRouterProps> = () => {
         }, {
             path: '/test',
             element: <PageTesting />
-        }
+        }, {
+            path: '/offers',
+            element: <OfferNotesPage />
+        },
     ];
 
     const publicRoutes = [

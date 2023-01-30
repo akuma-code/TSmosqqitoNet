@@ -26,11 +26,19 @@ const NavBar: FC<NavBarProps> = () => {
                             <span className="material-icons mr1">border_clear</span>Сетки</a>
                         </li>
                     }
-                    {checkAuth() && <li>
-                        <a href="/todos" style={{ fontSize: "2.3rem" }}>
-                            <span className="material-icons mr1">checklist</span>Заметки
-                        </a>
-                    </li>
+                    {checkAuth() &&
+                        <li>
+                            <a href="/todos" style={{ fontSize: "2.3rem" }}>
+                                <span className="material-icons mr1">checklist</span>Заметки
+                            </a>
+                        </li>
+                    }
+                    {checkAuth() &&
+                        <li>
+                            <a href="/offers" style={{ fontSize: "2.3rem" }}>
+                                <span className="material-icons mr1">checklist</span>ЮрДоговора
+                            </a>
+                        </li>
                     }
                     <li>
                         <a href="/sklad" style={{ fontSize: "2.3rem" }}>
