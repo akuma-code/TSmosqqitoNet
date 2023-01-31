@@ -15,7 +15,15 @@ export type OfferListData = {
 
 export interface OffCardListProps {
     offList: OfferListData[]
+    offControl: {
+        Add: (new_offer_data: OfferListData) => void,
+        Remove: (id: string) => void,
+        clearOffers: () => void,
+        Edit: (new_offer_data: OfferListData) => void,
+        toggleCheck: (id: string, field: keyof OfferListData) => void
+    }
 }
 export interface OfferCardProps {
     offer: OfferListData
+    checkFN: (id: string, field: keyof OfferListData) => void
 }
