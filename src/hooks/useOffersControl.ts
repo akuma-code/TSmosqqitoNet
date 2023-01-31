@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, HTMLAttributes, FC } from 'react'
+import { useState } from 'react'
 import { OfferListData } from '../Components/OfferNotes/OfferTypes'
 
 
