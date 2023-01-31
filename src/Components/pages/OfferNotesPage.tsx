@@ -1,98 +1,43 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Button, FormControl, HStack, Input, } from '@chakra-ui/react'
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
+import React, { useEffect, Fragment } from 'react'
+import { Box, Stack, StackDivider, } from '@chakra-ui/react'
 import { useID } from '../../hooks/useID'
 import useOffersControl from '../../hooks/useOffersControl'
+import { OfferForm } from '../OfferNotes/OfferForm'
+import { OffersCardList } from '../OfferNotes/OffersCardList'
+import { OfferFormData, OfferListData } from '../OfferNotes/OfferTypes'
+const _ID = useID
+
+const mockOffer: OfferListData = {
+  id: _ID(),
+  offerId: "23/01/25/02-21П",
+  companyName: "Рога И Копыта",
+  companyTag: "ООО",
+  dateReady: "2023-02-10",
+  desc: ""
+}
 
 
-type OfferNotesPageProps = {
+export type OfferNotesPageProps = {
 
 }
-export type OfferListData = {
 
-} & OfferFormData
 export const OfferNotesPage = (props: OfferNotesPageProps) => {
 
-  const [offerList, setOfferList] = useState<OfferListData[] | []>([])
-  const [offers, offControl] = useOffersControl()
-
+  const [offers, offControl] = useOffersControl([])
 
   function getOffer(offer: OfferFormData) {
+
     offControl.Add(offer)
-
   }
-  useEffect(() => {
 
-  }, [])
 
   return (
-    <Box>
+    <Stack >
       <OfferForm getOffer={getOffer} />
-      {offers.map(offer => (
-        <Card key={offer.id} bg={'gray.600'} flexDir={'row'}>
-
-
-          <li>{offer.offerId}</li>
-          <li>{offer.clientFIO}</li>
-          <li>{offer.dateReady}</li>
-          <li>{offer.desc}</li>
-        </Card>
-      ))}
-    </Box>
+      <StackDivider borderColor={'blue.700'} borderWidth={4} rounded={2} />
+      <OffersCardList offList={offers} />
+    </Stack>
   )
 }
 
-type OfferFormData = {
-  id?: string
-  offerId: string
-  clientFIO: string
-  dateReady: string
-  desc?: string
-}
 
-interface OfferFormProps {
-  getOffer: (offer: OfferFormData) => void
-}
-const OfferForm: React.FC<OfferFormProps> = (props) => {
-  const [offer, setOffer] = useState({ offerId: "", clientFIO: "", dateReady: "", desc: "", id: "" } as OfferFormData)
-  function changeOffer(field: keyof OfferFormData, value: string) {
-    const strID = useID
-    setOffer(prev => ({ ...prev, [field]: value }))
-    if (offer.id === "") setOffer(prev => ({ ...prev, id: strID() }))
-  }
-  function HandleSubmit() {
-    console.log('form submitted', offer)
-    props.getOffer(offer)
-    setOffer({ offerId: "", clientFIO: "", dateReady: "", desc: "", id: "" })
-  }
-  return <FormControl>
-    <HStack px={4} gap={8} mt={2}>
-      <Input
-        placeholder='Offer ID'
-        id='offid'
-        value={offer.offerId}
-        onChange={(e) => changeOffer('offerId', e.target.value)}
-        type={'text'} />
-      <Input
-        placeholder='Client FIO'
-        id='offclient'
-        value={offer.clientFIO}
-        onChange={(e) => changeOffer('clientFIO', e.target.value)}
-        type={'text'} />
-      <Input
-        placeholder='Date Ready'
-        id='offdate'
-        value={offer.dateReady}
-        onChange={(e) => changeOffer('dateReady', e.target.value)}
-        type={'date'} />
-      <Input
-        placeholder='Commentary'
-        id='offdate'
-        value={offer.desc}
-        onChange={(e) => changeOffer('desc', e.target.value)}
-        type={'text'} />
-      <Button type='submit' onClick={HandleSubmit}
-        colorScheme={'green'} p={8} mt={'10'}>Add Offer</Button>
-    </HStack>
-  </FormControl>
-}

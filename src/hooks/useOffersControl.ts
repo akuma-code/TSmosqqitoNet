@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext, HTMLAttributes, FC } from 'react'
-import { OfferListData } from '../Components/pages/OfferNotesPage'
+import { OfferListData } from '../Components/OfferNotes/OfferTypes'
 
 
-const useOffersControl = () => {
-    const [offers, setOffers] = useState<OfferListData[]>([] as OfferListData[])
+const useOffersControl = (initState = [] as OfferListData[]) => {
+    const [offers, setOffers] = useState<OfferListData[]>(initState)
     const offerActions = {
         Add(offer: OfferListData) { setOffers(prev => [offer, ...prev]) },
 
@@ -11,16 +11,9 @@ const useOffersControl = () => {
 
         clearOffers() { setOffers(prev => []) },
 
-        edit(id: string, edit_offer_data: OfferListData) {
-            setOffers(prev => prev.map(offer => offer.id === id ? { ...offer, ...edit_offer_data } : offer))
+        edit(edit_offer_data: OfferListData) {
+            setOffers(prev => prev.map(offer => offer.id === edit_offer_data.id ? { ...offer, ...edit_offer_data } : offer))
         }
-    }
-
-    function saveToLs() {
-        localStorage.setItem('offersList', JSON.stringify(offers))
-    }
-    function clearLs() {
-        localStorage.removeItem('offersList')
     }
 
     return [offers, offerActions] as const
