@@ -17,18 +17,18 @@ export const OfferNotesPage = (props: OfferNotesPageProps) => {
   const [offers, offControl] = useOffersControl()
 
 
-  function handleSubmit(offer: OfferFormData) {
-
+  function getOffer(offer: OfferFormData) {
+    offControl.Add(offer)
 
   }
   useEffect(() => {
-    setOfferList(offControl.load())
+
   }, [])
 
   return (
     <Box>
-      <OfferForm onSubmit={handleSubmit} />
-      {offerList.map(offer => (
+      <OfferForm getOffer={getOffer} />
+      {offers.map(offer => (
         <Card key={offer.id} bg={'gray.600'} flexDir={'row'}>
 
 
@@ -51,7 +51,7 @@ type OfferFormData = {
 }
 
 interface OfferFormProps {
-  onSubmit: (offer: OfferFormData) => void
+  getOffer: (offer: OfferFormData) => void
 }
 const OfferForm: React.FC<OfferFormProps> = (props) => {
   const [offer, setOffer] = useState({ offerId: "", clientFIO: "", dateReady: "", desc: "", id: "" } as OfferFormData)
@@ -62,7 +62,7 @@ const OfferForm: React.FC<OfferFormProps> = (props) => {
   }
   function HandleSubmit() {
     console.log('form submitted', offer)
-    props.onSubmit(offer)
+    props.getOffer(offer)
     setOffer({ offerId: "", clientFIO: "", dateReady: "", desc: "", id: "" })
   }
   return <FormControl>
