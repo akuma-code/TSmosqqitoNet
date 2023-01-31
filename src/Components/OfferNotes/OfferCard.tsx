@@ -20,15 +20,14 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
             {offer.desc && <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>}
         </CardBody>
         <CardFooter>
-            <CheckboxGroup colorScheme={'cyan'}
-
-            // defaultValue={['Закрывающие запрошены', 'Договор подписан', 'Документы в офисе']}
+            <CheckboxGroup
+            // defaultValue={[]}
             >
-                <Stack textShadow={'lg'} fontWeight='bold' >
-                    <Checkbox icon={<div className='bg-red' />} isChecked={offer.isRequested} onChange={() => checkFN(offer.id!, 'isRequested')}>Закрывающие запрошены</Checkbox>
-                    <Checkbox isChecked={offer.isDocSigned} onChange={() => checkFN(offer.id!, 'isDocSigned')} >Договор подписан</Checkbox>
-                    <Checkbox isChecked={offer.isDocResieved} onChange={() => checkFN(offer.id!, 'isDocResieved')} >Документы в офисе</Checkbox>
-                </Stack>
+                {/* <Stack textShadow={'lg'} fontWeight='bold' > */}
+                <Checkbox icon={<div className='bg-red' />} isChecked={offer.isRequested} onChange={() => checkFN(offer.id!, 'isRequested')}>Закрывающие запрошены</Checkbox>
+                <Checkbox isChecked={offer.isDocSigned} onChange={() => checkFN(offer.id!, 'isDocSigned')} >Договор подписан</Checkbox>
+                <Checkbox isChecked={offer.isDocResieved} onChange={() => checkFN(offer.id!, 'isDocResieved')} >Документы в офисе</Checkbox>
+                {/* </Stack> */}
             </CheckboxGroup>
         </CardFooter>
     </Card>);
