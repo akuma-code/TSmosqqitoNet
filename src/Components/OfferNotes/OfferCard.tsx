@@ -10,7 +10,8 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
 
 
     return (
-        <Card key={offer.id} bg={'gray.600'} flexDir={'column'} margin={4} maxWidth={'40vw'} rounded={'md'}>
+        <Card key={offer.id} bg={'gray.600'} flexDir={'column'} margin={4}
+            maxWidth={'20vw'} rounded={'md'}>
 
             <CardHeader pos={'relative'}>
                 <Heading size={'md'} flexDir={'column'} display={'flex'} textAlign={'center'}>
@@ -35,29 +36,8 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
                     <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>}
             </CardBody>
             <CardFooter bgColor={'green.600'} width={'100%'}>
-                <OffProgressBar>
-                    <Button
-                        height={'100%'}
-                        border={'2px solid'}
-                        variant={'outline'}
-                    >BTN1
-                    </Button>
-                    <Button height={'100%'}
-                        border={'2px solid'}
-                        variant={'outline'}
-                    >BTN
-                    </Button>
-                    <Button height={'100%'}
-                        border={'2px solid'}
-                        variant={'outline'}
-                    >BTN1
-                    </Button>
-                    <Button height={'100%'}
-                        border={'2px solid'}
-                        variant={'outline'}
-                    >BTN1
-                    </Button>
-                </OffProgressBar>
+                <OffProgressBar steps={['Договор подписан', 'Документы запрошены', 'Документы получены', "Документы сданы"]} />
+
             </CardFooter>
         </Card>
     );

@@ -21,7 +21,7 @@ export const HostContext = React.createContext<HostContextType | null>(null)
 
 const App = (): JSX.Element => {
   const [host, setHost] = useState(HOSTURL.CKO3 as any)
-  const [isAuth, setAuth] = useState(false)
+  const [isAuth, setAuth] = useState(true)
   const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
     const url = getURL() + "/"
