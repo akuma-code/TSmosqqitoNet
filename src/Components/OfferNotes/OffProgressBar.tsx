@@ -23,7 +23,7 @@ export const OffProgressBar: React.FC<OffProgressBarProps> = ({ progBarValue, st
         <Box
             bgColor={'red.400'}
             zIndex={4}
-            height={'3rem'}
+            height={'max-content'}
             width={'100vw'}
             alignItems={'center'}
             justifyContent={'center'}
@@ -33,13 +33,13 @@ export const OffProgressBar: React.FC<OffProgressBarProps> = ({ progBarValue, st
 
             <Progress size={'md'} colorScheme={'blue'} value={progBarValue} height={'100%'} bgColor={'lightblue'} rounded='md' hasStripe />
             <Box pos={'absolute'} top={0} display={'flex'} justifyContent='space-between' width={'100%'} height={'100%'}>
-                <CheckboxGroup >
+                {/* <CheckboxGroup >
 
                     {steps.map(ss =>
 
                         <CustomCheckbox step={ss} key={ss.id} ClickFn={toggle} />
                     )}
-                </CheckboxGroup>
+                </CheckboxGroup> */}
             </Box>
 
         </Box>

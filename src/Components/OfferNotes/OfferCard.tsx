@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { OfferCardProps, OfferListData } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
@@ -30,25 +30,26 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
         }
         return items
     }
-    return (
-        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} flexDir={'row'} margin={4}
-            maxWidth={'90vw'} rounded={'md'}>
+    return (<Flex maxWidth={'90vw'} flexDir='column'>
 
-            <CardHeader pos={'relative'}>
-                <Heading size={'md'} flexDir={'row'} display={'flex'} textAlign={'center'}>
-                    <span>{offer.offerId}</span>
-                    <span>{offer.companyTag} "{offer.companyName}"</span>
+
+        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} rounded={'md'} display={'flex'} flexDir={'row'} justifyContent='space-between' >
+
+            <CardHeader maxH={'1em'}>
+                <Heading size={'sm'} flexDir={'row'} display={'flex'} textAlign={'center'} columnGap={4} justifyContent='space-between' w={'100%'}>
+                    <Text>{offer.offerId} </Text>
+                    <Text>{offer.companyTag} "{offer.companyName}"</Text>
                 </Heading>
 
 
             </CardHeader>
-            <CardBody textColor={'whiteAlpha.800'} flexDir={'column'} display={'flex'} gap={2} textAlign={'center'}>
-                <Text fontSize={'lg'}>Дата отгрузки: {offer.dateReady}</Text>
-                {offer.desc &&
-                    <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>}
-            </CardBody>
-            <CardFooter bgColor={'green.600'} width={'30%'} pos={'relative'}>
-                <Menu colorScheme={'blue'} >
+            {/* <CardBody textColor={'whiteAlpha.800'} flexDir={'column'} display={'flex'} gap={2} textAlign={'center'}> */}
+
+            {/* {offer.desc &&
+                    <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>} */}
+            {/* </CardBody> */}
+            <CardFooter display={'flex'}>
+                {/* <Menu colorScheme={'blue'} >
                     <MenuButton pos={'absolute'}
                         top={0}
                         right={'-3em'}
@@ -61,10 +62,13 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                         <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
                         <MenuDivider />
                     </MenuList>
-                </Menu>
-                <OffProgressBar steps={offerSteps} toggle={toggleCheck} progBarValue={getProgressValue} />
+                </Menu> */}
+                {/* <OffProgressBar steps={offerSteps} toggle={toggleCheck} progBarValue={getProgressValue} /> */}
+                <Text fontSize={'lg'} color='white'>Дата отгрузки: {offer.dateReady}</Text>
             </CardFooter>
         </Card>
+        <Progress colorScheme={'blue'} value={60} bgColor={'lightblue'} rounded='md' hasStripe />
+    </Flex>
     );
 };
 
