@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
-import { OfferCardProps } from './OfferTypes';
+import { OfferCardProps, OfferListData } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
 import { OffProgressBar } from './OffProgressBar';
 import { I } from '../Cards/I';
@@ -22,26 +22,24 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
     const allChecked = offerSteps.every(s => s.isChecked)
     const checkedCount = offerSteps.reduce((count, step) => step.isChecked ? ++count : count, 0)
     const getProgressValue = 100 / sCount * checkedCount
-
+    function checkQuery<T extends { isChecked: boolean }>(items: T[]) {
+        for (let i = 1; i < items.length; i++) {
+            const prev = items[i - 1]
+            if (!prev.isChecked) items[i].isChecked = false
+            else items[i].isChecked = true
+        }
+        return items
+    }
     return (
-        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} flexDir={'column'} margin={4}
-            maxWidth={'60vw'} rounded={'md'}>
+        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} flexDir={'row'} margin={4}
+            maxWidth={'90vw'} rounded={'md'}>
 
             <CardHeader pos={'relative'}>
-                <Heading size={'md'} flexDir={'column'} display={'flex'} textAlign={'center'}>
+                <Heading size={'md'} flexDir={'row'} display={'flex'} textAlign={'center'}>
                     <span>{offer.offerId}</span>
                     <span>{offer.companyTag} "{offer.companyName}"</span>
                 </Heading>
-                <Menu colorScheme={'gray'} >
-                    <MenuButton pos={'absolute'} top={1} right={1}
-                        height={'3em'} width={'3em'}
-                    ><I title='developer_board' /></MenuButton>
-                    <MenuList>
 
-                        <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
-                        <MenuDivider />
-                    </MenuList>
-                </Menu>
 
             </CardHeader>
             <CardBody textColor={'whiteAlpha.800'} flexDir={'column'} display={'flex'} gap={2} textAlign={'center'}>
@@ -49,19 +47,24 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                 {offer.desc &&
                     <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>}
             </CardBody>
-            <CardFooter bgColor={'green.600'} width={'100%'}>
+            <CardFooter bgColor={'green.600'} width={'30%'} pos={'relative'}>
+                <Menu colorScheme={'blue'} >
+                    <MenuButton pos={'absolute'}
+                        top={0}
+                        right={'-3em'}
+                        bgColor='cyan.400'
+                        rounded={'xl'}
+                        p={2}
+                        height={'3em'} width={'3em'} fontSize={'2xl'}
+                    ><I title='developer_board' /></MenuButton>
+                    <MenuList>
+                        <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
+                        <MenuDivider />
+                    </MenuList>
+                </Menu>
                 <OffProgressBar steps={offerSteps} toggle={toggleCheck} progBarValue={getProgressValue} />
             </CardFooter>
         </Card>
     );
 };
 
-// const cbxgrp = <CheckboxGroup
-// // defaultValue={[]}
-// >
-//     <Stack textShadow={'lg'} fontWeight='bold' >
-//         <Checkbox icon={<div className='bg-red' />} isChecked={offer.isRequested} onChange={() => checkFN(offer.id!, 'isRequested')}>Закрывающие запрошены</Checkbox>
-//         <Checkbox isChecked={offer.isDocSigned} onChange={() => checkFN(offer.id!, 'isDocSigned')} >Договор подписан</Checkbox>
-//         <Checkbox isChecked={offer.isDocResieved} onChange={() => checkFN(offer.id!, 'isDocResieved')} >Документы в офисе</Checkbox>
-//     </Stack>
-// </CheckboxGroup>  
