@@ -25,5 +25,6 @@ export interface OffCardListProps {
 }
 export interface OfferCardProps {
     offer: OfferListData
-    checkFN: (id: string, field: keyof OfferListData) => void
+    offControl: OffCardListProps['offControl']
+    // checkFN: (id: string, field: keyof OfferListData) => void
 }

@@ -12,21 +12,23 @@ interface OfferFormProps {
 export const OfferForm: React.FC<OfferFormProps> = (props) => {
 
     const strID = useID;
-    const [offer, setOffer] = useState({ offerId: "", companyName: "", dateReady: "", desc: "", id: "", companyTag: "ООО" } as OfferFormData);
+    const [offer, setOffer] = useState({ offerId: "", companyName: "", dateReady: "", desc: "", id: strID(), companyTag: "ООО" } as OfferFormData);
     const firstInput = useRef<HTMLInputElement>(null)
 
-    function changeOffer(field: keyof OfferFormData, value: string) { setOffer(prev => ({ ...prev, [field]: value, id: strID() })); }
-    function HandleSubmit() {
+    function changeOffer(field: keyof OfferFormData, value: string) { setOffer(prev => ({ ...prev, [field]: value })); }
+    function HandleSubmit(e?: React.FormEvent) {
         console.log('offer added: ', offer);
         props.getOffer(offer);
-        setOffer({ offerId: "", companyName: "", dateReady: "", desc: "", id: "", companyTag: offer.companyTag });
+        setOffer({ offerId: "", companyName: "", dateReady: "", desc: "", id: strID(), companyTag: offer.companyTag });
+
         if (!firstInput.current) return
         firstInput.current.focus()
     }
 
 
     return (
-        <FormControl >
+
+        <FormControl id='offer_form' onSubmit={HandleSubmit}>
             <HStack px={4} gap={8} mt={2}>
                 <Input
                     placeholder='Offer ID'
@@ -63,8 +65,9 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
                     value={offer.desc}
                     onChange={(e) => changeOffer('desc', e.target.value)}
                     type={'text'} />
-                <Button type='submit' onClick={HandleSubmit}
-                    colorScheme={'green'} p={8} mt={'10'}>Add Offer</Button>
+                <Button type='submit'
+                    onClick={e => HandleSubmit(e)}
+                    colorScheme={'green'} p={8} mt={'10'} formTarget={'offer_form'} form={'offer_form'}></Button>
             </HStack>
         </FormControl>
     )

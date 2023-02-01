@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { OfferCardProps } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
 import { OffProgressBar } from './OffProgressBar';
 import { I } from '../Cards/I';
+import { useID } from '../../hooks/useID';
+const _id = useID
+const initSteps = [
+    { text: 'Договор подписан', isChecked: false, id: _id() },
+    { text: 'Документы запрошены', isChecked: false, id: _id() },
+    { text: 'Документы получены', isChecked: false, id: _id() },
+    { text: 'Документы сданы', isChecked: false, id: _id() },
+]
 
-export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
 
+export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
+    const [offerSteps, setofferSteps] = useState(initSteps)
+    const toggleCheck = (id: string) => { setofferSteps(prev => prev.map(s => s.id === id ? ({ ...s, isChecked: !s.isChecked }) : s)) }
+    const sCount = offerSteps.length
+    const allChecked = offerSteps.every(s => s.isChecked)
+    const checkedCount = offerSteps.reduce((count, step) => step.isChecked ? ++count : count, 0)
+    const getProgressValue = 100 / sCount * checkedCount
 
     return (
-        <Card key={offer.id} bg={'gray.600'} flexDir={'column'} margin={4}
-            maxWidth={'20vw'} rounded={'md'}>
+        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} flexDir={'column'} margin={4}
+            maxWidth={'60vw'} rounded={'md'}>
 
             <CardHeader pos={'relative'}>
                 <Heading size={'md'} flexDir={'column'} display={'flex'} textAlign={'center'}>
@@ -24,7 +38,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
                     ><I title='developer_board' /></MenuButton>
                     <MenuList>
 
-                        <MenuItem>Delete</MenuItem>
+                        <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
                         <MenuDivider />
                     </MenuList>
                 </Menu>
@@ -36,8 +50,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, checkFN }) => {
                     <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>}
             </CardBody>
             <CardFooter bgColor={'green.600'} width={'100%'}>
-                <OffProgressBar steps={['Договор подписан', 'Документы запрошены', 'Документы получены', "Документы сданы"]} />
-
+                <OffProgressBar steps={offerSteps} toggle={toggleCheck} progBarValue={getProgressValue} />
             </CardFooter>
         </Card>
     );

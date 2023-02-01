@@ -7,7 +7,7 @@ export const OffersCardList: React.FC<OffCardListProps> = (props) => {
 
     return (
         <div>
-            {offList.map(o => <OfferCard offer={o} key={o.id} checkFN={offControl.toggleCheck} />
+            {offList.map(o => <OfferCard offer={o} key={o.id} offControl={offControl} />
             )}
         </div>
     );
