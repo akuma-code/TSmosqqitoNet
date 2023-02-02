@@ -25,7 +25,7 @@ export const OffersCardList: React.FC<OffCardListProps> = (props) => {
     return (
         <Flex flexDir={'column'} rowGap={2}>
             <OfferCard offer={initOffer} offControl={offControl} key={initOffer.id} />
-            {offList.map(o => <OfferCard offer={o} offControl={offControl} />
+            {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} />
             )}
         </Flex>
     );

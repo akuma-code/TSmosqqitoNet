@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { OfferListData } from '../Components/OfferNotes/OfferTypes'
+import { useID } from './useID'
 
-
+const _id = useID
 const useOffersControl = (initState = [] as OfferListData[]) => {
     const [offers, setOffers] = useState<OfferListData[]>(initState)
     const offerActions = {
-        Add(offer: OfferListData) { setOffers(prev => [offer, ...prev]) },
+        Add(offer: OfferListData) {
+            if (!offer.id) offer.id = _id()
+            setOffers(prev => [offer, ...prev])
+        },
 
         Remove(id: string) { setOffers(prev => prev.filter(o => o.id !== id)) },
 

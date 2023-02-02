@@ -4,16 +4,21 @@ import './index.css';
 import 'dayjs/locale/ru'
 import dayjs from 'dayjs'
 import App from './App';
-import { ChakraProvider } from '@chakra-ui/react'
-import { themeCBX } from './Components/OfferNotes/ThemedCheckBox';
-
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { customCBx } from './Components/OfferNotes/ThemedCheckBox';
+import { inputTheme } from './Components/OfferNotes/CustomizedInput';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 dayjs.locale('ru')
 
-
+export const theme = extendTheme({
+  components: {
+    Input: { ...inputTheme },
+    Checkbox: { ...customCBx },
+  },
+})
 root.render(
-  <ChakraProvider theme={themeCBX}>
+  <ChakraProvider theme={theme}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
