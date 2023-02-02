@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, AlertIcon, Button, FormControl, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, InputRightElement as InputLeftElement, InputRightElement, Menu, MenuButton, MenuItem, MenuList, Stack } from '@chakra-ui/react';
+import React, { useRef, useState } from 'react';
+import { Alert, AlertIcon, Button, Center, FormControl, HStack, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { useID } from '../../hooks/useID';
 import { OfferFormData } from './OfferTypes';
 
@@ -44,8 +44,12 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
             {
                 isAlarm &&
                 <Alert status='error' pos={'absolute'} zIndex={4} h={20} maxW={"70vw"}>
-                    <AlertIcon />
-                    Введены не все данные, пожалуйста, заполните все поля, бля!
+                    <Center textAlign={'center'}
+                        display='flex' justifyContent={'space-between'}
+                    >
+                        <AlertIcon mx={5} w={8} />
+                        <Text fontSize={24}>Введены не все данные, пожалуйста, заполните все поля, бля!</Text>
+                    </Center>
                 </Alert>
             }
             <HStack px={4} gap={8} mt={2} >
@@ -108,7 +112,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
                 <Button type='submit'
                     onClick={e => HandleSubmit(e)}
                     bgColor={isAlarm ? 'red' : 'green'}
-                    colorScheme={isAlarm ? 'red' : 'green'}
+                    colorScheme={'green'}
                     p={8}
                     mt={'10'}
                     formTarget={'offer_form'}
