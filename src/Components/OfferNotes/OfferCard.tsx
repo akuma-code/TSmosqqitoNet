@@ -37,8 +37,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                 minH={10}
                 pos={'relative'}
             >
-
-                <CardHeader p={0} bgGradient={'linear(to-r,#db8f0a,#ee684f,#da5782,#a45ea3,#5e66a6)'}
+                <CardHeader p={0} bgGradient={'linear(to-r,,#abf8e7,#8778c7)'}
                     rounded={'md'}
                 >
                     <Flex columnGap={12} px={4}>
