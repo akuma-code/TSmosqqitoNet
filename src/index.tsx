@@ -5,7 +5,7 @@ import 'dayjs/locale/ru'
 import dayjs from 'dayjs'
 import App from './App';
 import { ChakraProvider } from '@chakra-ui/react'
-import { theme } from './Components/OfferNotes/CbxTheme';
+import { themeCBX } from './Components/OfferNotes/ThemedCheckBox';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -13,7 +13,7 @@ dayjs.locale('ru')
 
 
 root.render(
-  <ChakraProvider theme={theme}>
+  <ChakraProvider theme={themeCBX}>
     <React.StrictMode>
       <App />
     </React.StrictMode>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { OfferCardProps, OfferListData } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
 import { OffProgressBar } from './OffProgressBar';
 import { I } from '../Cards/I';
 import { useID } from '../../hooks/useID';
+import { CheckIcon } from '@chakra-ui/icons';
+import { customCBx } from './ThemedCheckBox';
+import { GiBiohazard } from 'react-icons/gi';
 const _id = useID
 const initSteps = [
     { text: 'Договор подписан', isChecked: false, id: _id() },
@@ -17,58 +20,70 @@ const initSteps = [
 
 export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
     const [offerSteps, setofferSteps] = useState(initSteps)
-    const toggleCheck = (id: string) => { setofferSteps(prev => prev.map(s => s.id === id ? ({ ...s, isChecked: !s.isChecked }) : s)) }
-    const sCount = offerSteps.length
     const allChecked = offerSteps.every(s => s.isChecked)
-    const checkedCount = offerSteps.reduce((count, step) => step.isChecked ? ++count : count, 0)
-    const getProgressValue = 100 / sCount * checkedCount
-    function checkQuery<T extends { isChecked: boolean }>(items: T[]) {
-        for (let i = 1; i < items.length; i++) {
-            const prev = items[i - 1]
-            if (!prev.isChecked) items[i].isChecked = false
-            else items[i].isChecked = true
-        }
-        return items
-    }
-    return (<Flex maxWidth={'90vw'} flexDir='column'>
 
+    return (
+        <Flex maxWidth={'60vw'} flexDir='column'
+            rowGap={1}
+            border={'1px solid black'}
+            rounded={'md'}
+        >
+            <Card key={offer.id}
+                rounded={'md'}
 
-        <Card key={offer.id} bg={allChecked ? 'aqua' : 'gray.600'} rounded={'md'} display={'flex'} flexDir={'row'} justifyContent='space-between' >
+                // display={'flex'}
+                flexDir={'column'}
+                // justifyContent='space-between'
+                minH={10}
+                pos={'relative'}
+            >
 
-            <CardHeader maxH={'1em'}>
-                <Heading size={'sm'} flexDir={'row'} display={'flex'} textAlign={'center'} columnGap={4} justifyContent='space-between' w={'100%'}>
-                    <Text>{offer.offerId} </Text>
-                    <Text>{offer.companyTag} "{offer.companyName}"</Text>
-                </Heading>
+                <CardHeader p={0} bgGradient={'linear(to-r,#db8f0a,#ee684f,#da5782,#a45ea3,#5e66a6)'}
+                    rounded={'md'}
+                >
+                    <Flex columnGap={12} px={4}>
+                        <Text fontSize={24}>{offer.companyTag} "{offer.companyName}"</Text>
+                        <Text fontSize={24}>{offer.offerId} </Text>
+                    </Flex>
+                    <Menu colorScheme={'blue'} >
+                        <MenuButton
+                            bgColor='cyan.400'
+                            rounded={'full'}
+                            // p={2}
+                            pos={'absolute'}
+                            fontSize={32}
+                            marginLeft={'100%'}
+                            top={0}
+                            textColor={'gray.800'}
+                        >
+                            <GiBiohazard width={6} height={6} />
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
+                            <MenuDivider />
+                        </MenuList>
+                    </Menu>
+                </CardHeader>
+            </Card>
 
+            <Flex pos={'relative'} alignItems='center'>
+                <Progress colorScheme={'blue'} value={95} bgColor={'lightblue'} rounded='md' hasStripe h={8} w={'100%'} />
+                <Text color={'HighlightText'} pos={'absolute'} marginLeft={'76%'} my={'auto'} px={2} fontWeight={'bold'} border={'1px solid black'} rounded='md'>Отгрузка: {offer.dateReady}</Text>
+            </Flex>
 
-            </CardHeader>
-            {/* <CardBody textColor={'whiteAlpha.800'} flexDir={'column'} display={'flex'} gap={2} textAlign={'center'}> */}
-
-            {/* {offer.desc &&
-                    <Text fontSize={'lg'}>Комментарий: {offer.desc}</Text>} */}
-            {/* </CardBody> */}
-            <CardFooter display={'flex'}>
-                {/* <Menu colorScheme={'blue'} >
-                    <MenuButton pos={'absolute'}
-                        top={0}
-                        right={'-3em'}
-                        bgColor='cyan.400'
-                        rounded={'xl'}
-                        p={2}
-                        height={'3em'} width={'3em'} fontSize={'2xl'}
-                    ><I title='developer_board' /></MenuButton>
-                    <MenuList>
-                        <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
-                        <MenuDivider />
-                    </MenuList>
-                </Menu> */}
-                {/* <OffProgressBar steps={offerSteps} toggle={toggleCheck} progBarValue={getProgressValue} /> */}
-                <Text fontSize={'lg'} color='white'>Дата отгрузки: {offer.dateReady}</Text>
-            </CardFooter>
-        </Card>
-        <Progress colorScheme={'blue'} value={60} bgColor={'lightblue'} rounded='md' hasStripe />
-    </Flex>
+        </Flex>
     );
 };
 
+// const getProgressValue = 100 / sCount * checkedCount
+//     function checkQuery<T extends { isChecked: boolean }>(items: T[]) {
+//         for (let i = 1; i < items.length; i++) {
+//             const prev = items[i - 1]
+//             if (!prev.isChecked) items[i].isChecked = false
+//             else items[i].isChecked = true
+//         }
+//         return items
+//     }
+//     const toggleCheck = (id: string) => { setofferSteps(prev => prev.map(s => s.id === id ? ({ ...s, isChecked: !s.isChecked }) : s)) }
+//     const sCount = offerSteps.length
+//     const checkedCount = offerSteps.reduce((count, step) => step.isChecked ? ++count : count, 0)

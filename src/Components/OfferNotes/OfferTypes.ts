@@ -1,6 +1,6 @@
 
 export type OfferFormData = {
-    id?: string
+    id: string
     offerId: string
     companyName: string
     companyTag: 'ООО' | 'АО' | 'ИП'

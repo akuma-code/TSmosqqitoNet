@@ -12,7 +12,7 @@ interface OfferFormProps {
 export const OfferForm: React.FC<OfferFormProps> = (props) => {
 
     const strID = useID;
-    const [offer, setOffer] = useState({ offerId: "", companyName: "", dateReady: "", desc: "", id: strID(), companyTag: "ООО" } as OfferFormData);
+    const [offer, setOffer] = useState({} as OfferFormData);
     const firstInput = useRef<HTMLInputElement>(null)
 
     function changeOffer(field: keyof OfferFormData, value: string) { setOffer(prev => ({ ...prev, [field]: value })); }
@@ -28,7 +28,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
 
     return (
 
-        <FormControl id='offer_form' onSubmit={HandleSubmit}>
+        <FormControl id='offer_form' onSubmit={HandleSubmit} maxW={'60vw'}>
             <HStack px={4} gap={8} mt={2}>
                 <Input
                     placeholder='Offer ID'
