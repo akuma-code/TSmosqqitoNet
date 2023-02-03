@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Grid, HStack, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Text } from '@chakra-ui/react';
 import { useID } from '../../hooks/useID';
 import { OfferFormData } from './OfferTypes';
 import { Alarma } from './Alarma';
@@ -20,19 +20,16 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
     function changeOffer(field: keyof OfferFormData, value: string) { setOffer(prev => ({ ...prev, [field]: value })); }
 
 
-    function HighLightButton() {
-        console.log("Введены не все данные!");
+    function toggleAlarma(ms: number) {
         if (isAlarm) return
         setIsAlarm(prev => true)
-
         setTimeout(() => {
             setIsAlarm(prev => false)
-        }, 4000)
+        }, ms)
     }
 
     function HandleSubmit(e?: React.FormEvent) {
         e?.preventDefault()
-        if (!offer.companyName || !offer.offerId) return HighLightButton();
 
         props.getOffer(offer!);
         setOffer({ companyName: "", offerId: "", desc: "", companyTag: offer.companyTag, dateReady: offer.dateReady } as OfferFormData);
@@ -48,98 +45,121 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
         <form id='offer_form' onSubmit={HandleSubmit} name='offer'>
 
 
-            <FormControl maxW={'80vw'} label='Новый договор'>
+            <FormControl maxW={'80vw'} label='Новый договор' minW={'30vw'}>
                 {
                     isAlarm && Alarma(alertText, toggleAlarm)
                 }
-                <Grid px={4} gap={8} mt={2} templateColumns={'repeat(5, 1fr)'} justifyItems='center'>
-                    <InputGroup zIndex={2} gap={3}>
+                <Grid
+                    gap={4}
+                    mt={2}
+                    templateColumns={'repeat(8, 1fr)'}
+                    justifyItems='center'
+                    alignItems={'center'}
+                >
+                    <GridItem colSpan={2} alignItems={'self-start'}>
+                        <InputGroup zIndex={2}  >
+                            <Flex alignItems={'center'} justifyItems={'center'} justifyContent='space-between' gap={3}>
+                                <InputLeftAddon
+                                    children={
+                                        <TagSelect changeTag={changeTag} tag={offer.companyTag || 'ООО'} />
+                                    }
+                                    bgColor='transparent'
+                                    border={0}
+                                    rounded='lg'
+                                    fontWeight={'extrabold'}
+                                    fontSize={18}
+                                // tabIndex={0}
+                                />
+                                <Box display={'flex'} flexDir={'column'} minInlineSize={'fit-content'}>
+                                    <Input
+                                        id='offcomp'
+                                        ref={firstInput}
+                                        value={offer.companyName}
+                                        onChange={(e) => changeOffer('companyName', e.target.value)}
+                                        type={'text'}
+                                        variant={'filled'}
+                                        tabIndex={1}
+                                        isRequired
+                                        _focusVisible={{ bg: "#3182ce", borderColor: "#3182ce" }}
+                                    />
 
-                        <InputLeftAddon
-                            children={<TagSelect changeTag={changeTag} tag={offer.companyTag || 'ООО'} />}
-                            bgColor='transparent'
-                            border={0}
-                            rounded='lg'
-                            fontWeight={'extrabold'}
-                            fontSize={18}
-                        // tabIndex={0}
-                        />
-                        <Box display={'flex'} flexDir={'column'} minInlineSize={'fit-content'}>
+                                    <FormLabel>Название компании</FormLabel>
+                                </Box>
+                            </Flex>
+                        </InputGroup>
+
+                    </GridItem>
+
+                    <GridItem colSpan={2} mx='auto'>
+                        <InputGroup flexDir={'column'} >
                             <Input
-                                id='offcomp'
-                                ref={firstInput}
-                                value={offer.companyName}
-                                onChange={(e) => changeOffer('companyName', e.target.value)}
+                                placeholder=''
+                                id='offid'
+                                value={offer.offerId}
+                                onChange={(e) => changeOffer('offerId', e.target.value)}
                                 type={'text'}
                                 variant={'filled'}
-                                tabIndex={1}
                                 isRequired
-                                _focusVisible={{ bg: "#3182ce", borderColor: "#3182ce" }}
+                                tabIndex={2}
+                                _focus={{ bgColor: 'blue.300' }} />
+                            <FormLabel >Номер договора</FormLabel>
+                        </InputGroup>
+                    </GridItem>
+
+
+                    <GridItem colSpan={2}>
+                        <InputGroup flexDir={'column'} _focus={{ bgColor: 'blue.300' }}>
+                            <Input
+                                placeholder='Date Ready'
+                                id='offdate'
+                                value={offer.dateReady}
+                                onChange={(e) => changeOffer('dateReady', e.target.value)}
+                                type={'date'}
+                                variant={'filled'}
+                                tabIndex={3}
+                                flexDir={'row-reverse'}
+                                justifyContent={'space-between'}
+                                gap={8}
+                                maxInlineSize={'full'}
+                                _focus={{ bgColor: 'blue.300' }}
+                            // isRequired
                             />
+                            <FormLabel>Дата отгрузки</FormLabel>
+                        </InputGroup>
+                    </GridItem>
 
-                            <FormLabel>Название компании</FormLabel>
-                        </Box>
-                    </InputGroup>
-                    <InputGroup flexDir={'column'} w='70%'>
-                        <Input
-                            placeholder=''
-                            id='offid'
-                            value={offer.offerId}
-                            onChange={(e) => changeOffer('offerId', e.target.value)}
-                            type={'text'}
-                            variant={'filled'}
-                            isRequired
-                            tabIndex={2}
-                            _focus={{ bgColor: 'blue.300' }} />
-                        <FormLabel >Номер договора</FormLabel>
-                    </InputGroup>
-
-
-                    <InputGroup flexDir={'column'} _focus={{ bgColor: 'blue.300' }}>
-                        <Input
-                            placeholder='Date Ready'
-                            id='offdate'
-                            value={offer.dateReady}
-                            onChange={(e) => changeOffer('dateReady', e.target.value)}
-                            type={'date'}
-                            variant={'filled'}
-                            tabIndex={3}
-                            flexDir={'row-reverse'}
-                            justifyContent={'space-between'}
-                            gap={8}
-                            maxInlineSize={'full'}
-                            _focus={{ bgColor: 'blue.300' }}
-                        // isRequired
-                        />
-                        <FormLabel>Дата отгрузки</FormLabel>
-                    </InputGroup>
-                    <InputGroup flexDir={'column'}>
-                        <Input
-                            placeholder=''
-                            id='offdate'
-                            value={offer.desc}
-                            onChange={(e) => changeOffer('desc', e.target.value)}
-                            type={'text'}
-                            variant={'filled'}
-                            tabIndex={4}
-                            _focus={{ bgColor: 'blue.300' }} />
-                        <FormLabel>Описание</FormLabel>
-                    </InputGroup>
+                    {/* <GridItem colSpan={2}>
+                        <InputGroup flexDir={'column'}>
+                            <Input
+                                placeholder=''
+                                id='offdate'
+                                value={offer.desc}
+                                onChange={(e) => changeOffer('desc', e.target.value)}
+                                type={'text'}
+                                variant={'filled'}
+                                tabIndex={4}
+                                _focus={{ bgColor: 'blue.300' }} />
+                            <FormLabel>Описание</FormLabel>
+                        </InputGroup>
+                    </GridItem> */}
 
 
+                    <GridItem colSpan={1}>
+                        <Button type='submit'
+                            // onClick={e => HandleSubmit(e)}
+                            bgColor={isAlarm ? 'red' : 'blue'}
+                            colorScheme={'blue'}
+                            p={8}
+                            mt={'2'}
+                            formTarget={'offer_form'}
+                            form={'offer_form'}
+                            w={'fit-content'}
+                            tabIndex={5}
+                        >Добавить
+                        </Button>
+                    </GridItem>
 
-                    <Button type='submit'
-                        // onClick={e => HandleSubmit(e)}
-                        bgColor={isAlarm ? 'red' : 'blue'}
-                        colorScheme={'blue'}
-                        p={8}
-                        mt={'2'}
-                        formTarget={'offer_form'}
-                        form={'offer_form'}
-                        w={'fit-content'}
-                        tabIndex={5}
-                    >Добавить
-                    </Button>
+
                 </Grid>
 
             </FormControl>
@@ -159,13 +179,16 @@ const TagSelect: React.FC<TagSelectProps> = (props) => {
     return (
         <Menu  >
             <MenuButton tabIndex={-1} autoFocus={false} as={Button}
+                w='full'
                 bgColor={'blue.300'}
                 _active={{ bgColor: 'transparent' }}
                 _focus={{ bgColor: 'transparent' }}
                 _hover={{ bgColor: "blue.300" }}
                 border={'2px solid black'}
             >{tag}</MenuButton>
-            <MenuList minW={'fit-content'}  >
+            <MenuList
+                w={'fit-content'}
+            >
                 <MenuOptionGroup defaultValue='ООО' type='radio'
                 >
                     <MenuItemOption

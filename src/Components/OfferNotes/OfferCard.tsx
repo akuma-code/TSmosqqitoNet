@@ -9,18 +9,53 @@ import { useID } from '../../hooks/useID';
 import { CheckIcon } from '@chakra-ui/icons';
 import { customCBx } from './ThemedCheckBox';
 import { GiBiohazard } from 'react-icons/gi';
+import { useDaysJS } from '../../hooks/useDaysJS';
 const _id = useID
 const initSteps = [
     { text: 'Договор подписан', isChecked: false, id: _id() },
     { text: 'Документы запрошены', isChecked: false, id: _id() },
-    { text: 'Документы получены', isChecked: false, id: _id() },
-    { text: 'Документы сданы', isChecked: false, id: _id() },
+    // { text: 'Документы получены', isChecked: false, id: _id() },
+    // { text: 'Документы сданы', isChecked: false, id: _id() },
 ]
 
 
 export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
     const [offerSteps, setofferSteps] = useState(initSteps)
     const allChecked = offerSteps.every(s => s.isChecked)
+    const [progValue, setProgValue] = useState(0)
+    const [progColor, setProgColor] = useState("green")
+    const [isAnimOn, setIsAnim] = useState(false)
+    const { localDate, daysLeft, HoursLeft } = useDaysJS()
+    const finish = localDate(offer.dateReady)
+    const dleft = daysLeft(offer.dateReady)
+    const calcProgressBarValue = () => {
+        if (daysLeft(offer.dateReady) > 10) return 0
+        const left = 100 - daysLeft(offer.dateReady) * 10
+
+        return left
+    }
+    const calcProgressColor = (hours_left: number) => {
+        const prog = {
+            0: 'green',
+            25: 'cyan',
+            50: 'yellow',
+            75: 'orange',
+            100: 'red',
+        }
+
+        if (hours_left <= 48) return prog[100]
+        if (hours_left <= 96) return prog[75]
+        if (hours_left <= 144) return prog[50]
+        if (hours_left <= 192) return prog[25]
+        if (hours_left <= 244) return prog[0]
+        return prog[0]
+    }
+    useEffect(() => {
+        const daysleft = calcProgressBarValue()
+        setProgValue(prev => daysleft)
+        setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
+        if (HoursLeft(offer.dateReady) <= 24) setIsAnim(true)
+    }, [])
 
     return (
         <Flex maxWidth={'60vw'} flexDir='column'
@@ -30,10 +65,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
         >
             <Card key={offer.id}
                 rounded={'md'}
-
-                // display={'flex'}
                 flexDir={'column'}
-                // justifyContent='space-between'
                 minH={10}
                 pos={'relative'}
             >
@@ -48,7 +80,6 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                         <MenuButton
                             bgColor='red.400'
                             rounded={'lg'}
-                            // p={2}
                             pos={'absolute'}
                             fontSize={32}
                             right={0}
@@ -71,30 +102,33 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
             </Card>
 
             <Flex pos={'relative'} alignItems='center'>
-                <Progress colorScheme={'blue'} value={95} bgColor={'lightblue'} rounded='md' hasStripe h={5} w={'100%'} />
+                <Progress colorScheme={progColor} value={progValue} bgColor={'lightblue'} rounded='md' hasStripe h={5} w={'100%'} isIndeterminate={isAnimOn} isAnimated />
                 <Text as={'kbd'}
-                    color={'HighlightText'}
+                    color={'blackAlpha.900'}
                     pos={'absolute'}
                     my={'auto'}
                     px={2}
                     fontWeight={'bold'}
-                    shadow='dark-lg'
-                    bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
-                    rounded='md'>Отгрузка: {offer.dateReady}</Text>
+                    // shadow='dark-lg'
+                    // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
+                    rounded='md'
+                >
+                    Отгрузка: {finish}                </Text>
+                <Text
+                    right={4}
+                    as={'kbd'}
+                    color={'blackAlpha.900'}
+                    pos={'absolute'}
+                    my={'auto'}
+                    px={2}
+                    fontWeight={'bold'}
+                    // shadow='dark-lg'
+                    // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
+                    rounded='md'>
+                    Осталось {dleft} дней                </Text>
             </Flex>
 
         </Flex>
     );
 };
-// const getProgressValue = 100 / sCount * checkedCount
-//     function checkQuery<T extends { isChecked: boolean }>(items: T[]) {
-//         for (let i = 1; i < items.length; i++) {
-//             const prev = items[i - 1]
-//             if (!prev.isChecked) items[i].isChecked = false
-//             else items[i].isChecked = true
-//         }
-//         return items
-//     }
-//     const toggleCheck = (id: string) => { setofferSteps(prev => prev.map(s => s.id === id ? ({ ...s, isChecked: !s.isChecked }) : s)) }
-//     const sCount = offerSteps.length
-//     const checkedCount = offerSteps.reduce((count, step) => step.isChecked ? ++count : count, 0)
+

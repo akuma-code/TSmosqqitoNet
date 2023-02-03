@@ -42,9 +42,9 @@ export const OfferNotesPage = (props: OfferNotesPageProps) => {
 
 
   return (
-    <Stack ml={3}>
+    <Stack pl={4}>
       <OfferForm getOffer={getOffer} />
-      <StackDivider borderColor={' black'} borderWidth={2} rounded={2} w={'full'} />
+      <StackDivider borderColor={' black'} borderWidth={2} rounded={2} />
       <OffersCardList offList={offers} offControl={offControl} />
     </Stack>
   )
