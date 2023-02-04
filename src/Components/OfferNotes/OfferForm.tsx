@@ -1,19 +1,29 @@
 import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Text } from '@chakra-ui/react';
 import { useID } from '../../hooks/useID';
-import { OfferFormData } from './OfferTypes';
+import { OfferFormData, OfferListData } from './OfferTypes';
 import { Alarma } from './Alarma';
-
+const _id = useID
 interface OfferFormProps {
     getOffer: (offer: OfferFormData) => void;
 }
 
-
+const initOffer = {
+    companyName: "Рога И Копыта",
+    companyTag: 'ООО',
+    dateReady: "2023-02-10",
+    offerId: "23/01/25/02-21П",
+    desc: "описание и все такое",
+    id: _id(),
+    isDocResieved: false,
+    isDocSigned: false,
+    isRequested: false
+} as OfferListData
 
 export const OfferForm: React.FC<OfferFormProps> = (props) => {
 
     const strID = useID;
-    const [offer, setOffer] = useState<OfferFormData>({ companyTag: "ООО", id: strID() } as OfferFormData);
+    const [offer, setOffer] = useState<OfferFormData>(initOffer);
     const firstInput = useRef<HTMLInputElement>(null)
     const [isAlarm, setIsAlarm] = useState(false)
     function toggleAlarm() { setIsAlarm(prev => !prev) }
@@ -32,7 +42,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
         e?.preventDefault()
 
         props.getOffer(offer!);
-        setOffer({ companyName: "", offerId: "", desc: "", companyTag: offer.companyTag, dateReady: offer.dateReady } as OfferFormData);
+        setOffer({ ...initOffer, companyTag: offer.companyTag, dateReady: offer.dateReady, id: _id() } as OfferFormData);
 
         if (!firstInput.current) return
         firstInput.current.focus()
@@ -74,6 +84,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
                                     <Input
                                         id='offcomp'
                                         ref={firstInput}
+
                                         value={offer.companyName}
                                         onChange={(e) => changeOffer('companyName', e.target.value)}
                                         type={'text'}

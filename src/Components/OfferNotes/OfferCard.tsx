@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Flex, Heading, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { OfferCardProps, OfferListData } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
@@ -10,6 +10,9 @@ import { CheckIcon } from '@chakra-ui/icons';
 import { customCBx } from './ThemedCheckBox';
 import { GiBiohazard } from 'react-icons/gi';
 import { useDaysJS } from '../../hooks/useDaysJS';
+import { EditCardPopover } from './EditPopover';
+import { VscSettings } from "react-icons/vsc";
+import { MdDeleteForever, MdDeleteOutline } from 'react-icons/md';
 const _id = useID
 const initSteps = [
     { text: 'Договор подписан', isChecked: false, id: _id() },
@@ -54,11 +57,11 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
         const daysleft = calcProgressBarValue()
         setProgValue(prev => daysleft)
         setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
-        if (HoursLeft(offer.dateReady) <= 24) setIsAnim(true)
-    }, [])
+        if (HoursLeft(offer.dateReady) <= 12) setIsAnim(true)
+    }, [offer.dateReady])
 
     return (
-        <Flex maxWidth={'60vw'} flexDir='column'
+        <Flex maxWidth={'100vw'} flexDir='column'
             rowGap={1}
             border={'1px solid black'}
             rounded={'md'}
@@ -70,35 +73,57 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                 pos={'relative'}
             >
                 <CardHeader p={0} bgGradient={'linear(to-r,#abf8e7,#8778c7)'}
-                    rounded={'md'}
+                    rounded={'md'} display={'flex'} flexDir={'row'} justifyContent='space-between'
                 >
                     <Flex columnGap={12} px={4}>
                         <Text fontSize={24}>{offer.companyTag} "{offer.companyName}"</Text>
                         <Text fontSize={24}>{offer.offerId} </Text>
                     </Flex>
-                    <Menu colorScheme={'blue'} >
-                        <MenuButton
-                            bgColor='red.400'
-                            rounded={'lg'}
-                            pos={'absolute'}
-                            fontSize={32}
-                            right={0}
-                            mr={0}
-                            top={0}
-                            h={'full'}
-                            w={10}
-                            textColor={'gray.800'}
-                        >
-                            <Center>
-                                <GiBiohazard width={6} height={6} />
-                            </Center>
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
-                            <MenuDivider />
-                        </MenuList>
-                    </Menu>
+                    <Flex gap={8} >
+
+                        {EditCardPopover(offer,
+                            <Button
+                                size={'lg'}
+                                variant={'solid'}
+                                p={1}
+                                fontSize={28}
+                                colorScheme={'red'}><VscSettings /></Button>)}
+                        <IconButton
+                            size={'lg'}
+                            variant={'solid'}
+                            colorScheme={'red'}
+                            padding={1}
+                            aria-label='delete'
+                            fontSize={28}
+                            icon={<MdDeleteOutline />}
+                            onClick={() => offControl.Remove(offer.id!)}
+                        />
+                        {/* <Menu colorScheme={'blue'} >
+                            <MenuButton
+                                bgColor='red.400'
+                                rounded={'lg'}
+                                pos={'relative'}
+                                fontSize={32}
+                                right={0}
+                                mr={0}
+                                top={0}
+                                h={'full'}
+                                w={10}
+                                textColor={'gray.800'}
+                            >
+                                <Center>
+                                    <GiBiohazard width={6} height={6} />
+                                </Center>
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
+                                <MenuDivider />
+                                <MenuItem onClick={() => offControl.clearOffers()}>Delete All</MenuItem>
+                            </MenuList>
+                        </Menu> */}
+                    </Flex>
                 </CardHeader>
+
             </Card>
 
             <Flex pos={'relative'} alignItems='center'>
