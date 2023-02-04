@@ -65,48 +65,55 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
             rowGap={1}
             border={'1px solid black'}
             rounded={'md'}
+            bgGradient={'linear(to-r,transparent 25%, #000)'}
         >
             <Card key={offer.id}
-                rounded={'md'}
+
+                // rounded={'md'}
                 flexDir={'column'}
                 minH={10}
                 pos={'relative'}
+
             >
                 <CardHeader p={0} bgGradient={'linear(to-r,#abf8e7,#8778c7)'}
-                    rounded={'md'} display={'flex'} flexDir={'row'} justifyContent='space-between'
+                    rounded={'md'}
+                    borderBottomLeftRadius={0}
+                    borderBottomRightRadius={0}
+                    display={'flex'} flexDir={'row'} justifyContent='space-between'
+
                 >
-                    <Flex columnGap={12} px={4}>
+                    <Flex columnGap={12} px={4} alignItems='center' borderBottomLeftRadius={0}
+                        borderBottomRightRadius={0}>
                         <Text fontSize={24}>{offer.companyTag} "{offer.companyName}"</Text>
                         <Text fontSize={24}>{offer.offerId} </Text>
                     </Flex>
                     <Flex gap={4} m={2}>
 
-                        {
-                            EditCardPopover(
-                                offer,
-                                offControl.Edit,
-                                <IconButton
-                                    aria-label='edit'
-                                    size={'md'}
-                                    variant={'solid'}
-                                    p={1}
-                                    fontSize={24}
-                                    icon={<VscSettings />}
-                                    colorScheme={'blue'} />)
+                        {EditCardPopover(
+                            offer,
+                            offControl.Edit,
+                            <IconButton
+                                aria-label='edit'
+                                size={'md'}
+                                variant={'solid'}
+                                p={1}
+                                fontSize={24}
+                                icon={<VscSettings />}
+                                colorScheme={'blue'} />)
                         }
                         {InfoPopover({
                             desc: offer.desc || "",
-                            target: <IconButton
-                                size={'md'}
-                                variant={'solid'}
-                                colorScheme={'blue'}
-                                padding={1}
-                                aria-label='delete'
-                                fontSize={24}
-                                isDisabled={offer.desc === ""}
-                                icon={<AiOutlineExclamationCircle />}
-                            />
-
+                            target:
+                                <IconButton
+                                    size={'md'}
+                                    variant={'solid'}
+                                    colorScheme={'blue'}
+                                    padding={1}
+                                    aria-label='delete'
+                                    fontSize={24}
+                                    isDisabled={offer.desc === ""}
+                                    icon={<AiOutlineExclamationCircle />}
+                                />
                         })}
 
                         <IconButton
@@ -132,6 +139,8 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                     rounded='md'
                     hasStripe
                     isAnimated
+                    borderTopLeftRadius={0}
+                    borderTopRightRadius={0}
                     h={5}
                     w={'100%'}
                     isIndeterminate={isAnimOn}
