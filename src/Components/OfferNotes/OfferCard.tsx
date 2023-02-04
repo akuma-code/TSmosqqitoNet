@@ -13,6 +13,8 @@ import { useDaysJS } from '../../hooks/useDaysJS';
 import { EditCardPopover } from './EditPopover';
 import { VscSettings } from "react-icons/vsc";
 import { MdDeleteForever, MdDeleteOutline } from 'react-icons/md';
+import { AiOutlineCloseCircle, AiOutlineExclamationCircle, AiOutlineMessage } from 'react-icons/ai';
+import { InfoPopover } from './InfoPopover';
 const _id = useID
 const initSteps = [
     { text: 'Договор подписан', isChecked: false, id: _id() },
@@ -23,8 +25,6 @@ const initSteps = [
 
 
 export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
-    const [offerSteps, setofferSteps] = useState(initSteps)
-    const allChecked = offerSteps.every(s => s.isChecked)
     const [progValue, setProgValue] = useState(0)
     const [progColor, setProgColor] = useState("green")
     const [isAnimOn, setIsAnim] = useState(false)
@@ -58,7 +58,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
         setProgValue(prev => daysleft)
         setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
         if (HoursLeft(offer.dateReady) <= 12) setIsAnim(true)
-    }, [offer.dateReady])
+    }, [offer])
 
     return (
         <Flex maxWidth={'100vw'} flexDir='column'
@@ -79,55 +79,63 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                         <Text fontSize={24}>{offer.companyTag} "{offer.companyName}"</Text>
                         <Text fontSize={24}>{offer.offerId} </Text>
                     </Flex>
-                    <Flex gap={8} >
+                    <Flex gap={4} m={2}>
 
-                        {EditCardPopover(offer,
-                            <Button
-                                size={'lg'}
+                        {
+                            EditCardPopover(
+                                offer,
+                                offControl.Edit,
+                                <IconButton
+                                    aria-label='edit'
+                                    size={'md'}
+                                    variant={'solid'}
+                                    p={1}
+                                    fontSize={24}
+                                    icon={<VscSettings />}
+                                    colorScheme={'blue'} />)
+                        }
+                        {InfoPopover({
+                            desc: offer.desc || "",
+                            target: <IconButton
+                                size={'md'}
                                 variant={'solid'}
-                                p={1}
-                                fontSize={28}
-                                colorScheme={'red'}><VscSettings /></Button>)}
+                                colorScheme={'blue'}
+                                padding={1}
+                                aria-label='delete'
+                                fontSize={24}
+                                isDisabled={offer.desc === ""}
+                                icon={<AiOutlineExclamationCircle />}
+                            />
+
+                        })}
+
                         <IconButton
-                            size={'lg'}
+                            size={'md'}
                             variant={'solid'}
                             colorScheme={'red'}
                             padding={1}
                             aria-label='delete'
                             fontSize={28}
-                            icon={<MdDeleteOutline />}
+                            icon={<AiOutlineCloseCircle />}
                             onClick={() => offControl.Remove(offer.id!)}
                         />
-                        {/* <Menu colorScheme={'blue'} >
-                            <MenuButton
-                                bgColor='red.400'
-                                rounded={'lg'}
-                                pos={'relative'}
-                                fontSize={32}
-                                right={0}
-                                mr={0}
-                                top={0}
-                                h={'full'}
-                                w={10}
-                                textColor={'gray.800'}
-                            >
-                                <Center>
-                                    <GiBiohazard width={6} height={6} />
-                                </Center>
-                            </MenuButton>
-                            <MenuList>
-                                <MenuItem onClick={() => offControl.Remove(offer.id!)}>Delete</MenuItem>
-                                <MenuDivider />
-                                <MenuItem onClick={() => offControl.clearOffers()}>Delete All</MenuItem>
-                            </MenuList>
-                        </Menu> */}
+
                     </Flex>
                 </CardHeader>
 
             </Card>
 
             <Flex pos={'relative'} alignItems='center'>
-                <Progress colorScheme={progColor} value={progValue} bgColor={'lightblue'} rounded='md' hasStripe h={5} w={'100%'} isIndeterminate={isAnimOn} isAnimated />
+                <Progress colorScheme={progColor}
+                    value={progValue}
+                    bgColor={'lightblue'}
+                    rounded='md'
+                    hasStripe
+                    isAnimated
+                    h={5}
+                    w={'100%'}
+                    isIndeterminate={isAnimOn}
+                />
                 <Text as={'kbd'}
                     color={'blackAlpha.900'}
                     pos={'absolute'}
@@ -138,7 +146,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                     // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'
                 >
-                    Отгрузка: {finish}                </Text>
+                    Отгрузка: {finish}</Text>
                 <Text
                     right={4}
                     as={'kbd'}
@@ -150,7 +158,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                     // shadow='dark-lg'
                     // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'>
-                    Осталось {dleft} дней                </Text>
+                    Осталось {dleft} дней</Text>
             </Flex>
 
         </Flex>

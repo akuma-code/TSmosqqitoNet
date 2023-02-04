@@ -19,7 +19,7 @@ export interface OffCardListProps {
         Add: (new_offer_data: OfferListData) => void,
         Remove: (id: string) => void,
         clearOffers: () => void,
-        Edit: (new_offer_data: OfferListData) => void,
+        Edit: (new_offer_data: OfferFormData) => void,
         toggleCheck: (id: string, field: keyof OfferListData) => void
     }
 }
