@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Flex, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text, Tooltip } from '@chakra-ui/react';
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { OfferCardProps, OfferListData } from './OfferTypes';
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
-import { OffProgressBar } from './OffProgressBar';
 import { I } from '../Cards/I';
 import { useID } from '../../hooks/useID';
 import { CheckIcon } from '@chakra-ui/icons';
@@ -15,6 +14,8 @@ import { VscSettings } from "react-icons/vsc";
 import { MdDeleteForever, MdDeleteOutline } from 'react-icons/md';
 import { AiOutlineCloseCircle, AiOutlineExclamationCircle, AiOutlineMessage } from 'react-icons/ai';
 import { InfoPopover } from './InfoPopover';
+import { GrAction } from 'react-icons/gr';
+import { HiCog } from "react-icons/hi";
 const _id = useID
 const initSteps = [
     { text: 'Договор подписан', isChecked: false, id: _id() },
@@ -46,11 +47,11 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
             100: 'red',
         }
 
-        if (hours_left <= 48) return prog[100]
-        if (hours_left <= 96) return prog[75]
-        if (hours_left <= 144) return prog[50]
-        if (hours_left <= 192) return prog[25]
-        if (hours_left <= 244) return prog[0]
+        if (hours_left <= 48) return prog[100] //меньше 2 суток
+        if (hours_left <= 96) return prog[75] //меньше 4 суток
+        if (hours_left <= 144) return prog[50] //меньше 6 суток
+        if (hours_left <= 192) return prog[25] //меньше 8 суток
+        if (hours_left <= 240) return prog[0] //меньше 10 суток
         return prog[0]
     }
     useEffect(() => {
@@ -58,6 +59,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
         setProgValue(prev => daysleft)
         setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
         if (HoursLeft(offer.dateReady) <= 12) setIsAnim(true)
+        else setIsAnim(false)
     }, [offer])
 
     return (
@@ -88,10 +90,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                         <Text fontSize={24}>{offer.offerId} </Text>
                     </Flex>
                     <Flex gap={4} m={2}>
-
-                        {EditCardPopover(
-                            offer,
-                            offControl.Edit,
+                        <EditCardPopover offer={offer} onEdit={offControl.Edit}>
                             <IconButton
                                 aria-label='edit'
                                 size={'md'}
@@ -99,24 +98,22 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                                 p={1}
                                 fontSize={24}
                                 icon={<VscSettings />}
-                                colorScheme={'blue'} />)
-                        }
-                        {InfoPopover({
-                            desc: offer.desc || "",
-                            target:
-                                <IconButton
-                                    size={'md'}
-                                    variant={'solid'}
-                                    colorScheme={'blue'}
-                                    padding={1}
-                                    aria-label='delete'
-                                    fontSize={24}
-                                    isDisabled={offer.desc === ""}
-                                    icon={<AiOutlineExclamationCircle />}
-                                />
-                        })}
+                                colorScheme={'blue'} />
+                        </EditCardPopover>
+                        <InfoPopover offer={offer} controlFn={offControl}>
+                            <IconButton
+                                size={'md'}
+                                variant={'solid'}
+                                colorScheme={'blue'}
+                                padding={1}
+                                aria-label='delete'
+                                fontSize={24}
+                                icon={<HiCog />}
+                            />
+                        </InfoPopover>
 
-                        <IconButton
+
+                        {/* <IconButton
                             size={'md'}
                             variant={'solid'}
                             colorScheme={'red'}
@@ -125,7 +122,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                             fontSize={28}
                             icon={<AiOutlineCloseCircle />}
                             onClick={() => offControl.Remove(offer.id!)}
-                        />
+                        /> */}
 
                     </Flex>
                 </CardHeader>
@@ -167,7 +164,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                     // shadow='dark-lg'
                     // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'>
-                    Осталось {dleft} дней</Text>
+                    Осталось дней: {dleft} </Text>
             </Flex>
 
         </Flex>

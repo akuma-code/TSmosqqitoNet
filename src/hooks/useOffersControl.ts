@@ -20,8 +20,14 @@ const useOffersControl = (initState = [] as OfferListData[]) => {
         },
 
         toggleCheck(id: string, field: keyof OfferListData) {
+            console.log(id, field);
+
             if (!id) return
             setOffers(prev => prev.map(o => o.id === id ? { ...o, [field]: !o[field] } : o))
+        },
+
+        getOffer(offer_id: string) {
+            return offers.reduce((targetOffer, o) => o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
         }
     }
 

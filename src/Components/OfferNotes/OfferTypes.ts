@@ -21,6 +21,7 @@ export interface OffCardListProps {
         clearOffers: () => void,
         Edit: (new_offer_data: OfferFormData) => void,
         toggleCheck: (id: string, field: keyof OfferListData) => void
+        getOffer: (id: string) => OfferListData
     }
 }
 export interface OfferCardProps {

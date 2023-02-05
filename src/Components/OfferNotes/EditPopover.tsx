@@ -1,6 +1,6 @@
 import FocusLock from "react-focus-lock"
 import React, { HTMLAttributes, useRef, useState } from "react"
-import { Box, Button, ButtonGroup, FormControl, FormLabel, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stack, Text, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, ButtonGroup, FormControl, FormLabel, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { EditIcon } from "@chakra-ui/icons"
 import { GiBiohazard } from "react-icons/gi"
 import { OfferCardProps, OfferFormData } from "./OfferTypes"
@@ -78,22 +78,22 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
                     id='offer_id'
                     defaultValue={currentOffer.offerId}
                     onChange={ChangeHandler('offerId')} />
-                <DateInput
-                    label='Дата закрытия'
-                    id='date_ready'
-                    defaultValue={currentOffer.dateReady}
-                    onChange={ChangeHandler('dateReady')} />
                 <TextInput
                     label='Комментарий'
                     id='offer_desc'
                     defaultValue={currentOffer.desc || ""}
                     onChange={ChangeHandler('desc')} />
+                <DateInput
+                    label='Дата закрытия'
+                    id='date_ready'
+                    defaultValue={currentOffer.dateReady}
+                    onChange={ChangeHandler('dateReady')} />
                 <ButtonGroup display='flex' justifyContent='flex-end'>
                     <Button variant='outline' onClick={onCancel}>
-                        Cancel
+                        Отменить
                     </Button>
                     <Button colorScheme='teal' type="submit">
-                        Save
+                        Сохранить
                     </Button>
                 </ButtonGroup>
             </Stack>
@@ -103,14 +103,19 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
 
 // 3. Create the Popover
 // Ensure you set `closeOnBlur` prop to false so it doesn't close on outside click
-export const EditCardPopover = (offer: OfferFormData, onEdit: OfferCardProps['offControl']['Edit'], trigger?: React.ReactNode,) => {
+type EditCardProps = {
+    offer: OfferFormData,
+    onEdit: OfferCardProps['offControl']['Edit'],
+    children?: React.ReactNode
+}
+export const EditCardPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
 
     return (
         <>
 
-            <Popover
+            <Popover isLazy
                 isOpen={isOpen}
                 initialFocusRef={firstFieldRef}
                 onOpen={onOpen}
@@ -119,8 +124,9 @@ export const EditCardPopover = (offer: OfferFormData, onEdit: OfferCardProps['of
                 closeOnBlur={true}
             >
                 <PopoverTrigger>
-                    {trigger}
+                    {children}
                 </PopoverTrigger>
+
                 <PopoverContent p={5} textAlign={'center'}>
                     {/* <FocusLock returnFocus persistentFocus={false}> */}
                     <PopoverArrow />
