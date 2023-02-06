@@ -2,10 +2,8 @@ import React from 'react';
 import { OffCardListProps } from './OfferTypes';
 import { OfferCard } from "./OfferCard";
 import { Flex, Grid, GridItem, Text } from '@chakra-ui/layout';
-import { useID } from '../../hooks/useID';
 import { MdDeleteForever } from 'react-icons/md';
 import { IconButton } from '@chakra-ui/react';
-const _id = useID
 
 export const OffersCardList: React.FC<OffCardListProps> = (props) => {
     const { offList, offControl } = props;
