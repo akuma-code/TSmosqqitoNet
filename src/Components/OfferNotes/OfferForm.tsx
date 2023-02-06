@@ -5,15 +5,15 @@ import { OfferFormData, OfferListData } from './OfferTypes';
 import { Alarma } from './Alarma';
 const _id = useID
 interface OfferFormProps {
-    getOffer: (offer: OfferFormData) => void;
+    addOffer: (offer: OfferFormData) => void;
 }
 
 const initOffer = {
-    companyName: "Рога и Копыта",
+    companyName: "",
     companyTag: 'ООО',
-    dateReady: "2023-02-10",
-    offerId: "23/01/25/02-21П",
-    desc: "описание и все такое",
+    dateReady: "",
+    offerId: "",
+    desc: "",
     id: _id(),
     isDocResieved: false,
     isDocSigned: false,
@@ -41,7 +41,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
     function HandleSubmit(e?: React.FormEvent) {
         e?.preventDefault()
 
-        props.getOffer(offer!);
+        props.addOffer(offer!);
         setOffer({ ...initOffer, companyTag: offer.companyTag, dateReady: offer.dateReady, id: _id() } as OfferFormData);
 
         if (!firstInput.current) return

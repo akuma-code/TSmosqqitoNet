@@ -6,6 +6,7 @@ import { OfferForm } from '../OfferNotes/OfferForm'
 import { OffersCardList } from '../OfferNotes/OffersCardList'
 import { OfferFormData, OfferListData } from '../OfferNotes/OfferTypes'
 import { WaitingOffersList } from '../OfferNotes/WaingOffersList'
+import { ClosedOffersList } from '../OfferNotes/ClosedOffersList'
 const _id = useID
 
 const mockOffer: OfferListData = {
@@ -33,19 +34,56 @@ export type OfferNotesPageProps = {
 }
 
 export const OfferNotesPage = (props: OfferNotesPageProps) => {
+  function init() {
+    const ofs = localStorage.getItem('offers_active') || '[]'
+    const wofs = localStorage.getItem('offers_waiting') || '[]'
+    const cofs = localStorage.getItem('offers_closed') || '[]'
+    const parsed = (offers: string) => {
+      const p = JSON.parse(offers) as OfferListData[]
+      return p
+    }
+    return {
+      ofs: parsed(ofs),
+      wofs: parsed(wofs),
+      cofs: parsed(cofs),
+    }
+  }
+  const [offers, offControl] = useOffersControl(init().ofs)
+  const [waitingList, setWaitngList] = useState<OfferListData[]>(init().wofs)
+  const [closedOffersList, setClosedOffersList] = useState<OfferListData[]>(init().cofs)
+  function addOfferToList(offer: OfferFormData) { offControl.Add(offer) }
 
-  const [offers, offControl] = useOffersControl([])
-  const [waitingList, setWaitngList] = useState<OfferListData[]>([])
-  const [closedOffersList, setClosedOffersList] = useState<OfferListData[]>([])
-  function getOffer(offer: OfferFormData) {
+  function SelectOffer(offer_id: string, offers: OfferListData[]) {
+    return offers.reduce((targetOffer, o) => o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
+  }
+  function MoveOffer(id: string, target: 'onWaiting' | 'Closed') {
+    if (target === 'onWaiting') {
+      const of = offControl.getOffer(id)
+      setWaitngList(prev => [...prev, of])
+      offControl.Remove(of.id)
+    }
 
-    offControl.Add(offer)
+    if (target === 'Closed') {
+      const of = SelectOffer(id, waitingList)
+      setClosedOffersList(prev => [...prev, of])
+      setWaitngList(prev => prev.filter(o => o.id !== of.id))
+    }
   }
 
+  function MoveToCloseList(id: string) { MoveOffer(id, 'Closed') }
+  function MoveToWaitList(id: string) { MoveOffer(id, 'onWaiting') }
+  const DeleteClosedOffer = (id: string) => setClosedOffersList(prev => prev.filter(co => co.id !== id))
 
+  function onDeleteWaiting(selId: string) { setWaitngList(prev => prev.filter(wo => wo.id !== selId)) }
+
+  useEffect(() => {
+    localStorage.setItem('offers_active', JSON.stringify(offers))
+    localStorage.setItem('offers_waiting', JSON.stringify(waitingList))
+    localStorage.setItem('offers_closed', JSON.stringify(closedOffersList))
+  }, [offers, waitingList, closedOffersList])
   return (
     <Stack align={'start'} px={8}>
-      <OfferForm getOffer={getOffer} />
+      <OfferForm addOffer={addOfferToList} />
       <StackDivider borderColor={' black'} borderWidth={2} rounded={2} />
 
       <Tabs isFitted variant='enclosed' w={'full'}>
@@ -57,13 +95,13 @@ export const OfferNotesPage = (props: OfferNotesPageProps) => {
 
         <TabPanels>
           <TabPanel>
-            <OffersCardList offList={offers} offControl={offControl} />
+            <OffersCardList offList={offers} offControl={offControl} onMove={MoveToWaitList} />
           </TabPanel>
           <TabPanel>
-            <WaitingOffersList offers={offers} />
+            <WaitingOffersList offersOnWaiting={waitingList} onClose={MoveToCloseList} onDelete={onDeleteWaiting} />
           </TabPanel>
           <TabPanel>
-            ClosedOffers
+            <ClosedOffersList offersClosed={closedOffersList} onDelete={DeleteClosedOffer} />
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -28,7 +28,9 @@ const useOffersControl = (initState = [] as OfferListData[]) => {
 
         getOffer(offer_id: string) {
             return offers.reduce((targetOffer, o) => o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
-        }
+        },
+
+
     }
 
     return [offers, offerActions] as const

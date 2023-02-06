@@ -16,12 +16,12 @@ import { WaitingOffersListProps } from './WaingOffersList'
 import { OfferCardProps, OfferListData } from './OfferTypes'
 import { useDaysJS } from '../../hooks/useDaysJS'
 
-type WaitingTableProps = {
+type ClosedTableProps = {
     onSelect: (offer: OfferListData) => void
     offersOnWaiting: OfferListData[]
 }
 
-export const WaitingTable: React.FC<WaitingTableProps> = ({ offersOnWaiting, onSelect }) => {
+export const ClosedTable: React.FC<ClosedTableProps> = ({ offersOnWaiting, onSelect }) => {
     const { localDate } = useDaysJS()
     const [selectedId, setSelectedId] = useState("")
     const select = (off: OfferListData) => {

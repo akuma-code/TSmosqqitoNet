@@ -25,7 +25,7 @@ const initSteps = [
 ]
 
 
-export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
+export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, onMove }) => {
     const [progValue, setProgValue] = useState(0)
     const [progColor, setProgColor] = useState("green")
     const [isAnimOn, setIsAnim] = useState(false)
@@ -100,7 +100,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl }) => {
                                 icon={<VscSettings />}
                                 colorScheme={'blue'} />
                         </EditCardPopover>
-                        <InfoPopover offer={offer} controlFn={offControl}>
+                        <InfoPopover offer={offer} controlFn={offControl} onMove={onMove!}>
                             <IconButton
                                 size={'md'}
                                 variant={'solid'}

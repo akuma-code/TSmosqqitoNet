@@ -9,10 +9,11 @@ type InfoPopoverProps = {
     offer: OfferCardProps['offer']
     controlFn: OfferCardProps['offControl']
     children?: React.ReactNode
+    onMove: (id: string) => void
 }
 
 export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
-    const { offer, children, controlFn } = props
+    const { offer, children, controlFn, onMove } = props
     const isReady = offer.isDocSigned && offer.isRequested
     const getO = controlFn.getOffer(offer.id)
     return (
@@ -34,7 +35,7 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
                     <Stack spacing={4} align={'stretch'}>
                         {isReady &&
                             <Button
-                                onClick={() => controlFn.Remove(offer.id)}
+                                onClick={() => onMove!(offer.id)}
                                 aria-label='finish offer'
                                 size={'md'}
                                 variant={'solid'}
