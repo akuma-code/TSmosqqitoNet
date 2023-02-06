@@ -1,7 +1,8 @@
-import { Button, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
+import { Button, Flex, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { ClosedTable } from './ClosedTable'
+import { GrDocumentMissing } from 'react-icons/gr'
 import { OfferListData } from './OfferTypes'
+import { OfferTable } from './OffersTable'
 
 export type ClosedOffersListProps = {
     offersClosed: OfferListData[]
@@ -12,23 +13,26 @@ export type ClosedOffersListProps = {
 
 export const ClosedOffersList: React.FC<ClosedOffersListProps> = ({ offersClosed: ofs, onDelete }) => {
     // Control: selectOffer, closeOffer
-    const [active, setActive] = useState<OfferListData | { id: "" }>({} as OfferListData)
+    const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(prev => offer)
     if (ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Список закрытых договоров пуст!</Text>
     return (
         <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'70vw'} minW={'50vw'} >
-            <GridItem>
-                <ClosedTable offersOnWaiting={ofs} onSelect={onSelect} />
+            <GridItem colSpan={6}>
+                <OfferTable listOffers={ofs} onSelect={onSelect} headers={['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]} />
             </GridItem>
-            <GridItem>
+            <GridItem colSpan={2}>
                 <Stack align={'stretch'} spacing={'1rem'}>
                     <Button
                         isDisabled={hasActive}
                         colorScheme='red'
                         _focus={{ bgColor: 'red.400' }}
                         onClick={() => onDelete(active.id)}
-                    >DeleteOffer</Button>
+                    ><Flex w={'full'} justifyContent='space-between' gap={4}>
+                            <Text>Удалить запись</Text>
+                            <GrDocumentMissing fontSize={20} />
+                        </Flex></Button>
                 </Stack>
             </GridItem>
         </Grid>

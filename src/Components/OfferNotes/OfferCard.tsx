@@ -73,7 +73,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, onMove 
 
                 // rounded={'md'}
                 flexDir={'column'}
-                minH={10}
+                maxH={14}
                 pos={'relative'}
 
             >
@@ -84,46 +84,34 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, onMove 
                     display={'flex'} flexDir={'row'} justifyContent='space-between'
 
                 >
-                    <Flex columnGap={12} px={4} alignItems='center' borderBottomLeftRadius={0}
+                    <Flex columnGap={12} px={4} alignItems='center' borderBottomLeftRadius={0} maxH={10}
                         borderBottomRightRadius={0}>
-                        <Text fontSize={24}>{offer.companyTag} "{offer.companyName}"</Text>
-                        <Text fontSize={24}>{offer.offerId} </Text>
+                        <Text fontSize={22}>{offer.companyTag} "{offer.companyName}"</Text>
+                        <Text fontSize={22}>{offer.offerId} </Text>
                     </Flex>
                     <Flex gap={4} m={2}>
-                        <EditCardPopover offer={offer} onEdit={offControl.Edit}>
-                            <IconButton
-                                aria-label='edit'
-                                size={'md'}
-                                variant={'solid'}
-                                p={1}
-                                fontSize={24}
-                                icon={<VscSettings />}
-                                colorScheme={'blue'} />
-                        </EditCardPopover>
+                        <Tooltip label="asdasd">
+                            <EditCardPopover offer={offer} onEdit={offControl.Edit}>
+
+                                <IconButton
+                                    aria-label='edit'
+                                    size={'sm'}
+                                    variant={'solid'}
+                                    fontSize={20}
+                                    icon={<VscSettings />}
+                                    colorScheme={'blue'} />
+                            </EditCardPopover>
+                        </Tooltip>
                         <InfoPopover offer={offer} controlFn={offControl} onMove={onMove!}>
                             <IconButton
-                                size={'md'}
+                                size={'sm'}
                                 variant={'solid'}
                                 colorScheme={'blue'}
-                                padding={1}
                                 aria-label='delete'
-                                fontSize={24}
+                                fontSize={20}
                                 icon={<HiCog />}
                             />
                         </InfoPopover>
-
-
-                        {/* <IconButton
-                            size={'md'}
-                            variant={'solid'}
-                            colorScheme={'red'}
-                            padding={1}
-                            aria-label='delete'
-                            fontSize={28}
-                            icon={<AiOutlineCloseCircle />}
-                            onClick={() => offControl.Remove(offer.id!)}
-                        /> */}
-
                     </Flex>
                 </CardHeader>
 

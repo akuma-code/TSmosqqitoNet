@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Flex, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Stack, Text } from '@chakra-ui/react'
+import { Button, ButtonProps, Flex, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Stack, Text, Tooltip } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { GrDocumentMissing, GrDocumentTransfer, GrDocumentVerified } from "react-icons/gr";
@@ -21,7 +21,8 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
             <PopoverTrigger>
                 {children}
             </PopoverTrigger>
-            <PopoverContent>
+
+            <PopoverContent >
                 <PopoverArrow />
                 <PopoverCloseButton placeSelf={'flex-end'} size={'md'} />
                 <PopoverHeader>
@@ -42,7 +43,7 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
                                 colorScheme={'twitter'}
                             >
                                 <Flex justifyContent={'space-between'} width='full' alignItems={'center'}>
-                                    <Text mx={2}>Закрыть договор</Text>
+                                    <Text mx={2}>Перенести в лист ожидания</Text>
                                     <FcApproval fontSize={20} />
                                 </Flex>
                             </Button>

@@ -1,53 +1,35 @@
-import React, { useEffect, Fragment, useState } from 'react'
-import { Box, Stack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, } from '@chakra-ui/react'
-import { useID } from '../../hooks/useID'
+import { useEffect, useState } from 'react'
+import { Stack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, } from '@chakra-ui/react'
 import useOffersControl from '../../hooks/useOffersControl'
 import { OfferForm } from '../OfferNotes/OfferForm'
 import { OffersCardList } from '../OfferNotes/OffersCardList'
 import { OfferFormData, OfferListData } from '../OfferNotes/OfferTypes'
 import { WaitingOffersList } from '../OfferNotes/WaingOffersList'
 import { ClosedOffersList } from '../OfferNotes/ClosedOffersList'
-const _id = useID
 
-const mockOffer: OfferListData = {
-  id: _id(),
-  offerId: "23/01/25/02-21П",
-  companyName: "Рога И Копыта",
-  companyTag: "ООО",
-  dateReady: "2023-02-10",
-  desc: ""
-}
-const initOffer = {
-  companyName: "Рога И Копыта",
-  companyTag: 'ООО',
-  dateReady: "2023-02-10",
-  offerId: "23/01/25/02-21П",
-  desc: "описание и все такое",
-  id: _id(),
-  isDocResieved: false,
-  isDocSigned: false,
-  isRequested: false
-} as OfferListData
 
 export type OfferNotesPageProps = {
 
 }
-
-export const OfferNotesPage = (props: OfferNotesPageProps) => {
-  function init() {
-    const ofs = localStorage.getItem('offers_active') || '[]'
-    const wofs = localStorage.getItem('offers_waiting') || '[]'
-    const cofs = localStorage.getItem('offers_closed') || '[]'
-    const parsed = (offers: string) => {
-      const p = JSON.parse(offers) as OfferListData[]
-      return p
-    }
-    return {
-      ofs: parsed(ofs),
-      wofs: parsed(wofs),
-      cofs: parsed(cofs),
-    }
+function init() {
+  const ofs = localStorage.getItem('offers_active') || '[]'
+  const wofs = localStorage.getItem('offers_waiting') || '[]'
+  const cofs = localStorage.getItem('offers_closed') || '[]'
+  const parsed = (offers: string) => {
+    const p = JSON.parse(offers) as OfferListData[]
+    return p
   }
+  return {
+    ofs: parsed(ofs),
+    wofs: parsed(wofs),
+    cofs: parsed(cofs),
+  }
+}
+function save(key: string, offers: OfferListData[]) {
+  return localStorage.setItem(key, JSON.stringify(offers))
+}
+export const OfferNotesPage = () => {
+
   const [offers, offControl] = useOffersControl(init().ofs)
   const [waitingList, setWaitngList] = useState<OfferListData[]>(init().wofs)
   const [closedOffersList, setClosedOffersList] = useState<OfferListData[]>(init().cofs)
@@ -77,20 +59,32 @@ export const OfferNotesPage = (props: OfferNotesPageProps) => {
   function onDeleteWaiting(selId: string) { setWaitngList(prev => prev.filter(wo => wo.id !== selId)) }
 
   useEffect(() => {
-    localStorage.setItem('offers_active', JSON.stringify(offers))
-    localStorage.setItem('offers_waiting', JSON.stringify(waitingList))
-    localStorage.setItem('offers_closed', JSON.stringify(closedOffersList))
+    save('offers_active', offers)
+    save('offers_waiting', waitingList)
+    save('offers_closed', closedOffersList)
   }, [offers, waitingList, closedOffersList])
+
+  const tabProps = {
+    _focusWithin: { bgColor: 'blue.300' },
+    bgColor: 'blue.100',
+    textColor: 'blackAlpha.900',
+    fontSize: 15,
+    fontWeight: 'semibold',
+    _hover: { bgColor: 'gray.400' },
+    _selected: { bgColor: 'blue.500' }
+  }
+
+
   return (
     <Stack align={'start'} px={8}>
       <OfferForm addOffer={addOfferToList} />
       <StackDivider borderColor={' black'} borderWidth={2} rounded={2} />
 
-      <Tabs isFitted variant='enclosed' w={'full'}>
-        <TabList mb='1em'>
-          <Tab>договора в работе</Tab>
-          <Tab>лист ожидания</Tab>
-          <Tab>закрытые договора</Tab>
+      <Tabs isFitted variant='enclosed'  >
+        <TabList mb='1em' >
+          <Tab {...tabProps}>договора в работе</Tab>
+          <Tab {...tabProps}>лист ожидания</Tab>
+          <Tab {...tabProps} >закрытые договора</Tab>
         </TabList>
 
         <TabPanels>

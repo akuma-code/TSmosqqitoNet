@@ -16,12 +16,14 @@ import { WaitingOffersListProps } from './WaingOffersList'
 import { OfferCardProps, OfferListData } from './OfferTypes'
 import { useDaysJS } from '../../hooks/useDaysJS'
 
-type ClosedTableProps = {
+interface OfferTableProps {
     onSelect: (offer: OfferListData) => void
-    offersOnWaiting: OfferListData[]
+    listOffers: OfferListData[]
+    headers: string[]
+
 }
 
-export const ClosedTable: React.FC<ClosedTableProps> = ({ offersOnWaiting, onSelect }) => {
+export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, headers }) => {
     const { localDate } = useDaysJS()
     const [selectedId, setSelectedId] = useState("")
     const select = (off: OfferListData) => {
@@ -38,14 +40,17 @@ export const ClosedTable: React.FC<ClosedTableProps> = ({ offersOnWaiting, onSel
             <Table size='sm' variant={''} bgColor='gray.200'>
                 <Thead >
                     <Tr >
-                        <Th fontSize={16}>контрагент</Th>
-                        <Th fontSize={16}>№ договора</Th>
+                        {headers.map((h, idx) =>
+                            <Th fontSize={16} key={idx}>{h}</Th>
+                        )}
+
+                        {/* <Th fontSize={16}>№ договора</Th>
                         <Th fontSize={16}>дата закрытия</Th>
-                        <Th fontSize={16}>Заметка</Th>
+                        <Th fontSize={16}>Заметка</Th> */}
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {offersOnWaiting.map(o =>
+                    {listOffers.map(o =>
                         <Tr
                             h={'fit-content'}
                             _hover={{ bgColor: "blue.100" }}

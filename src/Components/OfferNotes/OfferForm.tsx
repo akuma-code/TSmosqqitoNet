@@ -42,7 +42,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
         e?.preventDefault()
 
         props.addOffer(offer!);
-        setOffer({ ...initOffer, companyTag: offer.companyTag, dateReady: offer.dateReady, id: _id() } as OfferFormData);
+        setOffer({ ...initOffer, companyTag: offer.companyTag, id: _id() } as OfferFormData);
 
         if (!firstInput.current) return
         firstInput.current.focus()
