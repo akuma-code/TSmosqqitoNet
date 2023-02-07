@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Center, Flex, Heading, IconButton, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Progress, Text, Tooltip } from '@chakra-ui/react';
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
-import { OfferCardProps, OfferListData } from './OfferTypes';
-import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react'
-import { I } from '../Cards/I';
-import { useID } from '../../hooks/useID';
-import { CheckIcon } from '@chakra-ui/icons';
-import { customCBx } from './ThemedCheckBox';
-import { GiBiohazard } from 'react-icons/gi';
+import { Flex, IconButton, Progress, Text } from '@chakra-ui/react';
+import { Card, CardHeader } from '@chakra-ui/react';
+import { OfferCardProps } from './OfferTypes';
 import { useDaysJS } from '../../hooks/useDaysJS';
 import { EditPopover } from './EditPopover';
 import { VscSettings } from "react-icons/vsc";
-import { MdDeleteForever, MdDeleteOutline } from 'react-icons/md';
-import { AiOutlineCloseCircle, AiOutlineExclamationCircle, AiOutlineMessage } from 'react-icons/ai';
 import { InfoPopover } from './InfoPopover';
-import { GrAction } from 'react-icons/gr';
 import { HiCog } from "react-icons/hi";
-const _id = useID
-const initSteps = [
-    { text: 'Договор подписан', isChecked: false, id: _id() },
-    { text: 'Документы запрошены', isChecked: false, id: _id() },
-    // { text: 'Документы получены', isChecked: false, id: _id() },
-    // { text: 'Документы сданы', isChecked: false, id: _id() },
-]
+
 
 
 export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextStep: onMove }) => {
@@ -54,14 +39,19 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
         if (hours_left <= 240) return prog[0] //меньше 10 суток
         return prog[0]
     }
+
     useEffect(() => {
         const daysleft = calcProgressBarValue()
         setProgValue(prev => daysleft)
         setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
-        if (HoursLeft(offer.dateReady) <= 12) setFinish(true)
+        if (HoursLeft(offer.dateReady) <= 12) {
+            setFinish(true)
+
+        }
         else setFinish(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offer])
+
 
     return (
         <Flex maxWidth={'100vw'} flexDir='column'

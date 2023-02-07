@@ -4,7 +4,6 @@ import { OfferCard } from "./OfferCard";
 import { Flex, Grid, GridItem, Text } from '@chakra-ui/layout';
 import { MdDeleteForever } from 'react-icons/md';
 import { IconButton } from '@chakra-ui/react';
-
 export const ActiveOffersList: React.FC<OffCardListProps> = (props) => {
     const { offList, offControl, nextStep: onMove } = props;
 
@@ -34,6 +33,7 @@ export const ActiveOffersList: React.FC<OffCardListProps> = (props) => {
                             onClick={offControl.clearOffers}
                         />
                         <Text fontSize={20}>Удалить все</Text>
+
                     </>
                 }
             </GridItem>
