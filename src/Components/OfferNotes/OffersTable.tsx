@@ -3,17 +3,13 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
     Button,
-    Text,
 } from '@chakra-ui/react'
-import { WaitingOffersListProps } from './WaingOffersList'
-import { OfferCardProps, OfferFormData, OfferListData } from './OfferTypes'
+import { OfferFormData, OfferListData } from './OfferTypes'
 import { useDaysJS } from '../../hooks/useDaysJS'
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { useSortedOffers } from '../../hooks/useSortedOffers'
@@ -42,6 +38,7 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, he
     }
     useEffect(() => {
         SortedOffers.reverse()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSort.isAsc])
     const HeadButton = (header: string, field: keyof OfferFormData) => <Button
         onClick={() => SortHandler(field)}
