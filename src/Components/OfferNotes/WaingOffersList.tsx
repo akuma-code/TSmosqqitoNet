@@ -1,34 +1,22 @@
 import { Button, Flex, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { GrDocumentMissing, GrDocumentVerified } from 'react-icons/gr'
-import { OfferFormData, OfferListData } from './OfferTypes'
+import { OfferListData } from './OfferTypes'
 import { OfferTable } from './OffersTable'
-import { useSortedOffers } from '../../hooks/useSortedOffers'
 
 export type WaitingOffersListProps = {
     offersOnWaiting: OfferListData[]
-    onClose: (id: string) => void
+    nextStep: (id: string) => void
     onDelete: (id: string) => void
 }
-
-
 const stringHeaders = ['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]
-export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWaiting: ofs, onClose, onDelete }) => {
+
+
+export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWaiting: ofs, nextStep: onClose, onDelete }) => {
     // Control: selectOffer, closeOffer
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
-    const [sortField, setSortField] = useState<keyof OfferFormData | null>(null)
-    // const [hasActive, setHasActive] = useState(true)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(offer)
-
-    const sortOff = (field: keyof OfferFormData) => {
-        setSortField(field)
-    }
-    const sortedOffers = useSortedOffers(ofs, sortField)
-
-
-
-
 
     if (ofs.length === 0) return (
         <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Список ожидания пуст!</Text>

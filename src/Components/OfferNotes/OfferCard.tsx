@@ -25,7 +25,7 @@ const initSteps = [
 ]
 
 
-export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, onMove }) => {
+export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextStep: onMove }) => {
     const [progValue, setProgValue] = useState(0)
     const [progColor, setProgColor] = useState("green")
     const [isAnimOn, setIsAnim] = useState(false)

@@ -23,11 +23,11 @@ export interface OffCardListProps {
         toggleCheck: (id: string, field: keyof OfferListData) => void
         getOffer: (id: string) => OfferListData
     }
-    onMove?: (id: string) => void
+    nextStep?: (id: string) => void
 }
 export interface OfferCardProps {
     offer: OfferListData
     offControl: OffCardListProps['offControl']
-    onMove?: (id: string) => void
+    nextStep?: (id: string) => void
     // checkFN: (id: string, field: keyof OfferListData) => void
 }

@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useMemo } from "react";
+import { useMemo } from "react";
 import { OfferFormData, OfferListData } from "../Components/OfferNotes/OfferTypes";
 
 

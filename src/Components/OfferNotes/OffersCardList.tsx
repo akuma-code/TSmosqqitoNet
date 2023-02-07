@@ -6,7 +6,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import { IconButton } from '@chakra-ui/react';
 
 export const OffersCardList: React.FC<OffCardListProps> = (props) => {
-    const { offList, offControl, onMove } = props;
+    const { offList, offControl, nextStep: onMove } = props;
 
 
     if (offList.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Договоров в работе нет!</Text>
@@ -16,7 +16,7 @@ export const OffersCardList: React.FC<OffCardListProps> = (props) => {
 
             <GridItem colSpan={6}>
                 <Flex flexDir={'column'} rowGap={2}>
-                    {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} onMove={() => onMove!(o.id)} />
+                    {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} nextStep={() => onMove!(o.id)} />
                     )}
                 </Flex>
             </GridItem>

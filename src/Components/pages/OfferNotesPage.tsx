@@ -28,16 +28,21 @@ function init() {
 function save(key: string, offers: OfferListData[]) {
   return localStorage.setItem(key, JSON.stringify(offers))
 }
+
+function SelectOffer(offer_id: string, offers: OfferListData[]) {
+  return offers.reduce((targetOffer, o) =>
+    o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
+}
+
 export const OfferNotesPage = () => {
 
   const [offers, offControl] = useOffersControl(init().ofs)
   const [waitingList, setWaitngList] = useState<OfferListData[]>(init().wofs)
   const [closedOffersList, setClosedOffersList] = useState<OfferListData[]>(init().cofs)
+
+
   function addOfferToList(offer: OfferFormData) { offControl.Add(offer) }
 
-  function SelectOffer(offer_id: string, offers: OfferListData[]) {
-    return offers.reduce((targetOffer, o) => o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
-  }
   function MoveOffer(id: string, target: 'onWaiting' | 'Closed') {
     if (target === 'onWaiting') {
       const of = offControl.getOffer(id)
@@ -89,10 +94,10 @@ export const OfferNotesPage = () => {
 
         <TabPanels>
           <TabPanel>
-            <OffersCardList offList={offers} offControl={offControl} onMove={MoveToWaitList} />
+            <OffersCardList offList={offers} offControl={offControl} nextStep={MoveToWaitList} />
           </TabPanel>
           <TabPanel>
-            <WaitingOffersList offersOnWaiting={waitingList} onClose={MoveToCloseList} onDelete={onDeleteWaiting} />
+            <WaitingOffersList offersOnWaiting={waitingList} nextStep={MoveToCloseList} onDelete={onDeleteWaiting} />
           </TabPanel>
           <TabPanel>
             <ClosedOffersList offersClosed={closedOffersList} onDelete={DeleteClosedOffer} />
