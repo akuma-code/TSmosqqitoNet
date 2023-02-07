@@ -108,7 +108,7 @@ type EditCardProps = {
     onEdit: OfferCardProps['offControl']['Edit'],
     children?: React.ReactNode
 }
-export const EditCardPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }) => {
+export const EditPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }) => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const firstFieldRef = React.useRef(null)
 

@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react'
 import { Stack, StackDivider, Tab, TabList, TabPanel, TabPanels, Tabs, } from '@chakra-ui/react'
 import useOffersControl from '../../hooks/useOffersControl'
 import { OfferForm } from '../OfferNotes/OfferForm'
-import { OffersCardList } from '../OfferNotes/OffersCardList'
+import { ActiveOffersList } from '../OfferNotes/ActiveOffersList'
 import { OfferFormData, OfferListData } from '../OfferNotes/OfferTypes'
 import { WaitingOffersList } from '../OfferNotes/WaingOffersList'
 import { ClosedOffersList } from '../OfferNotes/ClosedOffersList'
 
 
-export type OfferNotesPageProps = {
 
-}
 function init() {
   const ofs = localStorage.getItem('offers_active') || '[]'
   const wofs = localStorage.getItem('offers_waiting') || '[]'
@@ -56,7 +54,9 @@ export const OfferNotesPage = () => {
       setWaitngList(prev => prev.filter(o => o.id !== of.id))
     }
   }
-
+  function onEditWaitings(edit_offer_data: OfferListData) {
+    setWaitngList(prev => prev.map(offer => offer.id === edit_offer_data.id ? { ...offer, ...edit_offer_data } : offer))
+  }
   function MoveToCloseList(id: string) { MoveOffer(id, 'Closed') }
   function MoveToWaitList(id: string) { MoveOffer(id, 'onWaiting') }
   const DeleteClosedOffer = (id: string) => setClosedOffersList(prev => prev.filter(co => co.id !== id))
@@ -94,10 +94,10 @@ export const OfferNotesPage = () => {
 
         <TabPanels>
           <TabPanel>
-            <OffersCardList offList={offers} offControl={offControl} nextStep={MoveToWaitList} />
+            <ActiveOffersList offList={offers} offControl={offControl} nextStep={MoveToWaitList} />
           </TabPanel>
           <TabPanel>
-            <WaitingOffersList offersOnWaiting={waitingList} nextStep={MoveToCloseList} onDelete={onDeleteWaiting} />
+            <WaitingOffersList offersOnWaiting={waitingList} nextStep={MoveToCloseList} onDelete={onDeleteWaiting} onEdit={onEditWaitings} />
           </TabPanel>
           <TabPanel>
             <ClosedOffersList offersClosed={closedOffersList} onDelete={DeleteClosedOffer} />

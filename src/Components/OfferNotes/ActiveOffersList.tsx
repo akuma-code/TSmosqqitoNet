@@ -5,7 +5,7 @@ import { Flex, Grid, GridItem, Text } from '@chakra-ui/layout';
 import { MdDeleteForever } from 'react-icons/md';
 import { IconButton } from '@chakra-ui/react';
 
-export const OffersCardList: React.FC<OffCardListProps> = (props) => {
+export const ActiveOffersList: React.FC<OffCardListProps> = (props) => {
     const { offList, offControl, nextStep: onMove } = props;
 
 

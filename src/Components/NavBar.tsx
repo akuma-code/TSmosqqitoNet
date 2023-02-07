@@ -36,7 +36,7 @@ const NavBar: FC<NavBarProps> = () => {
                     {checkAuth() &&
                         <li>
                             <a href="/offers" style={{ fontSize: "2.3rem" }}>
-                                <span className="material-icons mr1">checklist</span>ЮрДоговора
+                                <span className="material-icons mr1">description</span>ЮрДоговора
                             </a>
                         </li>
                     }

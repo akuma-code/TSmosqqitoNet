@@ -9,7 +9,7 @@ import { CheckIcon } from '@chakra-ui/icons';
 import { customCBx } from './ThemedCheckBox';
 import { GiBiohazard } from 'react-icons/gi';
 import { useDaysJS } from '../../hooks/useDaysJS';
-import { EditCardPopover } from './EditPopover';
+import { EditPopover } from './EditPopover';
 import { VscSettings } from "react-icons/vsc";
 import { MdDeleteForever, MdDeleteOutline } from 'react-icons/md';
 import { AiOutlineCloseCircle, AiOutlineExclamationCircle, AiOutlineMessage } from 'react-icons/ai';
@@ -28,7 +28,7 @@ const initSteps = [
 export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextStep: onMove }) => {
     const [progValue, setProgValue] = useState(0)
     const [progColor, setProgColor] = useState("green")
-    const [isAnimOn, setIsAnim] = useState(false)
+    const [isFinished, setFinish] = useState(false)
     const { localDate, daysLeft, HoursLeft } = useDaysJS()
     const finish = localDate(offer.dateReady)
     const dleft = daysLeft(offer.dateReady)
@@ -58,8 +58,9 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
         const daysleft = calcProgressBarValue()
         setProgValue(prev => daysleft)
         setProgColor(prev => calcProgressColor(HoursLeft(offer.dateReady)))
-        if (HoursLeft(offer.dateReady) <= 12) setIsAnim(true)
-        else setIsAnim(false)
+        if (HoursLeft(offer.dateReady) <= 12) setFinish(true)
+        else setFinish(false)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offer])
 
     return (
@@ -90,7 +91,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                         <Text fontSize={22}>{offer.offerId} </Text>
                     </Flex>
                     <Flex gap={4} m={2}>
-                        <EditCardPopover offer={offer} onEdit={offControl.Edit}>
+                        <EditPopover offer={offer} onEdit={offControl.Edit}>
 
                             <IconButton
                                 aria-label='edit'
@@ -99,7 +100,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                                 fontSize={20}
                                 icon={<VscSettings />}
                                 colorScheme={'blue'} />
-                        </EditCardPopover>
+                        </EditPopover>
                         <InfoPopover offer={offer} controlFn={offControl} onMove={onMove!}>
                             <IconButton
                                 size={'sm'}
@@ -126,7 +127,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                     borderTopRightRadius={0}
                     h={5}
                     w={'100%'}
-                    isIndeterminate={isAnimOn}
+                // isIndeterminate={isAnimOn}
                 />
                 <Text as={'kbd'}
                     color={'blackAlpha.900'}
@@ -150,7 +151,12 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                     // shadow='dark-lg'
                     // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'>
-                    Осталось дней: {dleft} </Text>
+                    {isFinished ? "Завершено!"
+                        :
+                        `Осталось дней: ${dleft}`
+                    }
+
+                </Text>
             </Flex>
 
         </Flex>
