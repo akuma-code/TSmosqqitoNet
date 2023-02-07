@@ -1,8 +1,9 @@
 import { Button, Flex, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { GrDocumentMissing, GrDocumentVerified } from 'react-icons/gr'
-import { OfferListData } from './OfferTypes'
+import { OfferFormData, OfferListData } from './OfferTypes'
 import { OfferTable } from './OffersTable'
+import { useSortedOffers } from '../../hooks/useSortedOffers'
 
 export type WaitingOffersListProps = {
     offersOnWaiting: OfferListData[]
@@ -11,19 +12,33 @@ export type WaitingOffersListProps = {
 }
 
 
-
+const stringHeaders = ['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]
 export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWaiting: ofs, onClose, onDelete }) => {
     // Control: selectOffer, closeOffer
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
+    const [sortField, setSortField] = useState<keyof OfferFormData | null>(null)
     // const [hasActive, setHasActive] = useState(true)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(offer)
-    if (ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Список ожидания пуст!</Text>
+
+    const sortOff = (field: keyof OfferFormData) => {
+        setSortField(field)
+    }
+    const sortedOffers = useSortedOffers(ofs, sortField)
+
+
+
+
+
+    if (ofs.length === 0) return (
+        <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Список ожидания пуст!</Text>
+    )
+
     return (
         <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'70vw'} minW={'50vw'} >
             <GridItem colSpan={6}>
                 <OfferTable listOffers={ofs} onSelect={onSelect}
-                    headers={['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]}
+                // headers={['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]}
                 />
             </GridItem>
             <GridItem colSpan={2}>

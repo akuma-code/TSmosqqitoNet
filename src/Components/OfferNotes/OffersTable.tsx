@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Table,
     Thead,
@@ -13,44 +13,75 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { WaitingOffersListProps } from './WaingOffersList'
-import { OfferCardProps, OfferListData } from './OfferTypes'
+import { OfferCardProps, OfferFormData, OfferListData } from './OfferTypes'
 import { useDaysJS } from '../../hooks/useDaysJS'
-
+import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
+import { useSortedOffers } from '../../hooks/useSortedOffers'
 interface OfferTableProps {
     onSelect: (offer: OfferListData) => void
     listOffers: OfferListData[]
-    headers: string[]
-
+    headers?: string[]
+    sortFn?: (f: keyof OfferFormData) => void
 }
 
 export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, headers }) => {
     const { localDate } = useDaysJS()
     const [selectedId, setSelectedId] = useState("")
+    const [selectedSort, setSelectedSort] = useState<{ field?: keyof OfferFormData, isAsc?: boolean }>({})
+    const [sortField, setSortField] = useState<keyof OfferFormData | null>(null)
     const select = (off: OfferListData) => {
         onSelect(off)
         setSelectedId(off.id)
     }
     const isSelected = (id: string) => selectedId === id
 
+    function SortHandler(f: keyof OfferFormData) {
+        setSortField(f)
+        if (selectedSort.field === f) setSelectedSort(prev => ({ ...prev, isAsc: !prev.isAsc }))
+        else setSelectedSort(prev => ({ ...prev, field: f }))
+    }
+    useEffect(() => {
+        SortedOffers.reverse()
+    }, [selectedSort.isAsc])
+    const HeadButton = (header: string, field: keyof OfferFormData) => <Button
+        onClick={() => SortHandler(field)}
+        variant={'unstyled'}
+        fontSize={16}
+        _focusWithin={{ bgColor: 'gray.400' }}
+        _active={{ bgColor: 'gray.800' }}
+        px={4}
+        display='flex'
+        gap={2}
+    >{header} {selectedSort.field === field ?
+        selectedSort.isAsc ? <BsFillCaretDownFill /> : <BsFillCaretUpFill />
+        : ""
+        }
 
-
-
+    </Button>
+    const SortedOffers = useSortedOffers(listOffers, sortField)
     return (
         <TableContainer maxW='60vw'>
             <Table size='sm' variant={''} bgColor='gray.200'>
                 <Thead >
                     <Tr >
-                        {headers.map((h, idx) =>
-                            <Th fontSize={16} key={idx}>{h}</Th>
-                        )}
+                        {headers ? headers.map((h, idx) =>
+                            <Th fontSize={16} key={idx}
 
-                        {/* <Th fontSize={16}>№ договора</Th>
-                        <Th fontSize={16}>дата закрытия</Th>
-                        <Th fontSize={16}>Заметка</Th> */}
+                            >{h}</Th>
+                        ) :
+
+                            <>
+                                <Th>{HeadButton('Контрагент', 'companyName')}</Th>
+                                <Th>{HeadButton('№ договора', 'offerId')}</Th>
+                                <Th>{HeadButton('дата закрытия', 'dateReady')}</Th>
+                                <Th>{HeadButton('Заметка', 'desc')}</Th>
+
+                            </>
+                        }
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {listOffers.map(o =>
+                    {SortedOffers.map(o =>
                         <Tr
                             h={'fit-content'}
                             _hover={{ bgColor: "blue.100" }}

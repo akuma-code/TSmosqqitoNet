@@ -90,18 +90,16 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, onMove 
                         <Text fontSize={22}>{offer.offerId} </Text>
                     </Flex>
                     <Flex gap={4} m={2}>
-                        <Tooltip label="asdasd">
-                            <EditCardPopover offer={offer} onEdit={offControl.Edit}>
+                        <EditCardPopover offer={offer} onEdit={offControl.Edit}>
 
-                                <IconButton
-                                    aria-label='edit'
-                                    size={'sm'}
-                                    variant={'solid'}
-                                    fontSize={20}
-                                    icon={<VscSettings />}
-                                    colorScheme={'blue'} />
-                            </EditCardPopover>
-                        </Tooltip>
+                            <IconButton
+                                aria-label='edit'
+                                size={'sm'}
+                                variant={'solid'}
+                                fontSize={20}
+                                icon={<VscSettings />}
+                                colorScheme={'blue'} />
+                        </EditCardPopover>
                         <InfoPopover offer={offer} controlFn={offControl} onMove={onMove!}>
                             <IconButton
                                 size={'sm'}

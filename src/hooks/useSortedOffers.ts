@@ -1,11 +1,18 @@
-import { SetStateAction, useState } from "react";
-import { OfferListData } from "../Components/OfferNotes/OfferTypes";
+import { SetStateAction, useState, useMemo } from "react";
+import { OfferFormData, OfferListData } from "../Components/OfferNotes/OfferTypes";
 
 
-export const useSortedOffers = <T>(offers: T[], setOffers: React.Dispatch<SetStateAction<T>>) => {
-    const sorted = (field: keyof offers) => [...offers].sort((a, b) => a.companyName!.localeCompare(b.companyName!))
+export const useSortedOffers = (offers: OfferListData[], field?: keyof OfferFormData | null) => {
+    const sortedOffers = useMemo(() => {
+
+        if (field) {
+            return [...offers].sort((a: OfferListData, b: OfferListData) => a[field]!.localeCompare(b[field]!))
+        }
+        return offers
+    }, [field, offers])
 
 
+    return sortedOffers
 }
 
 
