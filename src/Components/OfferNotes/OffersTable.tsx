@@ -23,7 +23,7 @@ interface OfferTableProps {
 export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, headers }) => {
     const { localDate } = useDaysJS()
     const [selectedId, setSelectedId] = useState("")
-    const [selectedSort, setSelectedSort] = useState<{ field?: keyof OfferFormData, isAsc?: boolean }>({ isAsc: false })
+    const [selectedSort, setSelectedSort] = useState<{ field: keyof OfferFormData, isAsc: boolean }>({ field: 'companyName', isAsc: false })
     const select = (off: OfferListData) => {
         onSelect(off)
         setSelectedId(off.id)
@@ -33,10 +33,10 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, he
     function SortHandler(f: keyof OfferFormData) {
         setSelectedSort(prev => prev.field === f ? { ...prev, isAsc: !prev.isAsc } : { ...prev, field: f })
     }
-    useEffect(() => {
-        SortedOffers.reverse()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedSort.isAsc])
+    // useEffect(() => {
+    //     SortedOffers.reverse()
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [selectedSort.isAsc])
     const HeadButton = (header: string, field: keyof OfferFormData) => <Button
         onClick={() => SortHandler(field)}
         variant={'unstyled'}
@@ -52,7 +52,7 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, he
         }
 
     </Button>
-    const SortedOffers = useSortedOffers(listOffers, selectedSort.field)
+    const SortedOffers = useSortedOffers(listOffers, selectedSort.field!, selectedSort.isAsc)
     return (
         <TableContainer maxW='60vw'>
             <Table size='sm' variant={''} bgColor='gray.200'>

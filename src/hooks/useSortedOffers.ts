@@ -2,14 +2,16 @@ import { useMemo } from "react";
 import { OfferFormData, OfferListData } from "../Components/OfferNotes/OfferTypes";
 
 
-export const useSortedOffers = (offers: OfferListData[], field?: keyof OfferFormData | null) => {
+export const useSortedOffers = (offers: OfferListData[], field: keyof OfferFormData, isAsc: boolean) => {
     const sortedOffers = useMemo(() => {
 
         if (field) {
-            return [...offers].sort((a: OfferListData, b: OfferListData) => a[field]!.localeCompare(b[field]!))
+            const sorted = [...offers].sort((a: OfferListData, b: OfferListData) => a[field]!.localeCompare(b[field]!))
+            if (isAsc) sorted.reverse()
+            return sorted
         }
         return offers
-    }, [field, offers])
+    }, [field, offers, isAsc])
 
 
     return sortedOffers
