@@ -81,7 +81,7 @@ export const OfferNotesPage = () => {
 
 
   return (
-    <Stack align={'start'} px={8}>
+    <Stack align={'center'} px={8} maxW={'70vw'}>
       <OfferForm addOffer={addOfferToList} />
       <StackDivider borderColor={' black'} borderWidth={2} rounded={2} />
 

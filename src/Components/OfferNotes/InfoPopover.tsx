@@ -34,7 +34,7 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
                 </PopoverHeader>
                 <PopoverBody>
                     <Stack spacing={4} align={'stretch'}>
-                        {isReady &&
+                        {offer.isRequested &&
                             <Button
                                 onClick={() => onMove!(offer.id)}
                                 aria-label='finish offer'

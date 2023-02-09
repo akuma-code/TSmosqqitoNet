@@ -16,11 +16,11 @@ export const ClosedOffersList: React.FC<ClosedOffersListProps> = ({ offersClosed
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(prev => offer)
-    if (ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' >Список закрытых договоров пуст!</Text>
+    if (ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Список закрытых договоров пуст!</Text>
     return (
-        <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'70vw'} minW={'50vw'} >
+        <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'80vw'} minW={'50vw'} >
             <GridItem colSpan={6}>
-                <OfferTable listOffers={ofs} onSelect={onSelect} headers={['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]} />
+                <OfferTable listOffers={ofs} onSelect={onSelect} />
             </GridItem>
             <GridItem colSpan={2}>
                 <Stack align={'stretch'} spacing={'1rem'}>

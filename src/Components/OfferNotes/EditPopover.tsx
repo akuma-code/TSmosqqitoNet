@@ -1,9 +1,11 @@
 import FocusLock from "react-focus-lock"
-import React, { HTMLAttributes, useRef, useState } from "react"
-import { Box, Button, ButtonGroup, FormControl, FormLabel, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
+import React, { HTMLAttributes, useRef, useState, useMemo } from "react"
+import { Box, Button, ButtonGroup, Flex, FormControl, FormLabel, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { EditIcon } from "@chakra-ui/icons"
 import { GiBiohazard } from "react-icons/gi"
-import { OfferCardProps, OfferFormData } from "./OfferTypes"
+import { OfferCardProps, OfferFormData, OfferListData } from "./OfferTypes"
+import { IconType } from "react-icons/lib"
+import { GrDocumentMissing, GrDocumentVerified } from "react-icons/gr"
 // 1. Create a text input component
 
 
@@ -46,13 +48,13 @@ const DateInput = React.forwardRef((props: TextInputProps, ref: React.ForwardedR
     )
 })
 type EditFormProps = {
-    initOffer: OfferFormData
+    initOffer: OfferListData
     onCancel: () => void
     EditFn: OfferCardProps['offControl']['Edit']
 }
 // 2. Create the form
 const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) => {
-    const [newOfferData, setOfferData] = useState<OfferFormData>(currentOffer)
+    const [newOfferData, setOfferData] = useState<OfferListData>(currentOffer)
     function HandleSubmit(e: React.FormEvent) {
         e.preventDefault()
         EditFn({ ...currentOffer, ...newOfferData })
@@ -62,11 +64,14 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
     function ChangeHandler(key: keyof OfferFormData) {
         return (e: React.ChangeEvent<HTMLInputElement>) => setOfferData(prev => ({ ...prev, [key]: e.target.value }))
     }
+    function ToggleHandler(key: keyof OfferListData) {
+        return () => setOfferData(prev => ({ ...prev, [key]: !prev[key] }))
+    }
     return (
-        <form onSubmit={HandleSubmit}>
+        <form onSubmit={HandleSubmit} >
 
 
-            <Stack spacing={4}>
+            <Stack spacing={4} p={4}>
                 <TextInput
                     label={'Название'}
                     id='comp_name'
@@ -88,6 +93,16 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
                     id='date_ready'
                     defaultValue={currentOffer.dateReady}
                     onChange={ChangeHandler('dateReady')} />
+                <ButtonGroup display={'flex'} alignContent='stretch' w={'full'}>
+                    {!currentOffer.isDocSigned &&
+                        <CheckButton
+                            text={["подписан", "договор не подписан",]}
+                            isCheck={currentOffer.isDocSigned!}
+                            IconOnCheck={GrDocumentVerified}
+                            IconOnUncheck={GrDocumentMissing}
+                            onClick={ToggleHandler('isDocSigned')}
+                        />}
+                </ButtonGroup>
                 <ButtonGroup display='flex' justifyContent='flex-end'>
                     <Button variant='outline' onClick={onCancel}>
                         Отменить
@@ -127,7 +142,7 @@ export const EditPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }
                     {children}
                 </PopoverTrigger>
 
-                <PopoverContent p={5} textAlign={'center'}>
+                <PopoverContent textAlign={'center'}>
                     {/* <FocusLock returnFocus persistentFocus={false}> */}
                     <PopoverArrow />
                     <PopoverCloseButton size={'lg'} />
@@ -142,3 +157,36 @@ export const EditPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }
     )
 }
 
+type CheckButtonProps = {
+    text: string[],
+    IconOnCheck: IconType,
+    IconOnUncheck: IconType,
+    isCheck: boolean
+    onClick: () => void
+}
+
+const CheckButton: React.FC<CheckButtonProps> = ({ text, IconOnCheck, IconOnUncheck, isCheck, onClick }) => {
+    const BTN = useMemo(() => (
+        <Button size={'md'} onClick={onClick} w='full'
+            colorScheme={isCheck ? 'green' : 'red'}
+            variant={isCheck ? 'solid' : 'outline'}
+        >
+            <Flex justifyContent={'space-between'} width='full' alignItems={'center'} >
+                {isCheck ?
+                    <Text>{text[0]}</Text>
+                    :
+                    <Text> {text[1]}</Text>
+                }
+                {isCheck ?
+                    <IconOnCheck fontSize={20} />
+                    :
+                    <IconOnUncheck fontSize={20} />
+                }
+            </Flex>
+        </Button>
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), [text, isCheck])
+    return (
+        BTN
+    )
+}
