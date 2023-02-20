@@ -34,7 +34,7 @@ export enum PATHS {
     SHOP = 'shop',
     PROD = 'prod',
     TYPE = 'type',
-    OFFER = 'offer',
+    OFFERS = 'offers',
     WAREHOUSE = 'sklad/wh',
     WHINFO = 'whinfo',
     SETTINGS = 'settings'

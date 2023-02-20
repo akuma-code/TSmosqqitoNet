@@ -11,6 +11,7 @@ export type WaitingOffersListProps = {
     nextStep: (id: string) => void
     onDelete: (id: string) => void
     onEdit: (data: OfferListData) => void
+    createDB?: (o: OfferListData) => void
 }
 const stringHeaders = ['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]
 
@@ -20,6 +21,8 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(offer)
+
+
     const Control = useMemo(() => {
         const CloseBtn =
             <Button
@@ -58,11 +61,22 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                     <GrDocumentMissing fontSize={20} />
                 </Flex>
             </Button>;
-        return { CloseBtn, DeleteBtn, EditBtn }
-    }, [active.id, hasActive, nextStep, onDelete])
+        const CopyToDB =
+            <Button
+                isDisabled={hasActive}
+                colorScheme='red'
+                _focus={{ bgColor: 'red.400' }}
+            >
+                <Flex w={'full'} justifyContent='space-between' gap={4}>
+                    <Text>Копировать в БД</Text>
+                    <GrDocumentMissing fontSize={20} />
+                </Flex>
+            </Button>;
+        return { CloseBtn, DeleteBtn, EditBtn, CopyToDB }
+    }, [active, hasActive, nextStep, onDelete])
 
 
-    if (ofs.length === 0) return (
+    if (!ofs || ofs.length === 0) return (
         <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Список ожидания пуст!</Text>
     )
     return (
@@ -76,6 +90,7 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                     <EditPopover offer={active} onEdit={onEdit}>
                         {Control.EditBtn}
                     </EditPopover>
+                    {Control.CopyToDB}
                     {Control.DeleteBtn}
 
                 </Stack>

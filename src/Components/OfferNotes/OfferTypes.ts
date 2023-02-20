@@ -11,6 +11,7 @@ export type OfferListData = {
     isRequested?: boolean
     isDocSigned?: boolean
     isDocResieved?: boolean
+    status?: 'onActive' | 'onWaiting' | 'onClosed'
 } & OfferFormData
 
 export interface OffCardListProps {
@@ -24,6 +25,17 @@ export interface OffCardListProps {
         getOffer: (id: string) => OfferListData
     }
     nextStep?: (id: string) => void
+}
+
+export interface OffersDBApi {
+    Create: (offer: OfferListData) => void
+    CreateList: (offers: OfferListData[]) => void
+    Remove: (id: string) => void
+    RemoveList: (status: OfferListData['status']) => void
+    Edit: (new_offer_data: OfferListData) => void
+    ClearOffers: () => void
+    update: () => Promise<void>
+    getOffer: (id: string) => void
 }
 export interface OfferCardProps {
     offer: OfferListData

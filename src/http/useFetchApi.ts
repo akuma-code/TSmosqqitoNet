@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { HOSTURL, PATHS } from "../types/IServerData";
 
 export const getURL = () => {
-    const saved_url = localStorage.getItem('server_url') || HOSTURL.CKO3
+    const saved_url = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
+    // console.log("HOST: ", saved_url);
+
     return saved_url
 }
 
@@ -50,7 +52,7 @@ export const fetchApi = (path: string) => {
     return { fetchAll, fetchOne, edit, copySklad, remove, create } as const
 
 }
-export const useFetchApi = <T>(path: PATHS, id?: number) => {
+export const useFetchApi = <T>(path: PATHS) => {
     const [isLoading, setIsLoading] = useState(false)
     const [data, setFetchedData] = useState<T[]>([])
     const [error, setError] = useState("")

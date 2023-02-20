@@ -34,7 +34,7 @@ export const FinProdTask = async (id: string) => {
     return API
 }
 export const RunAutoCompleteTasks = async (days: number) => {
-    console.log(`${days}-days tasks finish`);
+    // console.log(`${days}-days tasks finish`);
     return await $api.post(`api/${PATHS.WHINFO}/autocomplete/` + days)
 }
 

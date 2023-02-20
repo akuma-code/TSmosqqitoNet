@@ -16,7 +16,7 @@ export const ClosedOffersList: React.FC<ClosedOffersListProps> = ({ offersClosed
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(prev => offer)
-    if (ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Список закрытых договоров пуст!</Text>
+    if (!ofs || ofs.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Список закрытых договоров пуст!</Text>
     return (
         <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'80vw'} minW={'50vw'} >
             <GridItem colSpan={6}>

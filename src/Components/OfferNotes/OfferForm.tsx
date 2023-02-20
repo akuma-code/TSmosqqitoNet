@@ -30,13 +30,7 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
     function changeOffer(field: keyof OfferFormData, value: string) { setOffer(prev => ({ ...prev, [field]: value })); }
 
 
-    function toggleAlarma(ms: number) {
-        if (isAlarm) return
-        setIsAlarm(prev => true)
-        setTimeout(() => {
-            setIsAlarm(prev => false)
-        }, ms)
-    }
+
 
     function HandleSubmit(e?: React.FormEvent) {
         e?.preventDefault()

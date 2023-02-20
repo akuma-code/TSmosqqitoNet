@@ -1,21 +1,26 @@
 import React from 'react';
-import { OffCardListProps } from './OfferTypes';
+import { OffCardListProps, OffersDBApi } from './OfferTypes';
 import { OfferCard } from "./OfferCard";
 import { Flex, Grid, GridItem, Text } from '@chakra-ui/layout';
 import { MdDeleteForever } from 'react-icons/md';
 import { IconButton } from '@chakra-ui/react';
-export const ActiveOffersList: React.FC<OffCardListProps> = (props) => {
-    const { offList, offControl, nextStep: onMove } = props;
+
+type ActiveOffersListProps = {
+    actions?: OffersDBApi
+} & OffCardListProps
+
+export const ActiveOffersList: React.FC<ActiveOffersListProps> = (props) => {
+    const { offList, offControl, nextStep, actions } = props;
 
 
-    if (offList.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Договоров в работе нет!</Text>
+    if (!offList || offList.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Договоров в работе нет!</Text>
 
     return (
         <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'70vw'} minW={'50vw'} >
 
             <GridItem colSpan={6}>
                 <Flex flexDir={'column'} rowGap={2}>
-                    {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} nextStep={() => onMove!(o.id)} />
+                    {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} nextStep={() => nextStep!(o.id)} />
                     )}
                 </Flex>
             </GridItem>
@@ -30,7 +35,7 @@ export const ActiveOffersList: React.FC<OffCardListProps> = (props) => {
                             aria-label='delete'
                             fontSize={28}
                             icon={<MdDeleteForever />}
-                            onClick={offControl.clearOffers}
+                            onClick={() => actions!.RemoveList('onActive')}
                         />
                         <Text fontSize={20}>Удалить все</Text>
 
