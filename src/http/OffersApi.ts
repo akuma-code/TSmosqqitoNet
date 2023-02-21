@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { OfferListData } from "../Components/OfferNotes/OfferTypes";
 import { HOSTURL, PATHS } from "../types/IServerData";
 const $api = axios.create({
-    baseURL: HOSTURL.LOCALHOST
+    baseURL: HOSTURL.CKO3
 })
 
 export const OffersApi = {
