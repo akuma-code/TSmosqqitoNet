@@ -3,15 +3,10 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { HOSTURL, PATHS } from "../types/IServerData";
 
-export const getURL = () => {
-    const saved_url = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
-    // console.log("HOST: ", saved_url);
 
-    return saved_url
-}
 
 export const $api = axios.create({
-    baseURL: getURL()
+    baseURL: HOSTURL.CKO3
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchApi = (path: string) => {
