@@ -3,7 +3,7 @@ import React, { HTMLAttributes, useRef, useState, useMemo } from "react"
 import { Box, Button, ButtonGroup, Flex, FormControl, FormLabel, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Stack, Text, Tooltip, useDisclosure } from "@chakra-ui/react"
 import { EditIcon } from "@chakra-ui/icons"
 import { GiBiohazard } from "react-icons/gi"
-import { OfferCardProps, OfferFormData, OfferListData } from "./OfferTypes"
+import { OfferCardProps, OfferFormData, OfferListData, OffersDBApi } from "./OfferTypes"
 import { IconType } from "react-icons/lib"
 import { GrDocumentMissing, GrDocumentVerified } from "react-icons/gr"
 // 1. Create a text input component
@@ -23,9 +23,6 @@ const TextInput = React.forwardRef((props: TextInputProps, ref: React.ForwardedR
         </FormControl>
     )
 })
-type DateInputProps = {
-    onChange: () => void
-} & TextInputProps
 const DateInput = React.forwardRef((props: TextInputProps, ref: React.ForwardedRef<HTMLInputElement>) => {
 
     return (
@@ -48,25 +45,23 @@ const DateInput = React.forwardRef((props: TextInputProps, ref: React.ForwardedR
     )
 })
 type EditFormProps = {
-    initOffer: OfferListData
+    currentOfferData: OfferListData
     onCancel: () => void
-    EditFn: OfferCardProps['offControl']['Edit']
+    EditFn: OffersDBApi['Edit']
 }
 // 2. Create the form
-const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) => {
-    const [newOfferData, setOfferData] = useState<OfferListData>(currentOffer)
+const EditForm = ({ currentOfferData, onCancel, EditFn }: EditFormProps) => {
+    const [newOfferData, setOfferData] = useState<OfferListData>(currentOfferData)
     function HandleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        EditFn({ ...currentOffer, ...newOfferData })
+        EditFn(currentOfferData.id, newOfferData)
         onCancel()
     }
 
     function ChangeHandler(key: keyof OfferFormData) {
         return (e: React.ChangeEvent<HTMLInputElement>) => setOfferData(prev => ({ ...prev, [key]: e.target.value }))
     }
-    function ToggleHandler(key: keyof OfferListData) {
-        return () => setOfferData(prev => ({ ...prev, [key]: !prev[key] }))
-    }
+
     return (
         <form onSubmit={HandleSubmit} >
 
@@ -75,33 +70,33 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
                 <TextInput
                     label={'Название'}
                     id='comp_name'
-                    defaultValue={currentOffer.companyName || ""}
+                    defaultValue={currentOfferData.companyName || ""}
                     onChange={ChangeHandler('companyName')}
                 />
                 <TextInput
                     label='Номер договора'
                     id='offer_id'
-                    defaultValue={currentOffer.offerId}
+                    defaultValue={currentOfferData.offerId}
                     onChange={ChangeHandler('offerId')} />
                 <TextInput
                     label='Комментарий'
                     id='offer_desc'
-                    defaultValue={currentOffer.desc || ""}
+                    defaultValue={currentOfferData.desc || ""}
                     onChange={ChangeHandler('desc')} />
                 <DateInput
                     label='Дата закрытия'
                     id='date_ready'
-                    defaultValue={currentOffer.dateReady}
+                    defaultValue={currentOfferData.dateReady}
                     onChange={ChangeHandler('dateReady')} />
                 <ButtonGroup display={'flex'} alignContent='stretch' w={'full'}>
-                    {!currentOffer.isDocSigned &&
+                    {/* {!currentOfferData.isDocSigned &&
                         <CheckButton
                             text={["подписан", "договор не подписан",]}
-                            isCheck={currentOffer.isDocSigned!}
+                            isCheck={currentOfferData.isDocSigned!}
                             IconOnCheck={GrDocumentVerified}
                             IconOnUncheck={GrDocumentMissing}
                             onClick={ToggleHandler('isDocSigned')}
-                        />}
+                        />} */}
                 </ButtonGroup>
                 <ButtonGroup display='flex' justifyContent='flex-end'>
                     <Button variant='outline' onClick={onCancel}>
@@ -120,7 +115,7 @@ const EditForm = ({ initOffer: currentOffer, onCancel, EditFn }: EditFormProps) 
 // Ensure you set `closeOnBlur` prop to false so it doesn't close on outside click
 type EditCardProps = {
     offer: OfferFormData,
-    onEdit: OfferCardProps['offControl']['Edit'],
+    onEdit: OffersDBApi['Edit']
     children?: React.ReactNode
 }
 export const EditPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }) => {
@@ -149,7 +144,7 @@ export const EditPopover: React.FC<EditCardProps> = ({ offer, onEdit, children }
                     <PopoverHeader fontSize={20} fontWeight='semibold' textAlign={'center'}>
                         Изменить запись
                     </PopoverHeader>
-                    <EditForm onCancel={onClose} initOffer={offer} EditFn={onEdit} />
+                    <EditForm onCancel={onClose} currentOfferData={offer} EditFn={onEdit} />
                     {/* </FocusLock> */}
                 </PopoverContent>
             </Popover>

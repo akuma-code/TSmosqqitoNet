@@ -1,3 +1,4 @@
+import { OfferApiActions } from "../../hooks/useGlobalOffers"
 
 export type OfferFormData = {
     id: string
@@ -8,7 +9,7 @@ export type OfferFormData = {
     desc?: string
 }
 export type OfferListData = {
-    isRequested?: boolean
+    isDocRequested?: boolean
     isDocSigned?: boolean
     isDocResieved?: boolean
     status?: 'onActive' | 'onWaiting' | 'onClosed'
@@ -16,7 +17,7 @@ export type OfferListData = {
 
 export interface OffCardListProps {
     offList: OfferListData[]
-    offControl: {
+    offControl?: {
         Add: (new_offer_data: OfferListData) => void,
         Remove: (id: string) => void,
         clearOffers: () => void,
@@ -32,14 +33,17 @@ export interface OffersDBApi {
     CreateList: (offers: OfferListData[]) => void
     Remove: (id: string) => void
     RemoveList: (status: OfferListData['status']) => void
-    Edit: (new_offer_data: OfferListData) => void
+    Edit: (id: string, new_offer_data: OfferListData) => void
     ClearOffers: () => void
     update: () => Promise<void>
     getOffer: (id: string) => void
+    toggleCheck: (offer: OfferListData, field: keyof OfferListData) => void
+    changeStatus: (id: string, newStatus: OfferListData['status']) => void
 }
 export interface OfferCardProps {
     offer: OfferListData
-    offControl: OffCardListProps['offControl']
+    offControl?: OffersDBApi
+
     nextStep?: (id: string) => void
     // checkFN: (id: string, field: keyof OfferListData) => void
 }

@@ -10,7 +10,7 @@ type ActiveOffersListProps = {
 } & OffCardListProps
 
 export const ActiveOffersList: React.FC<ActiveOffersListProps> = (props) => {
-    const { offList, offControl, nextStep, actions } = props;
+    const { offList, nextStep, actions } = props;
 
 
     if (!offList || offList.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Договоров в работе нет!</Text>
@@ -20,7 +20,7 @@ export const ActiveOffersList: React.FC<ActiveOffersListProps> = (props) => {
 
             <GridItem colSpan={6}>
                 <Flex flexDir={'column'} rowGap={2}>
-                    {offList.map(o => <OfferCard offer={o} offControl={offControl} key={o.id} nextStep={() => nextStep!(o.id)} />
+                    {offList.map(o => <OfferCard offer={o} offControl={actions!} key={o.id} nextStep={() => nextStep!(o.id)} />
                     )}
                 </Flex>
             </GridItem>

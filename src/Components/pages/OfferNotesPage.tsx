@@ -8,6 +8,7 @@ import { WaitingOffersList } from '../OfferNotes/WaingOffersList'
 import { ClosedOffersList } from '../OfferNotes/ClosedOffersList'
 import useGlobalOffers from '../../hooks/useGlobalOffers'
 import { OffersApi } from '../../http/OffersApi'
+import { useSearchParams } from 'react-router-dom'
 
 async function FetchDBOffers() {
   const get_db = async () => await OffersApi.getAll()
@@ -40,20 +41,7 @@ function init() {
     }
 
   }
-  // const get_db = async () => await OffersApi.getAll()
-  // get_db().then(data => {
 
-  //   const offersList = {
-  //     activeOffers: [...data].filter(o => o.status! === 'onActive') as OfferListData[],
-  //     waitingOffers: [...data].filter(o => o.status! === 'onWaiting') as OfferListData[],
-  //     closedOffers: [...data].filter(o => o.status! === 'onClosed') as OfferListData[],
-  //   }
-
-  //   console.log('offersList', offersList)
-  //   return dbofs.push(offersList)
-
-  // })
-  // console.log(dbofs);
   return {
     ofs: parsed(ofs),
     // wofs: dbofs.waitingOffers,
@@ -71,6 +59,9 @@ function SelectOffer(offer_id: string, offers: OfferListData[]) {
     o.id === offer_id ? { ...targetOffer, ...o } : targetOffer, {} as OfferListData)
 }
 
+
+
+
 export const OfferNotesPage = () => {
 
   const [globalOffers, setGO, isLoading, error] = useGlobalOffers()
@@ -78,39 +69,28 @@ export const OfferNotesPage = () => {
   const [waitingList, setWaitngList] = useState<OfferListData[]>(globalOffers.waitingOffers)
   const [closedOffersList, setClosedOffersList] = useState<OfferListData[]>(globalOffers.closedOffers)
 
+
+
+
+
   function addOfferToList(offer: OfferListData) {
-    offControl.Add(offer)
+    // offControl.Add(offer)
     offer.status = 'onActive'
     setGO.Create(offer)
   }
 
-  function MoveOffer(id: string, target: 'onWaiting' | 'Closed') {
-    if (target === 'onWaiting') {
-      const of = offControl.getOffer(id)
-      setWaitngList(prev => [...prev, of])
-      offControl.Remove(of.id)
-    }
-
-    if (target === 'Closed') {
-      const of = SelectOffer(id, waitingList)
-      setClosedOffersList(prev => [...prev, of])
-      setWaitngList(prev => prev.filter(o => o.id !== of.id))
-    }
-  }
-  function onEditWaitings(edit_offer_data: OfferListData) {
-    setWaitngList(prev => prev.map(offer => offer.id === edit_offer_data.id ? { ...offer, ...edit_offer_data } : offer))
-  }
-  function MoveToCloseList(id: string) { MoveOffer(id, 'Closed') }
+  function MoveOffer(id: string, target: 'onWaiting' | 'onActive' | 'onClosed') { setGO.changeStatus(id, target) }
+  function onEditWaitings(id: string, edit_offer_data: OfferListData) { setGO.Edit(id, edit_offer_data) }
+  function MoveToCloseList(id: string) { MoveOffer(id, 'onClosed') }
   function MoveToWaitList(id: string) { MoveOffer(id, 'onWaiting') }
-  const DeleteClosedOffer = (id: string) => setClosedOffersList(prev => prev.filter(co => co.id !== id))
+  function onDeleteWaiting(selId: string) { setGO.Remove(selId) }
+  const DeleteClosedOffer = (id: string) => setGO.Remove(id)
 
-  function onDeleteWaiting(selId: string) { setWaitngList(prev => prev.filter(wo => wo.id !== selId)) }
-  const CopyOffer = async (offer: OfferListData) => {
-    const of = await setGO.getOffer(offer.id)
-    if (of) setGO.Remove(offer.id)
-    setGO.Create(offer)
 
-  }
+
+
+
+
   useEffect(() => {
     offers && save('offers_active', offers)
     waitingList && save('offers_waiting', waitingList)
@@ -129,40 +109,49 @@ export const OfferNotesPage = () => {
 
   useEffect(() => {
     // setGO.CreateList(waitingList)
-
   }, [])
+
+  if (error) {
+    return (<div>
+      <Text fontSize={'3xl'}>{error}</Text>
+    </div>)
+  }
 
   return (
     <Stack align={'center'} px={8} maxW={'70vw'}>
       <OfferForm addOffer={addOfferToList} />
       <StackDivider borderColor={' black'} borderWidth={2} rounded={2} />
-      {isLoading ? <Text>loading....</Text>
-        :
+      {
+        isLoading ?
+          <Text fontSize={36}>loading....</Text>
+          :
+          <Tabs isFitted variant='enclosed'  >
+            <TabList mb='1em' >
+              <Tab {...tabProps}>договора в работе</Tab>
+              <Tab {...tabProps}>лист ожидания</Tab>
+              <Tab {...tabProps} >закрытые договора</Tab>
+            </TabList>
 
-
-        <Tabs isFitted variant='enclosed'  >
-          <TabList mb='1em' >
-            <Tab {...tabProps}>договора в работе</Tab>
-            <Tab {...tabProps}>лист ожидания</Tab>
-            <Tab {...tabProps} >закрытые договора</Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel>
-              <ActiveOffersList offList={globalOffers.activeOffers} offControl={offControl} nextStep={MoveToWaitList} actions={setGO} />
-            </TabPanel>
-            <TabPanel>
-              <WaitingOffersList offersOnWaiting={globalOffers.waitingOffers}
-                nextStep={MoveToCloseList}
-                onDelete={onDeleteWaiting}
-                onEdit={onEditWaitings}
-              />
-            </TabPanel>
-            <TabPanel>
-              <ClosedOffersList offersClosed={globalOffers.closedOffers} onDelete={DeleteClosedOffer} />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+            <TabPanels>
+              <TabPanel>
+                <ActiveOffersList offList={globalOffers.activeOffers}
+                  nextStep={MoveToWaitList}
+                  actions={setGO} />
+              </TabPanel>
+              <TabPanel>
+                <WaitingOffersList offersOnWaiting={globalOffers.waitingOffers}
+                  nextStep={MoveToCloseList}
+                  onDelete={onDeleteWaiting}
+                  onEdit={onEditWaitings}
+                  actions={setGO}
+                />
+              </TabPanel>
+              <TabPanel>
+                <ClosedOffersList offersClosed={globalOffers.closedOffers}
+                  onDelete={DeleteClosedOffer} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
       }
     </Stack>
   )

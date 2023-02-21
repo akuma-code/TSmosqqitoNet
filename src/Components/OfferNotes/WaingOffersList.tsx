@@ -1,22 +1,23 @@
 import { Button, Flex, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
 import React, { useMemo, useState } from 'react'
 import { GrDocumentMissing, GrDocumentVerified } from 'react-icons/gr'
+import { BsFillFileEarmarkArrowDownFill } from 'react-icons/bs'
 import { FiEdit } from 'react-icons/fi'
-import { OfferListData } from './OfferTypes'
+import { OfferListData, OffersDBApi } from './OfferTypes'
 import { OfferTable } from './OffersTable'
 import { EditPopover } from './EditPopover'
+import { InfoPopover } from './InfoPopover'
 
 export type WaitingOffersListProps = {
     offersOnWaiting: OfferListData[]
     nextStep: (id: string) => void
     onDelete: (id: string) => void
-    onEdit: (data: OfferListData) => void
-    createDB?: (o: OfferListData) => void
+    onEdit: (id: string, data: OfferListData) => void
+    actions: OffersDBApi
 }
-const stringHeaders = ['Контрагент', "№ ДОГОВОРА", "ДАТА ЗАКРЫТИЯ", "ЗАМЕТКА"]
 
 
-export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWaiting: ofs, nextStep, onDelete, onEdit }) => {
+export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWaiting: ofs, nextStep, onDelete, onEdit, actions }) => {
     // Control: selectOffer, closeOffer
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
@@ -31,9 +32,9 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                 _focus={{ bgColor: 'blue.400' }}
                 onClick={() => nextStep(active.id!)}
             >
-                <Flex w={'full'} justifyContent='space-between' gap={4} >
+                <Flex w={'full'} justifyContent='space-between' gap={2} >
                     <Text>Закрыть договор</Text>
-                    <GrDocumentVerified fontSize={18} />
+                    <BsFillFileEarmarkArrowDownFill fontSize={18} color='white' />
                 </Flex>
 
             </Button>;
@@ -49,6 +50,25 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                 </Flex>
 
             </Button>;
+        const DocSignBtn =
+            <Button
+                isDisabled={hasActive}
+                colorScheme='green'
+                _focus={{ bgColor: 'green.400' }}
+                onClick={() => actions.toggleCheck(active, 'isDocSigned')}
+            >
+                <Flex w={'full'} justifyContent='space-between' gap={4} >
+                    <Text textColor={'#000'}>
+                        {active.isDocSigned ?
+                            `Отменить подпись`
+                            :
+                            `Подписать договор`
+                        }
+                    </Text>
+                    <BsFillFileEarmarkArrowDownFill fontSize={18} />
+                </Flex>
+
+            </Button>;
         const DeleteBtn =
             <Button
                 isDisabled={hasActive}
@@ -61,18 +81,8 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                     <GrDocumentMissing fontSize={20} />
                 </Flex>
             </Button>;
-        const CopyToDB =
-            <Button
-                isDisabled={hasActive}
-                colorScheme='red'
-                _focus={{ bgColor: 'red.400' }}
-            >
-                <Flex w={'full'} justifyContent='space-between' gap={4}>
-                    <Text>Копировать в БД</Text>
-                    <GrDocumentMissing fontSize={20} />
-                </Flex>
-            </Button>;
-        return { CloseBtn, DeleteBtn, EditBtn, CopyToDB }
+
+        return { CloseBtn, DeleteBtn, EditBtn, InfoBtn: DocSignBtn }
     }, [active, hasActive, nextStep, onDelete])
 
 
@@ -90,7 +100,7 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
                     <EditPopover offer={active} onEdit={onEdit}>
                         {Control.EditBtn}
                     </EditPopover>
-                    {Control.CopyToDB}
+                    {Control.InfoBtn}
                     {Control.DeleteBtn}
 
                 </Stack>

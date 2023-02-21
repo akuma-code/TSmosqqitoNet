@@ -17,7 +17,7 @@ const initOffer = {
     id: _id(),
     isDocResieved: false,
     isDocSigned: false,
-    isRequested: false
+    isDocRequested: false
 } as OfferListData
 
 export const OfferForm: React.FC<OfferFormProps> = (props) => {

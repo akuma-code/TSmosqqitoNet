@@ -3,19 +3,22 @@ import React, { useState } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { GrDocumentMissing, GrDocumentTransfer, GrDocumentVerified } from "react-icons/gr";
 import { IconType } from 'react-icons/lib';
-import { OfferCardProps } from './OfferTypes';
+import { OfferCardProps, OfferListData, OffersDBApi } from './OfferTypes';
 import { FcApproval } from "react-icons/fc";
 type InfoPopoverProps = {
     offer: OfferCardProps['offer']
-    controlFn: OfferCardProps['offControl']
+    controlFn: OffersDBApi
     children?: React.ReactNode
-    onMove: (id: string) => void
+    onMove?: (id: string) => void
 }
 
 export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
     const { offer, children, controlFn, onMove } = props
-    const isReady = offer.isDocSigned && offer.isRequested
-    const getO = controlFn.getOffer(offer.id)
+    const isReady = offer.isDocSigned && offer.isDocRequested
+    const toggleCheck = (field: 'isDocSigned' | 'isDocRequested') => {
+        // if (typeof offer[field] !== 'boolean') return
+        controlFn.toggleCheck(offer, field)
+    }
     return (
         <Popover placement='right'>
             <PopoverTrigger>
@@ -29,14 +32,14 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
                     {!isReady ?
                         "Ход договора"
                         :
-                        `${getO.companyName} можно закрывать!`
+                        `${offer.companyName} можно закрывать!`
                     }
                 </PopoverHeader>
                 <PopoverBody>
                     <Stack spacing={4} align={'stretch'}>
-                        {offer.isRequested &&
+                        {offer.isDocRequested &&
                             <Button
-                                onClick={() => onMove!(offer.id)}
+                                onClick={() => controlFn.changeStatus(offer.id, 'onWaiting')}
                                 aria-label='finish offer'
                                 size={'md'}
                                 variant={'solid'}
@@ -52,13 +55,13 @@ export const InfoPopover: React.FC<InfoPopoverProps> = (props) => {
                             IconOnCheck={GrDocumentVerified}
                             IconOnUncheck={GrDocumentMissing}
                             isCheck={offer.isDocSigned!}
-                            onClick={() => controlFn.toggleCheck(offer.id, 'isDocSigned')}
+                            onClick={() => toggleCheck('isDocSigned')}
                         />
                         <CheckButton text={['Закрывающие готовы!', 'Закрывающие не запрошены!']}
                             IconOnCheck={GrDocumentVerified}
                             IconOnUncheck={GrDocumentTransfer}
-                            isCheck={offer.isRequested!}
-                            onClick={() => controlFn.toggleCheck(offer.id, 'isRequested')}
+                            isCheck={offer.isDocRequested!}
+                            onClick={() => toggleCheck('isDocRequested')}
                         />
 
                         <Button aria-label='delete offer' size={'md'} onClick={() => controlFn.Remove(offer.id)}
