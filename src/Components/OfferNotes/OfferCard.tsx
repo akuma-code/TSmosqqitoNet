@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Flex, IconButton, Progress, Stack, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, IconButton, Progress, Text, Tooltip } from '@chakra-ui/react';
 import { Card, CardHeader } from '@chakra-ui/react';
 import { OfferCardProps } from './OfferTypes';
 import { useDaysJS } from '../../hooks/useDaysJS';
 import { EditPopover } from './EditPopover';
-import { VscSettings, VscUnverified, VscVerified } from "react-icons/vsc";
+import { VscNote, VscSettings, VscUnverified, VscVerified } from "react-icons/vsc";
 import { InfoPopover } from './InfoPopover';
 import { HiCog } from "react-icons/hi";
 
@@ -39,8 +39,6 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
         if (hours_left <= 240) return prog[0] //меньше 10 суток
         return prog[0]
     }
-    const tt = useRef(null)
-    const steptext = `${!offer.isDocSigned && 'договор не подписан'} *** ${!offer.isDocRequested && 'закрывающих нет'}`
     useEffect(() => {
         const daysleft = calcProgressBarValue()
         setProgValue(prev => daysleft)
@@ -52,13 +50,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
         else setFinish(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offer])
-    const TT: React.FC<{ target: boolean, text: { yes: string, no: string } }> = ({ target, text }) => {
-        const tt = useRef(null)
-        const color = target ? 'green' : '#a32c2c'
-        return (<Tooltip label={`${target ? text.yes : text.no}`} placement={`auto`}>
-            <Box ref={tt}>{target ? <VscVerified fontSize={24} color={color} /> : <VscUnverified fontSize={24} color={color} />}</Box>
-        </Tooltip>)
-    }
+
 
     return (
         <Flex maxWidth={'100vw'} flexDir='column'
@@ -87,23 +79,15 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                         <Text fontSize={22}>{offer.companyTag} "{offer.companyName}"</Text>
                         <Text fontSize={22}>{offer.offerId} </Text>
                     </Flex>
-                    {/* <Flex gap={3} p={3} bg={'#ccb3fa'} rounded={'md'}> */}
 
-                    {/* {
-                            <TT target={offer.isDocSigned!}
-                                text={{ yes: 'договор подписан', no: 'договор не подписан' }}
-                            />
-                        }
-                        {
-                            <TT target={offer.isDocRequested!}
-                                text={{ yes: 'закрывающие запрошены', no: 'закрывающие не запрошены' }}
-                            />
-                        } */}
-
-
-                    {/* </Flex> */}
                     <Flex gap={4} m={2}>
                         <Flex align={'center'} bg={'#decdfd'} rounded={'md'} flexDir='row' gap={2} p={1}>
+                            {offer.desc &&
+                                <TTinfo
+                                    target={!!offer.desc}
+                                    text={offer.desc}
+                                />
+                            }
                             {
                                 <TT target={offer.isDocSigned!}
                                     text={{ yes: 'договор подписан', no: 'договор не подписан' }}
@@ -188,3 +172,20 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
     );
 };
 
+const TT: React.FC<{ target: boolean, text: { yes: string, no: string } }> = ({ target, text }) => {
+    const tt = useRef(null)
+    const color = target ? 'green' : '#a32c2c'
+    return (
+        <Tooltip label={`${target ? text.yes : text.no}`} placement={`auto`}>
+            <Box ref={tt}>{target ? <VscVerified fontSize={24} color={color} /> : <VscUnverified fontSize={24} color={color} />}</Box>
+        </Tooltip>
+    )
+}
+const TTinfo: React.FC<{ target: boolean, text: string }> = ({ target, text }) => {
+    const tt = useRef(null)
+    return (
+        <Tooltip label={text} placement={`auto`} fontSize={20}>
+            <Box ref={tt}>{target ? <VscNote fontSize={24} color={'yellow.400'} /> : null}</Box>
+        </Tooltip>
+    )
+}

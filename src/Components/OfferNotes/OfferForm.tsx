@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, HStack, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuItemOption, MenuList, MenuOptionGroup, Text } from '@chakra-ui/react';
+import React, { useRef, useState } from 'react';
+import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, Input, InputGroup, InputLeftAddon } from '@chakra-ui/react';
 import { useID } from '../../hooks/useID';
 import { OfferFormData, OfferListData } from './OfferTypes';
 import { Alarma } from './Alarma';
+import { TagSelect } from './TagSelect';
 const _id = useID
 interface OfferFormProps {
     addOffer: (offer: OfferFormData) => void;
@@ -22,7 +23,6 @@ const initOffer = {
 
 export const OfferForm: React.FC<OfferFormProps> = (props) => {
 
-    const strID = useID;
     const [offer, setOffer] = useState<OfferFormData>(initOffer);
     const firstInput = useRef<HTMLInputElement>(null)
     const [isAlarm, setIsAlarm] = useState(false)
@@ -133,22 +133,6 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
                         </InputGroup>
                     </GridItem>
 
-                    {/* <GridItem colSpan={2}>
-                        <InputGroup flexDir={'column'}>
-                            <Input
-                                placeholder=''
-                                id='offdate'
-                                value={offer.desc}
-                                onChange={(e) => changeOffer('desc', e.target.value)}
-                                type={'text'}
-                                variant={'filled'}
-                                tabIndex={4}
-                                _focus={{ bgColor: 'blue.300' }} />
-                            <FormLabel>Описание</FormLabel>
-                        </InputGroup>
-                    </GridItem> */}
-
-
                     <GridItem colSpan={1}>
                         <Button type='submit'
                             // onClick={e => HandleSubmit(e)}
@@ -171,57 +155,5 @@ export const OfferForm: React.FC<OfferFormProps> = (props) => {
         </form>
     )
 };
-
-type TagSelectProps = {
-    changeTag: (value: OfferFormData['companyTag']) => void,
-    tag: OfferFormData['companyTag']
-}
-const TagSelect: React.FC<TagSelectProps> = (props) => {
-
-    const { tag, changeTag } = props
-
-
-    return (
-        <Menu  >
-            <MenuButton tabIndex={-1} autoFocus={false} as={Button}
-                w='full'
-                bgColor={'blue.300'}
-                _active={{ bgColor: 'transparent' }}
-                _focus={{ bgColor: 'transparent' }}
-                _hover={{ bgColor: "blue.300" }}
-                border={'2px solid black'}
-            >{tag}</MenuButton>
-            <MenuList
-                w={'fit-content'}
-            >
-                <MenuOptionGroup defaultValue='ООО' type='radio'
-                >
-                    <MenuItemOption
-                        _hover={{ bgColor: "blue.300" }}
-                        _focus={{ bgColor: 'blue.300' }}
-                        value='ООО'
-                        onClick={() => changeTag('ООО')}
-                    >ООО
-                    </MenuItemOption>
-                    <MenuItemOption
-                        _hover={{ bgColor: "blue.300" }}
-                        _focus={{ bgColor: 'blue.300' }}
-                        value='ИП'
-                        onClick={() => changeTag('ИП')}
-                    >ИП
-                    </MenuItemOption>
-                </MenuOptionGroup>
-                {/* <MenuItem
-                    _hover={{ bgColor: "lightblue" }}
-                    _focus={{ bgColor: 'lightblue' }}
-                    onClick={() => changeTag('ИП')}>ИП</MenuItem>
-                <MenuItem
-                    _hover={{ bgColor: "lightblue" }}
-                    _focus={{ bgColor: 'lightblue' }}
-                    onClick={() => changeTag('ООО')}>ООО</MenuItem> */}
-
-            </MenuList>
-        </Menu>)
-}
 
 

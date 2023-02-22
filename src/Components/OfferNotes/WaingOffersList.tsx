@@ -1,12 +1,11 @@
-import { Button, Flex, Grid, GridItem, Stack, Text } from '@chakra-ui/react'
+import { Button, Flex, Grid, GridItem, Input, Stack, Text } from '@chakra-ui/react'
 import React, { useMemo, useState } from 'react'
-import { GrDocumentMissing, GrDocumentVerified } from 'react-icons/gr'
+import { GrDocumentMissing } from 'react-icons/gr'
 import { BsFillFileEarmarkArrowDownFill } from 'react-icons/bs'
 import { FiEdit } from 'react-icons/fi'
 import { OfferListData, OffersDBApi } from './OfferTypes'
 import { OfferTable } from './OffersTable'
 import { EditPopover } from './EditPopover'
-import { InfoPopover } from './InfoPopover'
 
 export type WaitingOffersListProps = {
     offersOnWaiting: OfferListData[]
@@ -22,7 +21,7 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
     const [active, setActive] = useState<OfferListData>({ id: "" } as OfferListData)
     const hasActive = active.id === "" ? true : false
     const onSelect = (offer: OfferListData) => setActive(offer)
-
+    const [query, setQuery] = useState("")
 
     const Control = useMemo(() => {
         const CloseBtn =
@@ -83,8 +82,8 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
             </Button>;
 
         return { CloseBtn, DeleteBtn, EditBtn, InfoBtn: DocSignBtn }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active, hasActive, nextStep, onDelete])
-
 
     if (!ofs || ofs.length === 0) return (
         <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Список ожидания пуст!</Text>
@@ -92,14 +91,13 @@ export const WaitingOffersList: React.FC<WaitingOffersListProps> = ({ offersOnWa
     return (
         <Grid templateColumns={'repeat(8, 1fr)'} columnGap={'40px'} maxW={'80vw'} minW={'50vw'} >
             <GridItem colSpan={6}>
-                <OfferTable listOffers={ofs} onSelect={onSelect} />
+                <OfferTable listOffers={ofs} onSelect={onSelect} searchQuery={query} />
             </GridItem>
             <GridItem colSpan={2}>
                 <Stack align={'stretch'} spacing={'1rem'}>
+                    <Input type='text' placeholder='фильтрация договоров' value={query} onChange={(e) => setQuery(e.target.value)} />
                     {Control.CloseBtn}
-                    <EditPopover offer={active} onEdit={onEdit}>
-                        {Control.EditBtn}
-                    </EditPopover>
+                    <EditPopover offer={active} onEdit={onEdit}>{Control.EditBtn}</EditPopover>
                     {Control.InfoBtn}
                     {Control.DeleteBtn}
 

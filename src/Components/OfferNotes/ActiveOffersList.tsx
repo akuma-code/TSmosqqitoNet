@@ -37,7 +37,7 @@ export const ActiveOffersList: React.FC<ActiveOffersListProps> = (props) => {
                             icon={<MdDeleteForever />}
                             onClick={() => actions!.RemoveList('onActive')}
                         />
-                        <Text fontSize={20}>Удалить все</Text>
+                        <Text fontSize={20}>Очистить список</Text>
 
                     </>
                 }

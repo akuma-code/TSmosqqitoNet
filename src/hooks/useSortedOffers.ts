@@ -22,7 +22,14 @@ export const useSortedOffers = (offers: OfferListData[], field: keyof OfferFormD
     return sortedOffers
 }
 
-
+export const useFilterOffers = (offers: OfferListData[], field: keyof OfferFormData, isAsc: boolean, query?: string) => {
+    const sorted = useSortedOffers(offers, field, isAsc)
+    const filterOffers = useMemo(() => {
+        if (!query) return sorted
+        return [...sorted].filter(offer => offer[field]?.toLowerCase().includes(query.toLowerCase()))
+    }, [sorted, query, field])
+    return filterOffers
+}
 
 
 

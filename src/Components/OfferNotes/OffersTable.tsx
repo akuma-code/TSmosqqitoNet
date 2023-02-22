@@ -10,21 +10,21 @@ import {
     Button,
     Tooltip,
     Flex,
-    Stack,
 } from '@chakra-ui/react'
 import { OfferFormData, OfferListData } from './OfferTypes'
 import { useDaysJS } from '../../hooks/useDaysJS'
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { FiAlertTriangle } from "react-icons/fi";
-import { useSortedOffers } from '../../hooks/useSortedOffers'
+import { useFilterOffers } from '../../hooks/useSortedOffers'
 interface OfferTableProps {
     onSelect: (offer: OfferListData) => void
     listOffers: OfferListData[]
     headers?: string[]
     sortFn?: (f: keyof OfferFormData) => void
+    searchQuery: string
 }
 
-export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect }) => {
+export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect, searchQuery }) => {
     const { localDate } = useDaysJS()
     const [selectedId, setSelectedId] = useState("")
     const [selectedSort, setSelectedSort] = useState<{ field: keyof OfferFormData, isAsc: boolean }>({ field: 'dateReady', isAsc: true })
@@ -58,7 +58,7 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect }) 
             }
 
         </Button>, [selectedSort])
-    const SortedOffers = useSortedOffers(listOffers, selectedSort.field!, selectedSort.isAsc)
+    const SortedOffers = useFilterOffers(listOffers, selectedSort.field!, selectedSort.isAsc, searchQuery)
     return (
         <TableContainer maxW='80vw'>
             <Table size='sm' bgColor='gray.200'>
@@ -80,10 +80,7 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect }) 
                             border={isSelected(o.id) ? '2px solid black' : ""}
                             key={o.id}
                         >
-                            <Td>
-                                {o.companyTag + " " + o.companyName}
-
-                            </Td>
+                            <Td>{o.companyTag + " " + o.companyName}</Td>
                             <Td>
                                 <Tooltip label='не хватает подписанного договора' placement='top' hasArrow isDisabled={o.isDocSigned}>
                                     <Flex justify={'space-around'}>
@@ -95,12 +92,8 @@ export const OfferTable: React.FC<OfferTableProps> = ({ listOffers, onSelect }) 
                                 </Tooltip>
 
                             </Td>
-                            <Td>
-                                {localDate(o.dateReady)}
-                            </Td>
-                            <Td>
-                                {o.desc}
-                            </Td>
+                            <Td>{localDate(o.dateReady)}</Td>
+                            <Td>{o.desc}</Td>
                         </Tr>
                     )}
 
