@@ -2,8 +2,12 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { OfferListData } from "../Components/OfferNotes/OfferTypes";
 import { HOSTURL, PATHS } from "../types/IServerData";
+
+const arrOfUrl = [HOSTURL.HOME, HOSTURL.WORK, HOSTURL.CKO3, HOSTURL.LOCALHOST]
+const base_url = getUrl(arrOfUrl)
+
 const $api = axios.create({
-    baseURL: HOSTURL.CKO3
+    baseURL: HOSTURL.HOME
 })
 
 export const OffersApi = {
@@ -16,9 +20,14 @@ export const OffersApi = {
     },
 
     async create<T>(item: T): Promise<T> {
-        const { data } = await $api.post(`api/${PATHS.OFFERS}`, item)
-        console.log('$API: Created offer: ', data)
-        return data
+        try {
+            const { data } = await $api.post(`api/${PATHS.OFFERS}`, item)
+            console.log('$API: Created offer: ', data)
+            return data
+        } catch (error: unknown) {
+            if (error instanceof AxiosError) console.log(error)
+        }
+        return item
     },
     async createList<T>(items: T[]): Promise<T[]> {
         const { data } = await $api.post(`api/${PATHS.OFFERS}/list`, items)
@@ -54,3 +63,33 @@ export const OffersApi = {
 
 
 }
+
+
+
+
+
+function getUrl(urlarray: typeof arrOfUrl) {
+    const api = (base_url: HOSTURL) => axios.create({
+        baseURL: base_url
+    })
+    const testApi = async (path: HOSTURL) => {
+        const { data } = await api(path).get(`api/offers`)
+        return data
+    }
+    const result = []
+    for (let i = 0; i < urlarray.length; i++) {
+        try {
+            const data = testApi(urlarray[i])
+            result.push(urlarray[i])
+        } catch {
+            continue
+        }
+    }
+    // console.log("Result: ", ...result);
+    return result[0]
+
+}
+
+
+
+
