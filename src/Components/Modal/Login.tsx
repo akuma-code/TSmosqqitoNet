@@ -39,7 +39,7 @@ export const Login = () => {
                     fontSize={32}
                     size={'lg'}
                     mr={5}
-                    mt={3}
+                    // mt={3}
                     onClick={setOpen.on}
                 >
                     Войти

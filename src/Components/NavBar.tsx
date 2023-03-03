@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
-import { Text } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 import { PlusSquareIcon } from '@chakra-ui/icons'
+import { MdBackupTable, MdOutlineSettingsApplications } from "react-icons/md";
 import { useAuth } from '../hooks/useAuth'
 import { Login } from './Modal/Login'
+import { SettingsModal } from './Modal/SettingsModal';
 
 type NavBarProps = {
     children?: React.ReactNode
@@ -46,17 +48,23 @@ const NavBar: FC<NavBarProps> = () => {
                         </a>
                     </li>
                     {checkAuth() &&
-                        <li>
-                            <a href="/test">
-                                <PlusSquareIcon fontSize={'5xl'} background='grey' />
+                        <li className='valign-wrapper mt1'>
+                            <a href="/test" >
+                                <MdBackupTable fontSize={40} color={'black'} />
                             </a>
                         </li>
                     }
+
                 </ul>
-                <div className="right">
+                <Flex flexDir={'row'}
+                    pt={4}
+                    justifyContent={'flex-end'}
+                    gap={3}
+                >
+
+                    <SettingsModal />
                     <Login />
-                    {/* <Text fontSize={'4xl'} style={{ marginRight: "2rem" }}>Сетки да Заметки</Text> */}
-                </div>
+                </Flex>
             </div>
         </nav>
     )
