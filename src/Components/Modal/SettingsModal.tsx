@@ -1,5 +1,5 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { MdOutlineSettingsApplications } from 'react-icons/md'
 import {
     Table,
@@ -64,20 +64,27 @@ interface TableProps {
     // [key: string]: string
 }
 const SettingsTable: React.FC<TableProps> = ({ server_options }) => {
-
     const { host_url } = server_options
-
+    const getDesc = (url: string) => {
+        if (url === 'http://akumapc:5000') return 'Дом'
+        if (url === 'http://prodnyan:5000') return 'Дев Сервер'
+        if (url === 'http://cko3:5000') return 'Сервак на работе'
+        return 'No Description'
+    }
+    const [info, setInfo] = useState({ url: host_url, desc: getDesc(host_url) })
 
     function onChangeUrl(path: string) {
         const saved = localStorage.getItem('server_url')
         if (saved === path) console.log(saved);
 
         localStorage.setItem('server_url', path)
+        setInfo(prev => ({ ...prev, url: host_url, desc: (getDesc(host_url)) }))
     }
+    // useEffect(() => setInfo(prev => ({ ...prev, url: host_url, desc: (getDesc(host_url)) })),
+    //     [host_url])
     return (
         <TableContainer>
             <Table variant='striped' colorScheme='blue' size={'xl'}>
-                {/* <TableCaption>settings</TableCaption> */}
                 <Thead>
                     <Tr>
                         <Th>параметр</Th>
@@ -89,9 +96,9 @@ const SettingsTable: React.FC<TableProps> = ({ server_options }) => {
                     <Tr>
                         <Td>Host Url</Td>
                         <Td>
-                            <UrlMenuButton saved_path={host_url} onChangeFn={onChangeUrl} />
+                            <UrlMenuButton saved_path={info.url} onChangeFn={onChangeUrl} />
                         </Td>
-                        <Td>{host_url}</Td>
+                        <Td>{info.desc}</Td>
                     </Tr>
 
                 </Tbody>
@@ -127,7 +134,8 @@ const UrlMenuButton: React.FC<{ saved_path: string, onChangeFn: (p: string) => v
     return (
         <Menu closeOnSelect={true} >
             <MenuButton as={Button} colorScheme='blue' variant={'link'}>
-                {text(path)}
+                {/* {text(path)} */}
+                {path}
             </MenuButton>
             <MenuList minWidth='240px'>
 
