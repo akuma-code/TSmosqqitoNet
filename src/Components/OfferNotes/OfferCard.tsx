@@ -60,12 +60,8 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
             bgGradient={'linear(to-r,transparent 25%, #000)'}
         >
             <Card key={offer.id}
-
-                // rounded={'md'}
                 flexDir={'column'}
                 maxH={14}
-            // pos={'relative'}
-
             >
                 <CardHeader p={0} bgGradient={'linear(to-r,#abf8e7,#8778c7)'}
                     rounded={'md'}
@@ -144,8 +140,6 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                     my={'auto'}
                     px={2}
                     fontWeight={'bold'}
-                    // shadow='dark-lg'
-                    // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'
                 >
                     Отгрузка: {finish}</Text>
@@ -157,10 +151,9 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, offControl, nextSte
                     my={'auto'}
                     px={2}
                     fontWeight={'bold'}
-                    // shadow='dark-lg'
-                    // bgGradient={' linear-gradient(90deg,#646464ae 0% ,#404b88dd 50%, #646464ae 100%)'}
                     rounded='md'>
-                    {isFinished ? "Завершено!"
+                    {isFinished ?
+                        "Завершено!"
                         :
                         `Осталось дней: ${dleft}`
                     }

@@ -11,8 +11,6 @@ type ActiveOffersListProps = {
 
 export const ActiveOffersList: React.FC<ActiveOffersListProps> = (props) => {
     const { offList, nextStep, actions } = props;
-
-
     if (!offList || offList.length === 0) return <Text fontSize={'2xl'} fontWeight='bold' textAlign='center' w={'55vw'}>Договоров в работе нет!</Text>
 
     return (

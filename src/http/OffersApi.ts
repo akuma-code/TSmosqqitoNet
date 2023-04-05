@@ -1,5 +1,4 @@
 import axios, { AxiosError } from "axios";
-import { useEffect, useState } from "react";
 import { OfferListData } from "../Components/OfferNotes/OfferTypes";
 import { HOSTURL, PATHS } from "../types/IServerData";
 
@@ -24,9 +23,9 @@ export const OffersApi = {
             console.log('$API: Created offer: ', data)
             return data
         } catch (error: unknown) {
-            if (error instanceof AxiosError) console.log(error)
+            if (error instanceof AxiosError) console.log(error.message)
+            return item
         }
-        return item
     },
     async createList<T>(items: T[]): Promise<T[]> {
         const { data } = await $api.post(`api/${PATHS.OFFERS}/list`, items)
