@@ -38,7 +38,9 @@ export const AppRouter: FC<AppRouterProps> = () => {
 
 
     const checkAuth = () => {
-        const isAuth = localStorage.getItem('isAuth') || "false"
+
+        const ls = localStorage.getItem('isAuth') || 'false'
+        const isAuth = JSON.parse(ls)
         return JSON.parse(isAuth)
     }
     return (

@@ -2,13 +2,17 @@ import axios from "axios"
 import { HOSTURL } from "../types/IServerData"
 
 
-const url_path = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
+// const url_path = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
 
+// export const $api = axios.create({
+//     baseURL: url_path
+// })
+
+const savedurl = localStorage.getItem('server_url')
+savedurl ?? console.log("sever: ", savedurl)
 export const $api = axios.create({
-    baseURL: url_path
+    baseURL: savedurl ?? HOSTURL.WORK
 })
-
-
 
 
 

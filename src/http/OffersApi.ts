@@ -1,12 +1,8 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { OfferListData } from "../Components/OfferNotes/OfferTypes";
-import { HOSTURL, PATHS } from "../types/IServerData";
+import { PATHS } from "../types/IServerData";
+import { $api } from ".";
 
-const url_path = localStorage.getItem('server_url') || HOSTURL.LOCALHOST
-
-const $api = axios.create({
-    baseURL: url_path
-})
 
 export const OffersApi = {
 

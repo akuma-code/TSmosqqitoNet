@@ -1,5 +1,4 @@
 import { $api } from "."
-import { PATHS } from "../types/IServerData"
 
 export const ResetSkladModels = async () => {
     const { data } = await $api.post("api/settings/reset_models")
