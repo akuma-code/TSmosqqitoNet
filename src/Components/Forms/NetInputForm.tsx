@@ -40,20 +40,25 @@ export const NetInputForm: React.FC<INetInputProps> = ({ ADD }) => {
             name='netinput'
             onSubmit={submitHandler}
         >
-            <div className="col s3 center ">
-                <div className="switch input-field valign-wrapper">
-                    <label className='black-text align-center'>
-                        <input
-                            type="checkbox"
-                            className='black-text'
-                            onChange={() => { setIsSimple(prev => !prev) }}
-                        />
-                        {isSimple ? <I title='grid_3x3' /> : <I title='grid_4x4' />}
-                        <span className="lever"></span>
-                        {isSimple ? "Простая" : "SKF"}
-                    </label>
+            <div className="col s3  ">
+                <div className=" input-field valign-wrapper ">
+                    <button type="button"
+                        className=' btn btn-large blue lighten-1 '
+                        onClick={() => setIsSimple(prev => !prev)}
+                    >
+                        <div className='black-text  flex-row  flow-text'>
+                            {
+                                isSimple ?
+                                    <><I title='grid_3x3' />Простая</>
+                                    :
+                                    <><I title='grid_4x4' />SKF</>
+                            }
+
+                        </div>
+                    </button>
                 </div>
             </div>
+
             <div className="input-field col s2 ">
                 <i className="material-icons prefix center" style={{ transform: "rotate(270deg)" }}>expand</i>
                 <label htmlFor="sizew">Ширина</label>

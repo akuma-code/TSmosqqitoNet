@@ -6,7 +6,7 @@ import { I } from './I'
 
 
 
-const NetCard: React.FC<INetCardProps & { isForbidden?: boolean }> = (props) => {
+const NetCard: React.FC<INetCardProps & { isForbidden?: boolean, counter?: number }> = (props) => {
     const { h, isSimple, w } = props
     const [isSKF, setIsSKF] = useState(!isSimple)
     const { simple, skf } = useCalcNet(w, h)
@@ -29,6 +29,7 @@ const NetCard: React.FC<INetCardProps & { isForbidden?: boolean }> = (props) => 
         <div className={`form__list z-depth-3 px1 ${isForbCls}`} >
 
             <div className='flex-row'>
+                <b className='flow-text'>{props.counter}) </b>
                 <button className={`btn    ${isSKF ? "blue accent-2" : "blue-grey darken-4"} w100 flex-row`}
                     onClick={() => toggle()}
                 >

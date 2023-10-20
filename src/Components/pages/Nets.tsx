@@ -59,7 +59,8 @@ export const Nets: FC<NetsPageProps> = () => {
     return (
 
         <div className='col container'>
-            <Text fontSize={'4xl'} className='center'>Расчет М\С по световому проему</Text>
+            {/* <Text fontSize={'4xl'} className='center'>Расчет М\С по световому проему</Text>y */}
+
             <div className='flex-row'>
                 <NetInputForm ADD={ADD} />
                 <button className="material-icons red darken-4 black-text mx1 reset-btn"
@@ -68,8 +69,8 @@ export const Nets: FC<NetsPageProps> = () => {
                 </button>
             </div>
             <ListContainer>
-                {netlist.map(net => (
-                    <NetCard {...net} remove={remove} key={net.id} />
+                {netlist.map((net, idx) => (
+                    <NetCard {...net} remove={remove} key={net.id} counter={idx + 1} />
                 ))}
             </ListContainer>
         </div>

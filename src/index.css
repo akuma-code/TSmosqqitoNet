@@ -82,6 +82,21 @@ code {
   padding-right: 2rem;
 }
 
+.py05 {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.py1 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py2 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .pr1 {
   padding-right: 1rem;
 }
@@ -109,6 +124,11 @@ code {
 .mx1 {
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+.my1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mr1 {
