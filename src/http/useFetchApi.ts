@@ -6,7 +6,7 @@ import { HOSTURL, PATHS } from "../types/IServerData";
 const savedurl = localStorage.getItem('server_url')
 savedurl ?? console.log("sever: ", savedurl)
 export const $api = axios.create({
-    baseURL: savedurl ?? HOSTURL.WORK
+    baseURL: savedurl || HOSTURL.WORK
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchApi = (path: string) => {

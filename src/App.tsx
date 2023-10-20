@@ -23,7 +23,7 @@ const App = (): JSX.Element => {
   const [isAuth, setAuth] = useState(true)
   const [formdata, setFormdata] = useState<ContextDataType>({} as ContextDataType)
   useEffect(() => {
-    const url = HOSTURL.CKO3 + "/"
+    const url = HOSTURL.WORK + "/"
     // if (host !== url) setHost(url)
     setHost(url)
     RunAutoCompleteTasks(0)
