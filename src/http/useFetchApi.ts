@@ -6,7 +6,7 @@ import { HOSTURL, PATHS } from "../types/IServerData";
 
 
 export const $api = axios.create({
-    baseURL: HOSTURL.CKO3
+    baseURL: localStorage.get('server_url') || HOSTURL.WORK
 })
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchApi = (path: string) => {
